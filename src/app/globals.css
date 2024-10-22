@@ -145,7 +145,7 @@ body {
 .group:hover .group-hover\:animate-pulse {
   animation: pulse 1s infinite;
 }*/
-
+/*
 .bg-dot-pattern {
   background-image: radial-gradient(
     circle,
@@ -181,4 +181,53 @@ body {
 
 .group:hover .group-hover\:animate-pulse {
   animation: pulse 1s infinite;
+}*/
+
+.wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /*height: 100vh;*/
+}
+
+.circle {
+  /*width: 700px;
+  height: 300px;*/
+  border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+  overflow: hidden;
+  animation: morph 3s linear infinite;
+}
+
+.circle img {
+  width: 100%;
+}
+
+@keyframes morph {
+  0%,
+  100% {
+    border-radius: 40% 60% 70% 30% / 40% 40% 60% 50%;
+  }
+
+  34% {
+    border-radius: 70% 30% 50% 50% / 30% 30% 70% 70%;
+  }
+
+  67% {
+    border-radius: 100% 60% 60% 100% / 100% 100% 60% 60%;
+  }
+}
+
+@keyframes gradient-x {
+  0%,
+  100% {
+    background-size: 200% 200%;
+    background-position: left center;
+  }
+  50% {
+    background-size: 200% 200%;
+    background-position: right center;
+  }
+}
+.animate-gradient-x {
+  animation: gradient-x 5s ease infinite;
 }
