@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import Image from 'next/image';
 import { motion,useAnimation } from 'framer-motion';
 import { Button } from "@/components/ui/button";
-import { Code,Rocket,Database,Server,Wifi,FacebookIcon,GithubIcon,Linkedin,Cloud,LucideIcon } from 'lucide-react';
+import { Rocket,Linkedin,GithubIcon,Globe,Code,Database,Server,Wifi,Cloud,Terminal,FacebookIcon,Cpu,Layers,Zap,LucideIcon } from 'lucide-react';
 
 
 
@@ -27,16 +27,23 @@ const FloatingIcon = ({ icon: Icon,delay }: { icon: LucideIcon,delay: number }) 
 
   return (
     <motion.div
-      className="absolute text-primary/30"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 1 }}
+      className="absolute text-primary/20"
+      //initial={{ opacity: 0 }}
+      //animate={{ opacity: 1 }}
+      //transition={{ duration: 1 }}
       style={{
         top: `${Math.random() * 100}%`,
         left: `${Math.random() * 100}%`,
         right: `${Math.random() * 100}%`,
         bottom: `${Math.random() * 100}%`,
       }}
+      initial={{ x: Math.random() * 100 + '%',y: Math.random() * 100 + '%' }}
+      animate={{
+        x: [Math.random() * 100 + '%',Math.random() * 100 + '%'],
+        y: [Math.random() * 100 + '%',Math.random() * 100 + '%'],
+      }}
+      transition={{ duration: 20 + Math.random() * 10,repeat: Infinity,repeatType: 'reverse' }}
+
     >
       <motion.div animate={controls}>
         <Icon size={32} />
@@ -53,7 +60,7 @@ export default function Home() {
         <div className="absolute inset-0 bg-gradient-to-br from-primary/30 to-secondary/10" />
 
         {/* Floating coding icons */}
-        {[Code,Database,Server,Wifi,Cloud,Code,Database,Server,Wifi,Cloud].map((icon,index) => (
+        {[Code,Database,Server,Wifi,Cloud,Terminal,Cpu,Globe,Layers,Zap].map((icon,index) => (
           <FloatingIcon key={index} icon={icon} delay={index * 0.5} />
         ))}
 
