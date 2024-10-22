@@ -2,9 +2,10 @@ import React from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { Button } from "@/components/ui/button";
-import { Rocket,Linkedin,GithubIcon,Globe,Code,Database,Server,Wifi,Cloud,Terminal,FacebookIcon,Cpu,Layers,Zap } from 'lucide-react';
+import { Rocket,Linkedin,GithubIcon,Globe,Code,Database,Server,Wifi,Cloud,Terminal,FacebookIcon,Cpu,Layers,Zap,Handshake } from 'lucide-react';
 import { FloatingIcon } from './FloatingIcon';
 import { SocialIcons } from './SocialIcons';
+import BannerImage from "@/assets/bannerImage.png"
 
 const Banner: React.FC = () => {
     return (
@@ -30,7 +31,8 @@ const Banner: React.FC = () => {
                             transition={{ type: "spring",stiffness: 300 }}
                         >
                             <Image
-                                src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1374&q=80"
+                                //src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1374&q=80"
+                                src={BannerImage}
                                 alt="Alex Johnson"
                                 width={800}
                                 height={10}
@@ -46,17 +48,19 @@ const Banner: React.FC = () => {
                     transition={{ duration: 0.8,delay: 0.2 }}
                     className="md:w-1/2 md:pl-12"
                 >
-                    <h1 className="text-4xl md:text-5xl font-bold mb-4">Alex Johnson</h1>
+                    <h1 className="text-4xl md:text-5xl font-bold mb-4">Pujon Das Auvi</h1>
                     <h2 className="text-xl md:text-2xl text-primary mb-6">Full Stack Developer</h2>
                     <p className="text-muted-foreground mb-8">
                         Transforming ideas into robust, user-friendly applications. Specializing in React, Node.js, and modern web technologies. Passionate about creating efficient and elegant solutions.
                     </p>
                     <div className="flex space-x-4 mb-8">
-                        <Button className="bg-primary hover:bg-primary/90 text-primary-foreground">
-                            <Rocket className="mr-2 h-4 w-4" /> Projects
+                        <Button className="bg-primary hover:bg-primary/90 text-primary-foreground relative overflow-hidden group border-none text-white">
+                            <Rocket className="mr-2 h-4 w-4" /> Enter the Codeverse
+                            <span className="absolute inset-0 bg-white/30 z-20 transition-transform duration-500 translate-x-full group-hover:translate-x-0" />
                         </Button>
-                        <Button variant="outline" className="border-primary text-primary hover:bg-primary hover:text-primary-foreground">
-                            Contact Me
+                        <Button variant="outline" className="border-primary text-primary hover:bg-background hover:text-primary relative overflow-hidden group border-none">
+                            <Handshake className="mr-2 h-4 w-4" /> Initiate Neural Handshake
+                            <span className="absolute inset-0 bg-white/30 z-20 transition-transform duration-500 translate-x-full group-hover:translate-x-0" />
                         </Button>
                     </div>
                     <div className="flex space-x-6">

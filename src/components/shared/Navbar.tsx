@@ -7,6 +7,8 @@ import { motion,AnimatePresence } from 'framer-motion';
 import { Button } from "@/components/ui/button";
 import { FileText,Menu,X,Home,Briefcase,User,Mail } from 'lucide-react';
 import { usePathname } from 'next/navigation';
+import BannerImage from "@/assets/bannerImage.png"
+import Image from 'next/image';
 
 const Navbar: React.FC = () => {
     const [isOpen,setIsOpen] = useState(false);
@@ -38,13 +40,13 @@ const Navbar: React.FC = () => {
             <nav className="container mx-auto flex justify-between items-center">
                 <Link href="/" className="flex items-center space-x-3 group">
                     <div className="relative w-10 h-10">
-                        {/*<Image src="/logo.png" alt="Pujon Das Logo" layout="fill" objectFit="cover" className="rounded-full" />*/}
+                        <Image src={BannerImage} alt="Pujon Das Logo" layout="fill" objectFit="cover" className="rounded-full" />
                         {/*<div>P</div>*/}
                         <motion.div
                             className="absolute inset-0 rounded-full border-2 border-primary"
                             animate={{ scale: [1,1.1,1] }}
                             transition={{ duration: 2,repeat: Infinity }}
-                        >P</motion.div>
+                        />
                     </div>
                     <span className="text-xl font-bold text-foreground">Pujon Das</span>
                 </Link>
