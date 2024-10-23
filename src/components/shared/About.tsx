@@ -108,7 +108,7 @@ const About: React.FC = () => {
                             <h3 className="text-3xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary flex items-center">
                                 <Brain className="mr-2 h-8 w-8 text-primary" /> Who I Am ?
                             </h3>
-                            <div className="text-muted-foreground text-base">
+                            <div className="text-muted-foreground text-sm md:text-base">
                                 <p>
                                     Hi, I&apos;m Pujon Das Auvi, a Full-stack Developer based in Dhaka, Bangladesh, with a passion for building scalable, user-friendly web applications. I specialize in both front-end and back-end technologies, allowing me to create seamless, fully integrated web solutions from scratch.
 

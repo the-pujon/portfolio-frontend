@@ -6,6 +6,9 @@ import About from '@/components/shared/About';
 import { FloatingIcon } from '@/components/shared/FloatingIcon';
 
 import { Globe,Code,Database,Server,Wifi,Cloud,Terminal,Cpu,Layers,Zap } from 'lucide-react';
+import Skills from '@/components/shared/Skills';
+//import MySkill from '@/components/shared/MySkill';
+import TopProjects from './../components/shared/TopProjects';
 
 
 
@@ -20,6 +23,9 @@ const Home: React.FC = () => {
       </div>
       <Banner />
       <About />
+      <Skills />
+      <TopProjects />
+      {/*<MySkill />*/}
     </div>
   );
 }
