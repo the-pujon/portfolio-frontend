@@ -119,12 +119,31 @@ const Skills: React.FC = () => {
                 variants={containerVariants}
                 className="max-w-7xl mx-auto"
             >
-                <motion.h2
-                    variants={itemVariants}
-                    className="text-5xl font-extrabold mb-16 text-center bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary"
-                >
-                    My Skills Journey
-                </motion.h2>
+                <div className="flex flex-col items-center mb-20">
+                    <div className="relative">
+                        <h2 className="text-6xl md:text-6xl font-bold relative z-10 tracking-tight text-center">
+                            <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary via-secondary to-primary/50">
+                                Technical
+                            </span>{" "}
+                            <span className="relative inline-block">
+                                <span className="text-foreground">Arsenal</span>
+                                <div className="absolute -bottom-2 left-0 w-full h-[2px] bg-gradient-to-r from-primary/50 via-secondary to-primary animate-shimmer" />
+                            </span>
+                        </h2>
+                        <div className="absolute -top-8 -right-8 text-primary/20 animate-pulse">
+                            <Code className="w-16 h-16" />
+                        </div>
+                    </div>
+                    <p className="text-xl md:text-xl mt-8 max-w-2xl font-light text-center leading-relaxed">
+                        <span className="text-primary">Mastering modern technologies</span>{" "}
+                        <span className="text-muted-foreground">
+                            — from concept to deployment
+                        </span>
+                        <span className="block mt-2 text-muted-foreground/80">
+                            A comprehensive toolkit for building exceptional digital experiences
+                        </span>
+                    </p>
+                </div>
 
                 <div className="relative">
                     {/* Glowing timeline line */}

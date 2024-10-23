@@ -46,12 +46,28 @@ const About: React.FC = () => {
                 variants={containerVariants}
                 className="max-w-7xl mx-auto"
             >
-                <motion.h2
-                    variants={itemVariants}
-                    className="text-5xl font-extrabold mb-16 text-center bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary"
-                >
-                    About Me
-                </motion.h2>
+                <div className="flex flex-col items-center mb-20">
+                    <div className="relative">
+                        <h2 className="text-6xl md:text-6xl font-bold relative z-10 tracking-tight text-center">
+                            <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary via-secondary to-primary/50">
+                                The
+                            </span>{" "}
+                            <span className="relative inline-block">
+                                <span className="text-foreground">Developer&apos;s</span>
+                            </span>{" "}
+                            <span className="relative inline-block">
+                                <span className="text-foreground">Story</span>
+                                <div className="absolute -bottom-2 left-0 w-full h-[2px] bg-gradient-to-r from-primary/50 via-secondary to-primary animate-shimmer" />
+                            </span>
+                        </h2>
+                        <div className="absolute -top-8 -right-8 text-primary/20 animate-pulse">
+                            <Brain className="w-16 h-16" />
+                        </div>
+                    </div>
+                    <div className="text-xl md:text-xl mt-8 max-w-4xl font-light text-center leading-relaxed">
+                        <p className="text-muted-forgournd">From learning the fundamentals to mastering <span className='text-primary'>full-stack development</span>, here&apos;s my journey in tech.</p>
+                    </div>
+                </div>
 
                 <div className="flex flex-col lg:flex-row items-center lg:items-center gap-16">
                     <motion.div
@@ -105,9 +121,24 @@ const About: React.FC = () => {
 
                     <div className="w-full lg:w-3/5">
                         <motion.div variants={itemVariants} className="mb-10">
-                            <h3 className="text-3xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary flex items-center">
-                                <Brain className="mr-2 h-8 w-8 text-primary" /> Who I Am ?
+                            <h3 className="text-xl md:text-3xl font-bold mb-6 tracking-tight">
+                                <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary via-secondary to-primary/50">
+                                    Architect of
+                                </span>{" "}
+                                <span className="relative inline-block">
+                                    <span className="text-foreground">Innovation</span>
+                                    <div className="absolute -bottom-2 left-0 w-full h-[2px] bg-gradient-to-r from-primary/50 via-secondary to-primary animate-shimmer" />
+                                </span>
                             </h3>
+                            <p className="text-lg md:text-lg mb-8 font-light leading-relaxed">
+                                <span className="text-primary">Transforming visions into reality</span>{" "}
+                                <span className="text-muted-foreground">
+                                    — where creativity meets precision in every line of
+                                </span>{" "}
+                                <span className="text-primary animate-pulse">
+                                    code
+                                </span>
+                            </p>
                             <div className="text-muted-foreground text-sm md:text-base">
                                 <p>
                                     Hi, I&apos;m Pujon Das Auvi, a Full-stack Developer based in Dhaka, Bangladesh, with a passion for building scalable, user-friendly web applications. I specialize in both front-end and back-end technologies, allowing me to create seamless, fully integrated web solutions from scratch.
