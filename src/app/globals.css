@@ -129,7 +129,7 @@ body {
 }
 
 .circle img {
-  width: 100%;
+  /*width: 100%;*/
 }
 
 @keyframes morph {
