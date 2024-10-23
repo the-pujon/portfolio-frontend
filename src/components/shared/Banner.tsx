@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
@@ -13,9 +14,9 @@ const Banner: React.FC = () => {
             <div className="absolute inset-0 bg-gradient-to-br from-primary/30 to-secondary/10" />
 
             {/* Floating coding icons */}
-            {[Code,Database,Server,Wifi,Cloud,Terminal,Cpu,Globe,Layers,Zap].map((icon,index) => (
+            {/*{[Code,Database,Server,Wifi,Cloud,Terminal,Cpu,Globe,Layers,Zap].map((icon,index) => (
                 <FloatingIcon key={index} icon={icon} delay={index * 0.5} />
-            ))}
+            ))}*/}
 
             <div className="relative z-10 w-full max-w-7xl mx-auto flex flex-col md:flex-row items-center">
                 <motion.div
