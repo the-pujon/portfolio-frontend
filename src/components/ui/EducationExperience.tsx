@@ -97,7 +97,7 @@ const EducationExperience = () => {
             >
                 <div className="flex flex-col items-center mb-20">
                     <div className="relative">
-                        <h2 className="text-6xl md:text-6xl font-bold relative z-10 tracking-tight text-center">
+                        <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold relative z-10 tracking-tight text-center">
                             <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary via-secondary to-primary/50">
                                 Professional
                             </span>{" "}
@@ -107,99 +107,118 @@ const EducationExperience = () => {
                             </span>
                         </h2>
                         <div className="absolute -top-8 -right-8 text-primary/20 animate-pulse">
-                            <Briefcase className="w-16 h-16" />
+                            <Briefcase className="w-12 h-12 sm:w-16 sm:h-16" />
                         </div>
                     </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-8 mb-12">
-                    <div className="text-2xl font-bold flex items-center justify-center">
-                        <Briefcase className="w-6 h-6 mr-2 text-primary" />
-                        <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
-                            Work Experience
-                        </span>
+                {/* Mobile Layout */}
+                <div className="block md:hidden space-y-12">
+                    {/* Work Experience Section */}
+                    <div>
+                        <div className="text-xl font-bold flex items-center justify-start mb-6">
+                            <Briefcase className="w-5 h-5 mr-2 text-primary" />
+                            <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
+                                Work Experience
+                            </span>
+                        </div>
+                        <div className="space-y-4">
+                            {timelineData.map((item,index) => (
+                                <motion.div
+                                    key={index}
+                                    variants={itemVariants}
+                                    className="bg-card p-4 sm:p-6 rounded-lg shadow-lg relative overflow-hidden"
+                                    whileHover={{ scale: 1.02,boxShadow: "0 10px 30px -15px rgba(0, 0, 0, 0.3)" }}
+                                    transition={{ type: 'spring',stiffness: 300 }}
+                                >
+                                    {renderCardContent(item.experience)}
+                                </motion.div>
+                            ))}
+                        </div>
                     </div>
-                    <div className="text-2xl font-bold flex items-center justify-center">
-                        <GraduationCap className="w-6 h-6 mr-2 text-primary" />
-                        <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
-                            Education
-                        </span>
+
+                    {/* Education Section */}
+                    <div>
+                        <div className="text-xl font-bold flex items-center justify-start mb-6">
+                            <GraduationCap className="w-5 h-5 mr-2 text-primary" />
+                            <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
+                                Education
+                            </span>
+                        </div>
+                        <div className="space-y-4">
+                            {timelineData.map((item,index) => (
+                                <motion.div
+                                    key={index}
+                                    variants={itemVariants}
+                                    className="bg-card p-4 sm:p-6 rounded-lg shadow-lg relative overflow-hidden"
+                                    whileHover={{ scale: 1.02,boxShadow: "0 10px 30px -15px rgba(0, 0, 0, 0.3)" }}
+                                    transition={{ type: 'spring',stiffness: 300 }}
+                                >
+                                    {renderCardContent(item.education)}
+                                </motion.div>
+                            ))}
+                        </div>
                     </div>
                 </div>
 
-                <div className="relative">
-                    {/* Central timeline line */}
-                    <div className="absolute left-1/2 transform -translate-x-1/2 w-1 h-full bg-gradient-to-b from-primary to-secondary opacity-50 blur-sm" />
-                    <div className="absolute left-1/2 transform -translate-x-1/2 w-0.5 h-full bg-gradient-to-b from-primary to-secondary" />
+                {/* Desktop Layout */}
+                <div className="hidden md:block">
+                    {/* Desktop section headers */}
+                    <div className="grid grid-cols-2 gap-8 mb-12">
+                        <div className="text-2xl font-bold flex items-center justify-center">
+                            <Briefcase className="w-6 h-6 mr-2 text-primary" />
+                            <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
+                                Work Experience
+                            </span>
+                        </div>
+                        <div className="text-2xl font-bold flex items-center justify-center">
+                            <GraduationCap className="w-6 h-6 mr-2 text-primary" />
+                            <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
+                                Education
+                            </span>
+                        </div>
+                    </div>
 
-                    {timelineData.map((item,index) => (
-                        <motion.div
-                            key={index}
-                            variants={itemVariants}
-                            className="grid grid-cols-2 gap-8 mb-12 relative"
-                        >
-                            {/* Experience Card */}
+                    {/* Desktop Timeline */}
+                    <div className="relative">
+                        <div className="absolute left-1/2 transform -translate-x-1/2 w-1 h-full bg-gradient-to-b from-primary to-secondary opacity-50 blur-sm" />
+                        <div className="absolute left-1/2 transform -translate-x-1/2 w-0.5 h-full bg-gradient-to-b from-primary to-secondary" />
+
+                        {timelineData.map((item,index) => (
                             <motion.div
-                                className="bg-card p-6 rounded-lg shadow-lg relative overflow-hidden"
-                                whileHover={{ scale: 1.02,boxShadow: "0 10px 30px -15px rgba(0, 0, 0, 0.3)" }}
-                                transition={{ type: 'spring',stiffness: 300 }}
+                                key={index}
+                                variants={itemVariants}
+                                className="grid grid-cols-2 gap-8 mb-12 relative"
                             >
-                                <h3 className="text-xl font-bold text-primary mb-2">{item.experience.title}</h3>
-                                <div className="flex items-center text-muted-foreground mb-2">
-                                    <Calendar className="w-4 h-4 mr-2" />
-                                    <span>{item.experience.duration}</span>
-                                </div>
-                                <div className="flex items-center text-muted-foreground mb-4">
-                                    <Building2 className="w-4 h-4 mr-2" />
-                                    <span>{item.experience.organization}, {item.experience.location}</span>
-                                </div>
-                                <ul className="space-y-2">
-                                    {item.experience.points.map((point,i) => (
-                                        <li key={i} className="flex items-center text-muted-foreground">
-                                            <Star className="w-4 h-4 mr-2 text-primary" />
-                                            {point}
-                                        </li>
-                                    ))}
-                                </ul>
-                            </motion.div>
+                                <motion.div
+                                    className="bg-card p-6 rounded-lg shadow-lg relative overflow-hidden"
+                                    whileHover={{ scale: 1.02,boxShadow: "0 10px 30px -15px rgba(0, 0, 0, 0.3)" }}
+                                    transition={{ type: 'spring',stiffness: 300 }}
+                                >
+                                    {renderCardContent(item.experience)}
+                                </motion.div>
 
-                            {/* Timeline dot */}
-                            <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                                <div className="w-4 h-4 bg-primary rounded-full border-4 border-background" />
-                            </div>
+                                {/* Timeline dot */}
+                                <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10">
+                                    <div className="w-4 h-4 bg-primary rounded-full border-4 border-background" />
+                                </div>
 
-                            {/* Education Card */}
-                            <motion.div
-                                className="bg-card p-6 rounded-lg shadow-lg relative overflow-hidden"
-                                whileHover={{ scale: 1.02,boxShadow: "0 10px 30px -15px rgba(0, 0, 0, 0.3)" }}
-                                transition={{ type: 'spring',stiffness: 300 }}
-                            >
-                                <h3 className="text-xl font-bold text-primary mb-2">{item.education.title}</h3>
-                                <div className="flex items-center text-muted-foreground mb-2">
-                                    <Calendar className="w-4 h-4 mr-2" />
-                                    <span>{item.education.duration}</span>
-                                </div>
-                                <div className="flex items-center text-muted-foreground mb-4">
-                                    <Building2 className="w-4 h-4 mr-2" />
-                                    <span>{item.education.organization}, {item.education.location}</span>
-                                </div>
-                                <ul className="space-y-2">
-                                    {item.education.points.map((point,i) => (
-                                        <li key={i} className="flex items-center text-muted-foreground">
-                                            <Star className="w-4 h-4 mr-2 text-primary" />
-                                            {point}
-                                        </li>
-                                    ))}
-                                </ul>
+                                <motion.div
+                                    className="bg-card p-6 rounded-lg shadow-lg relative overflow-hidden"
+                                    whileHover={{ scale: 1.02,boxShadow: "0 10px 30px -15px rgba(0, 0, 0, 0.3)" }}
+                                    transition={{ type: 'spring',stiffness: 300 }}
+                                >
+                                    {renderCardContent(item.education)}
+                                </motion.div>
                             </motion.div>
-                        </motion.div>
-                    ))}
+                        ))}
+                    </div>
                 </div>
             </motion.div>
 
             {/* Background decorations */}
             <motion.div
-                className="absolute top-0 right-0 w-96 h-96 bg-gradient-radial from-primary/10 to-transparent rounded-full filter blur-3xl"
+                className="absolute top-0 right-0 w-48 sm:w-96 h-48 sm:h-96 bg-gradient-radial from-primary/10 to-transparent rounded-full filter blur-3xl"
                 animate={{
                     scale: [1,1.1,1],
                     opacity: [0.3,0.5,0.3],
@@ -207,7 +226,7 @@ const EducationExperience = () => {
                 transition={{ duration: 8,repeat: Infinity }}
             />
             <motion.div
-                className="absolute bottom-0 left-0 w-96 h-96 bg-gradient-radial from-secondary/10 to-transparent rounded-full filter blur-3xl"
+                className="absolute bottom-0 left-0 w-48 sm:w-96 h-48 sm:h-96 bg-gradient-radial from-secondary/10 to-transparent rounded-full filter blur-3xl"
                 animate={{
                     scale: [1,1.2,1],
                     opacity: [0.3,0.5,0.3],
@@ -217,5 +236,28 @@ const EducationExperience = () => {
         </section>
     );
 };
+
+// Helper function to render card content
+const renderCardContent = (item) => (
+    <>
+        <h3 className="text-lg sm:text-xl font-bold text-primary mb-2">{item.title}</h3>
+        <div className="flex items-center text-muted-foreground mb-2">
+            <Calendar className="w-4 h-4 mr-2" />
+            <span className="text-sm sm:text-base">{item.duration}</span>
+        </div>
+        <div className="flex items-center text-muted-foreground mb-4">
+            <Building2 className="w-4 h-4 mr-2" />
+            <span className="text-sm sm:text-base">{item.organization}, {item.location}</span>
+        </div>
+        <ul className="space-y-2">
+            {item.points.map((point,i) => (
+                <li key={i} className="flex items-center text-muted-foreground">
+                    <Star className="w-4 h-4 mr-2 text-primary flex-shrink-0" />
+                    <span className="text-sm sm:text-base">{point}</span>
+                </li>
+            ))}
+        </ul>
+    </>
+);
 
 export default EducationExperience;
