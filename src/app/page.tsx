@@ -12,6 +12,7 @@ import TopProjects from './../components/shared/TopProjects';
 import EducationExperience from '@/components/shared/EducationExperience';
 import LatestBlogs from '@/components/shared/LatestBlogs';
 import Certification from '@/components/shared/Certification';
+import Contact from '@/components/shared/Contact';
 
 
 
@@ -32,6 +33,7 @@ const Home: React.FC = () => {
       <EducationExperience />
       <LatestBlogs />
       <Certification />
+      <Contact />
     </div>
   );
 }
