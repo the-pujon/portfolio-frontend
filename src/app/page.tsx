@@ -10,6 +10,7 @@ import Skills from '@/components/shared/Skills';
 //import MySkill from '@/components/shared/MySkill';
 import TopProjects from './../components/shared/TopProjects';
 import EducationExperience from '@/components/shared/EducationExperience';
+import LatestBlogs from '@/components/shared/LatestBlogs';
 
 
 
@@ -28,6 +29,7 @@ const Home: React.FC = () => {
       <TopProjects />
       {/*<MySkill />*/}
       <EducationExperience />
+      <LatestBlogs />
     </div>
   );
 }
