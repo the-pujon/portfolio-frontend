@@ -3,15 +3,12 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   ExternalLink,
   Github,
-  ArrowRight,
   Star,
   ArrowUpRight,
   Sparkles,
   Rocket,
   Trophy,
   Zap,
-  Award,
-  Gem,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -61,14 +58,6 @@ const projects = [
 const TopProjects = () => {
   return (
     <section className="py-24 px-4 relative overflow-hidden bg-gradient-to-b from-background via-background/95 to-background/90">
-      {/* Enhanced layered background effects */}
-      <div className="absolute inset-0 -z-10">
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)] bg-[size:14px_24px]" />
-        <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_800px_at_50%_-100px,#3b82f620,transparent)]" />
-        <div className="absolute bottom-0 right-0 w-full h-full bg-[radial-gradient(circle_800px_at_80%_80%,#8b5cf620,transparent)]" />
-        <div className="absolute top-1/2 left-1/2 w-full h-full bg-[conic-gradient(from_0deg_at_50%_50%,#3b82f610,#8b5cf610,#3b82f610)] animate-slow-spin" />
-      </div>
-
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -91,7 +80,7 @@ const TopProjects = () => {
                   <div className="absolute -bottom-2 left-0 w-full h-[2px] bg-gradient-to-r from-primary/50 via-secondary to-primary animate-shimmer" />
                 </span>
               </h2>
-              <div className="absolute -top-8 -right-8 text-primary/20 animate-pulse">
+              <div className="absolute -top-8 right-12 text-primary/20 animate-pulse">
                 <Sparkles className="w-16 h-16" />
               </div>
             </div>
@@ -240,7 +229,8 @@ const TopProjects = () => {
 
                       {/* Enhanced technology badges */}
                       <div className="flex flex-wrap gap-2 pt-2 border-t border-primary/10">
-                        {project.technologies.map((tech, idx) => (
+                        {/*eslint-disable-next-line @typescript-eslint/no-unused-vars*/}
+                        {project.technologies.map((tech, _idx) => (
                           <Badge
                             key={tech}
                             variant="secondary"
