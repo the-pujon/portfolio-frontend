@@ -90,7 +90,7 @@ const EducationExperience = () => {
     ];
 
     return (
-        <section id="education-experience" className="py-12 sm:py-16 md:py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-background via-primary/5 to-secondary/10 relative overflow-hidden">
+        <section id="education-experience" className="py-12 sm:py-16 md:py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-primary/10 to-secondary/10 relative overflow-hidden">
             <motion.div
                 ref={ref}
                 animate={controls}

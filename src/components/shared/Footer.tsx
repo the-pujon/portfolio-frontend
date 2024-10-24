@@ -39,11 +39,11 @@ const Footer = () => {
         { name: 'About',href: '/about' },
         { name: 'Projects',href: '/projects' },
         { name: 'Blog',href: '/blog' },
-        { name: 'Contact',href: '/contact' },
+        //{ name: 'Contact',href: '/contact' },
     ];
 
     return (
-        <footer className="relative overflow-hidden border-t border-primary/10">
+        <footer className="relative overflow-hidden  border-primary/10 bg-gradient-to-br from-primary/10 to-secondary/10">
             {/* Main Footer Content */}
             <div className="max-w-7xl mx-auto px-4 py-12">
                 {/* Top Section with Logo and Social Links */}

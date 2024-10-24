@@ -75,7 +75,7 @@ const Certification = () => {
     };
 
     return (
-        <section className="py-24 px-4 relative overflow-hidden bg-gradient-to-b from-background via-background/95 to-background/90">
+        <section className="py-24 px-4 relative overflow-hidden bg-gradient-to-br from-background via-primary/5 to-secondary/10">
             <motion.div
                 ref={ref}
                 animate={controls}
