@@ -11,6 +11,7 @@ import Skills from '@/components/shared/Skills';
 import TopProjects from './../components/shared/TopProjects';
 import EducationExperience from '@/components/shared/EducationExperience';
 import LatestBlogs from '@/components/shared/LatestBlogs';
+import Certification from '@/components/shared/Certification';
 
 
 
@@ -30,9 +31,21 @@ const Home: React.FC = () => {
       {/*<MySkill />*/}
       <EducationExperience />
       <LatestBlogs />
+      <Certification />
     </div>
   );
 }
+
+//<Button
+//onClick={() => window.open(certificate.credentialLink)}
+//className="group relative overflow-hidden bg-primary hover:bg-primary/90 transition-colors duration-300"
+//>
+//<div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
+//<span className="relative flex items-center justify-center gap-2">
+//    Verify Credential
+//    <ExternalLink className="w-4 h-4 transition-transform duration-300 group-hover:rotate-45" />
+//</span>
+//</Button>
 
 
 export default Home;
