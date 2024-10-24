@@ -1,10 +1,9 @@
 import React from 'react';
 import { motion,useAnimation,useInView } from 'framer-motion';
-import { Calendar,ArrowRight,BookOpen,Clock } from 'lucide-react';
-import Image from 'next/image';
+import { ArrowRight,BookOpen } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '../ui/button';
-import { Badge } from '../ui/badge';
+import { BlogCard } from '../ui/BlogCard';
 
 interface BlogPost {
     id: string;
@@ -138,77 +137,12 @@ const LatestBlogs = () => {
                     </Link>
                 </div>
 
-                {/* Blog Grid */}
+                {/* Updated Blog Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {blogPosts.map((post,index) => (
-                        <motion.article
-                            key={post.id}
-                            variants={itemVariants}
-                            className="group h-full flex flex-col relative hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 border-primary/10 overflow-hidden bg-gradient-to-br from-background/80 via-background to-muted/20 backdrop-blur-sm hover:border-primary/30 rounded-lg"
-                        >
-                            <Link href={`/blog/${post.slug}`} className="h-full">
-                                {/* Glowing effect on hover */}
-                                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                                    <div className="absolute inset-0 bg-gradient-to-t from-primary/10 via-white/5 to-secondary/10 animate-gradient" />
-                                </div>
-
-                                <div className="relative h-48 w-full overflow-hidden">
-                                    <Image
-                                        src={post.coverImage}
-                                        alt={post.title}
-                                        layout="fill"
-                                        objectFit="cover"
-                                        className="transition-transform duration-700 group-hover:scale-110"
-                                    />
-                                    {/* Gradient overlay */}
-                                    <div className="absolute inset-0 bg-gradient-to-t from-background via-background/20 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500" />
-
-                                    {/* Category badge */}
-                                    <div className="absolute top-4 right-4 z-10">
-                                        <Badge className="bg-primary/90 text-primary-foreground px-3 py-1 flex items-center gap-2">
-                                            {post.category}
-                                        </Badge>
-                                    </div>
-
-                                    {/* Date and read time - floating style */}
-                                    <div className="absolute bottom-4 left-4 right-4 flex justify-between items-center text-sm text-white z-10">
-                                        <span className="flex items-center gap-1 bg-background/50 backdrop-blur-sm px-2 py-1 rounded-full">
-                                            <Calendar className="w-4 h-4" />
-                                            {new Date(post.date).toLocaleDateString()}
-                                        </span>
-                                        <span className="flex items-center gap-1 bg-background/50 backdrop-blur-sm px-2 py-1 rounded-full">
-                                            <Clock className="w-4 h-4" />
-                                            {post.readTime}
-                                        </span>
-                                    </div>
-                                </div>
-
-                                <div className="p-6 flex flex-col flex-grow bg-gradient-to-b from-transparent to-muted/5">
-                                    {/* Title with gradient effect on hover */}
-                                    <h3 className="text-xl font-semibold mb-3 text-foreground group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-primary group-hover:to-secondary transition-all duration-300 line-clamp-2">
-                                        {post.title}
-                                    </h3>
-
-                                    {/* Excerpt with fade-in effect */}
-                                    <p className="text-muted-foreground mb-6 line-clamp-2 group-hover:text-muted-foreground/80 transition-colors duration-300">
-                                        {post.excerpt}
-                                    </p>
-
-                                    {/* Enhanced Read More button */}
-                                    <div className="mt-auto">
-                                        <Button
-                                            variant="ghost"
-                                            className="w-full group/btn hover:bg-primary hover:text-white border border-primary/20 transition-all duration-300"
-                                        >
-                                            <span className="flex items-center justify-center gap-2">
-                                                Read Article
-                                                <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-2 transition-transform duration-300" />
-                                            </span>
-                                        </Button>
-                                    </div>
-                                </div>
-                            </Link>
-                        </motion.article>
+                    {blogPosts.map((post) => (
+                        <motion.div key={post.id} variants={itemVariants}>
+                            <BlogCard post={post} />
+                        </motion.div>
                     ))}
                 </div>
             </motion.div>
