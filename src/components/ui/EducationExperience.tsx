@@ -87,7 +87,7 @@ const EducationExperience = () => {
     ];
 
     return (
-        <section id="education-experience" className="py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-background via-primary/5 to-secondary/10 relative overflow-hidden">
+        <section id="education-experience" className="py-12 sm:py-16 md:py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-background via-primary/5 to-secondary/10 relative overflow-hidden">
             <motion.div
                 ref={ref}
                 animate={controls}
@@ -95,31 +95,82 @@ const EducationExperience = () => {
                 variants={containerVariants}
                 className="max-w-7xl mx-auto"
             >
-                <div className="flex flex-col items-center mb-20">
-                    <div className="relative">
-                        <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold relative z-10 tracking-tight text-center">
+                {/* Enhanced Responsive Title Section */}
+                <div className="flex flex-col items-center mb-10 sm:mb-16 md:mb-20">
+                    <motion.div
+                        className="relative mb-4 sm:mb-6"
+                        variants={{
+                            hidden: { opacity: 0,y: -20 },
+                            visible: { opacity: 1,y: 0 }
+                        }}
+                    >
+                        <span className="text-xs sm:text-sm md:text-base font-medium text-primary/80 tracking-wider uppercase mb-2 sm:mb-4 block text-center">
+                            Career Milestones & Academic Achievements
+                        </span>
+                        <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold relative z-10 tracking-tight text-center px-4">
                             <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary via-secondary to-primary/50">
-                                Professional
+                                Building
                             </span>{" "}
                             <span className="relative inline-block">
-                                <span className="text-foreground">Journey</span>
-                                <div className="absolute -bottom-2 left-0 w-full h-[2px] bg-gradient-to-r from-primary/50 via-secondary to-primary animate-shimmer" />
+                                <span className="text-foreground">Excellence</span>
+                                <div className="absolute -bottom-1 sm:-bottom-2 left-0 w-full h-[2px] bg-gradient-to-r from-primary/50 via-secondary to-primary animate-shimmer" />
                             </span>
                         </h2>
-                        <div className="absolute -top-8 -right-8 text-primary/20 animate-pulse">
-                            <Briefcase className="w-12 h-12 sm:w-16 sm:h-16" />
+                        <div className="absolute -top-4 sm:-top-6 md:-top-8 -right-4 sm:-right-6 md:-right-8 text-primary/20 animate-pulse">
+                            <Briefcase className="w-8 h-8 sm:w-12 sm:h-12 md:w-16 md:h-16" />
                         </div>
-                    </div>
+                    </motion.div>
+
+                    <motion.p
+                        className="text-sm sm:text-base md:text-lg lg:text-xl text-muted-foreground max-w-[90%] sm:max-w-2xl md:max-w-3xl text-center leading-relaxed px-4"
+                        variants={{
+                            hidden: { opacity: 0,y: 20 },
+                            visible: { opacity: 1,y: 0 }
+                        }}
+                    >
+                        From <span className="text-primary font-medium">academic foundations</span> to{" "}
+                        <span className="text-primary font-medium">professional triumphs</span>,
+                        explore the journey that shapes my expertise in{" "}
+                        <span className="text-primary font-medium">full-stack development</span>.
+                    </motion.p>
+
+                    <motion.div
+                        className="flex flex-wrap justify-center gap-2 mt-4 sm:mt-6 text-xs sm:text-sm text-muted-foreground/60 px-4"
+                        variants={{
+                            hidden: { opacity: 0 },
+                            visible: { opacity: 1 }
+                        }}
+                    >
+                        <span className="flex items-center">
+                            <GraduationCap className="w-3 h-3 sm:w-4 sm:h-4 mr-1" />
+                            Education
+                        </span>
+                        <span className="px-2">•</span>
+                        <span className="flex items-center">
+                            <Briefcase className="w-3 h-3 sm:w-4 sm:h-4 mr-1" />
+                            Experience
+                        </span>
+                        <span className="px-2">•</span>
+                        <span className="flex items-center">
+                            <Star className="w-3 h-3 sm:w-4 sm:h-4 mr-1" />
+                            Achievements
+                        </span>
+                    </motion.div>
                 </div>
 
                 {/* Mobile Layout */}
-                <div className="block md:hidden space-y-12">
+                <div className="block md:hidden space-y-8 sm:space-y-12">
                     {/* Work Experience Section */}
                     <div>
-                        <div className="text-xl font-bold flex items-center justify-start mb-6">
-                            <Briefcase className="w-5 h-5 mr-2 text-primary" />
-                            <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
-                                Work Experience
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-start mb-4 sm:mb-6">
+                            <div className="flex items-center">
+                                <Briefcase className="w-4 h-4 sm:w-5 sm:h-5 mr-2 text-primary" />
+                                <span className="text-lg sm:text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
+                                    Professional Experience
+                                </span>
+                            </div>
+                            <span className="text-xs sm:text-sm text-muted-foreground/60 mt-1 sm:mt-0 sm:ml-3">
+                                Building & Leading
                             </span>
                         </div>
                         <div className="space-y-4">
@@ -139,10 +190,15 @@ const EducationExperience = () => {
 
                     {/* Education Section */}
                     <div>
-                        <div className="text-xl font-bold flex items-center justify-start mb-6">
-                            <GraduationCap className="w-5 h-5 mr-2 text-primary" />
-                            <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
-                                Education
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-start mb-4 sm:mb-6">
+                            <div className="flex items-center">
+                                <GraduationCap className="w-4 h-4 sm:w-5 sm:h-5 mr-2 text-primary" />
+                                <span className="text-lg sm:text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
+                                    Academic Background
+                                </span>
+                            </div>
+                            <span className="text-xs sm:text-sm text-muted-foreground/60 mt-1 sm:mt-0 sm:ml-3">
+                                Learning & Growing
                             </span>
                         </div>
                         <div className="space-y-4">
@@ -163,23 +219,30 @@ const EducationExperience = () => {
 
                 {/* Desktop Layout */}
                 <div className="hidden md:block">
-                    {/* Desktop section headers */}
                     <div className="grid grid-cols-2 gap-8 mb-12">
-                        <div className="text-2xl font-bold flex items-center justify-center">
-                            <Briefcase className="w-6 h-6 mr-2 text-primary" />
-                            <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
-                                Work Experience
+                        <div className="flex flex-col items-center justify-center">
+                            <div className="flex items-center mb-2">
+                                <Briefcase className="w-5 h-5 lg:w-6 lg:h-6 mr-2 text-primary" />
+                                <span className="text-xl lg:text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
+                                    Professional Experience
+                                </span>
+                            </div>
+                            <span className="text-sm lg:text-base text-muted-foreground/60">
+                                Building & Leading
                             </span>
                         </div>
-                        <div className="text-2xl font-bold flex items-center justify-center">
-                            <GraduationCap className="w-6 h-6 mr-2 text-primary" />
-                            <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
-                                Education
+                        <div className="flex flex-col items-center justify-center">
+                            <div className="flex items-center mb-2">
+                                <GraduationCap className="w-5 h-5 lg:w-6 lg:h-6 mr-2 text-primary" />
+                                <span className="text-xl lg:text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
+                                    Academic Background
+                                </span>
+                            </div>
+                            <span className="text-sm lg:text-base text-muted-foreground/60">
+                                Learning & Growing
                             </span>
                         </div>
                     </div>
-
-                    {/* Desktop Timeline */}
                     <div className="relative">
                         <div className="absolute left-1/2 transform -translate-x-1/2 w-1 h-full bg-gradient-to-b from-primary to-secondary opacity-50 blur-sm" />
                         <div className="absolute left-1/2 transform -translate-x-1/2 w-0.5 h-full bg-gradient-to-b from-primary to-secondary" />
