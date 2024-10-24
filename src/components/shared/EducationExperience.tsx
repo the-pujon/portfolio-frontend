@@ -1,6 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
 import { motion,useAnimation,useInView } from 'framer-motion';
-import { GraduationCap,Calendar,MapPin,Award,Briefcase,Building2,Star } from 'lucide-react';
+import { GraduationCap,Briefcase,Star } from 'lucide-react';
+import EducationExperienceCard from '../ui/EducationExperienceCard';
+import EducationExperienceMob from './Mobile/EducationExperienceMob';
 
 const EducationExperience = () => {
     const ref = React.useRef(null);
@@ -159,63 +162,8 @@ const EducationExperience = () => {
                 </div>
 
                 {/* Mobile Layout */}
-                <div className="block md:hidden space-y-8 sm:space-y-12">
-                    {/* Work Experience Section */}
-                    <div>
-                        <div className="flex flex-col sm:flex-row sm:items-center justify-start mb-4 sm:mb-6">
-                            <div className="flex items-center">
-                                <Briefcase className="w-4 h-4 sm:w-5 sm:h-5 mr-2 text-primary" />
-                                <span className="text-lg sm:text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
-                                    Professional Experience
-                                </span>
-                            </div>
-                            <span className="text-xs sm:text-sm text-muted-foreground/60 mt-1 sm:mt-0 sm:ml-3">
-                                Building & Leading
-                            </span>
-                        </div>
-                        <div className="space-y-4">
-                            {timelineData.map((item,index) => (
-                                <motion.div
-                                    key={index}
-                                    variants={itemVariants}
-                                    className="bg-card p-4 sm:p-6 rounded-lg shadow-lg relative overflow-hidden"
-                                    whileHover={{ scale: 1.02,boxShadow: "0 10px 30px -15px rgba(0, 0, 0, 0.3)" }}
-                                    transition={{ type: 'spring',stiffness: 300 }}
-                                >
-                                    {renderCardContent(item.experience)}
-                                </motion.div>
-                            ))}
-                        </div>
-                    </div>
+                <EducationExperienceMob timelineData={timelineData} />
 
-                    {/* Education Section */}
-                    <div>
-                        <div className="flex flex-col sm:flex-row sm:items-center justify-start mb-4 sm:mb-6">
-                            <div className="flex items-center">
-                                <GraduationCap className="w-4 h-4 sm:w-5 sm:h-5 mr-2 text-primary" />
-                                <span className="text-lg sm:text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
-                                    Academic Background
-                                </span>
-                            </div>
-                            <span className="text-xs sm:text-sm text-muted-foreground/60 mt-1 sm:mt-0 sm:ml-3">
-                                Learning & Growing
-                            </span>
-                        </div>
-                        <div className="space-y-4">
-                            {timelineData.map((item,index) => (
-                                <motion.div
-                                    key={index}
-                                    variants={itemVariants}
-                                    className="bg-card p-4 sm:p-6 rounded-lg shadow-lg relative overflow-hidden"
-                                    whileHover={{ scale: 1.02,boxShadow: "0 10px 30px -15px rgba(0, 0, 0, 0.3)" }}
-                                    transition={{ type: 'spring',stiffness: 300 }}
-                                >
-                                    {renderCardContent(item.education)}
-                                </motion.div>
-                            ))}
-                        </div>
-                    </div>
-                </div>
 
                 {/* Desktop Layout */}
                 <div className="hidden md:block">
@@ -258,7 +206,9 @@ const EducationExperience = () => {
                                     whileHover={{ scale: 1.02,boxShadow: "0 10px 30px -15px rgba(0, 0, 0, 0.3)" }}
                                     transition={{ type: 'spring',stiffness: 300 }}
                                 >
-                                    {renderCardContent(item.experience)}
+                                    {/*{renderCardContent(item.experience)}
+                                    */}
+                                    <EducationExperienceCard item={item.experience} />
                                 </motion.div>
 
                                 {/* Timeline dot */}
@@ -271,7 +221,9 @@ const EducationExperience = () => {
                                     whileHover={{ scale: 1.02,boxShadow: "0 10px 30px -15px rgba(0, 0, 0, 0.3)" }}
                                     transition={{ type: 'spring',stiffness: 300 }}
                                 >
-                                    {renderCardContent(item.education)}
+                                    {/*{renderCardContent(item.education)}
+                                    */}
+                                    <EducationExperienceCard item={item.education} />
                                 </motion.div>
                             </motion.div>
                         ))}
@@ -279,48 +231,8 @@ const EducationExperience = () => {
                 </div>
             </motion.div>
 
-            {/* Background decorations */}
-            <motion.div
-                className="absolute top-0 right-0 w-48 sm:w-96 h-48 sm:h-96 bg-gradient-radial from-primary/10 to-transparent rounded-full filter blur-3xl"
-                animate={{
-                    scale: [1,1.1,1],
-                    opacity: [0.3,0.5,0.3],
-                }}
-                transition={{ duration: 8,repeat: Infinity }}
-            />
-            <motion.div
-                className="absolute bottom-0 left-0 w-48 sm:w-96 h-48 sm:h-96 bg-gradient-radial from-secondary/10 to-transparent rounded-full filter blur-3xl"
-                animate={{
-                    scale: [1,1.2,1],
-                    opacity: [0.3,0.5,0.3],
-                }}
-                transition={{ duration: 10,repeat: Infinity }}
-            />
         </section>
     );
 };
-
-// Helper function to render card content
-const renderCardContent = (item) => (
-    <>
-        <h3 className="text-lg sm:text-xl font-bold text-primary mb-2">{item.title}</h3>
-        <div className="flex items-center text-muted-foreground mb-2">
-            <Calendar className="w-4 h-4 mr-2" />
-            <span className="text-sm sm:text-base">{item.duration}</span>
-        </div>
-        <div className="flex items-center text-muted-foreground mb-4">
-            <Building2 className="w-4 h-4 mr-2" />
-            <span className="text-sm sm:text-base">{item.organization}, {item.location}</span>
-        </div>
-        <ul className="space-y-2">
-            {item.points.map((point,i) => (
-                <li key={i} className="flex items-center text-muted-foreground">
-                    <Star className="w-4 h-4 mr-2 text-primary flex-shrink-0" />
-                    <span className="text-sm sm:text-base">{point}</span>
-                </li>
-            ))}
-        </ul>
-    </>
-);
 
 export default EducationExperience;

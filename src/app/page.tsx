@@ -9,7 +9,7 @@ import { Globe,Code,Database,Server,Wifi,Cloud,Terminal,Cpu,Layers,Zap } from 'l
 import Skills from '@/components/shared/Skills';
 //import MySkill from '@/components/shared/MySkill';
 import TopProjects from './../components/shared/TopProjects';
-import EducationExperience from '@/components/ui/EducationExperience';
+import EducationExperience from '@/components/shared/EducationExperience';
 
 
 
