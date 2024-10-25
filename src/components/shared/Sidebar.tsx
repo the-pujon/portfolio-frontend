@@ -13,7 +13,8 @@ import {
     Scroll,
     FolderTree,
     GitFork,
-    PhoneCall
+    PhoneCall,
+    Edit
 } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 
@@ -22,6 +23,7 @@ const Sidebar = () => {
 
     const sidebarItems = [
         { name: 'Profile',icon: User,path: '/dashboard' },
+        { name: 'Edit Profile',icon: Edit,path: '/dashboard/edit-profile' },
         { name: 'Add Education',icon: GraduationCap,path: '/dashboard/education' },
         { name: 'Add Experience',icon: Briefcase,path: '/dashboard/experience' },
         { name: 'Add Blogs',icon: PenTool,path: '/dashboard/blogs' },
@@ -35,7 +37,7 @@ const Sidebar = () => {
     ];
 
     return (
-        <div className="w-64 h-screen bg-background border-r border-border mt-14">
+        <div className="w-64 h-screen bg-background border-r border-border mt-14 sticky top-14 self-start">
             <div className="p-4">
                 <h2 className="text-2xl font-bold text-primary">Dashboard</h2>
             </div>
