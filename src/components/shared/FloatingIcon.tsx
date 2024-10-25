@@ -1,12 +1,24 @@
 "use client";
 
-import { useAnimation,motion,MotionProps } from 'framer-motion';
+import { useAnimation,motion } from 'framer-motion';
 import { LucideIcon } from 'lucide-react';
 import { useEffect,useState } from "react";
 
+type RandomPositions = {
+    top: number;
+    left: number;
+    right: number;
+    bottom: number;
+    x1: number;
+    y1: number;
+    x2: number;
+    y2: number;
+    duration: number;
+};
+
 export const FloatingIcon = ({ icon: Icon,delay }: { icon: LucideIcon,delay: number }) => {
     const controls = useAnimation();
-    const [randomPositions,setRandomPositions] = useState({
+    const [randomPositions,setRandomPositions] = useState<RandomPositions>({
         top: 0,
         left: 0,
         right: 0,
@@ -47,25 +59,18 @@ export const FloatingIcon = ({ icon: Icon,delay }: { icon: LucideIcon,delay: num
         return null; // or a loading placeholder
     }
 
-    const motionProps: MotionProps & React.HTMLAttributes<HTMLDivElement> = {
-        className: "absolute text-primary/20",
-        style: {
-            top: `${randomPositions.top}%`,
-            left: `${randomPositions.left}%`,
-            right: `${randomPositions.right}%`,
-            bottom: `${randomPositions.bottom}%`,
-        },
-        initial: { x: `${randomPositions.x1}%`,y: `${randomPositions.y1}%` },
-        animate: {
-            x: [`${randomPositions.x1}%`,`${randomPositions.x2}%`],
-            y: [`${randomPositions.y1}%`,`${randomPositions.y2}%`],
-        },
-        transition: { duration: randomPositions.duration,repeat: Infinity,repeatType: 'reverse' as const },
-    };
-
     return (
-        <motion.div {...motionProps}>
-            <motion.div animate={controls}>
+        <motion.div
+            animate={controls}
+            className="absolute text-primary/20"
+            initial={{ x: `${randomPositions.x1}%`,y: `${randomPositions.y1}%` }}
+            transition={{
+                duration: randomPositions.duration,
+                repeat: Infinity,
+                repeatType: 'reverse' as const
+            }}
+        >
+            <motion.div>
                 <Icon size={32} />
             </motion.div>
         </motion.div>

@@ -1,13 +1,13 @@
 'use client'
-import React from 'react';
+import React,{ useRef } from 'react';
 import Image from 'next/image';
 import { motion,useAnimation,useInView } from 'framer-motion';
 import { Brain,Code,Database,Server,Sparkles,Award } from 'lucide-react';
 import BannerImage from "@/assets/bannerImage.png";
 
 const About: React.FC = () => {
-    const ref = React.useRef(null);
-    const isInView = useInView(ref,{ once: true });
+    const ref = useRef<HTMLDivElement>(null);
+    const isInView = useInView(ref as React.RefObject<Element>);
     const controls = useAnimation();
 
     React.useEffect(() => {
