@@ -3,7 +3,7 @@
 import React from 'react';
 import Banner from '@/components/shared/Banner';
 import About from '@/components/shared/About';
-import { FloatingIcon } from '@/components/shared/FloatingIcon';
+//import { FloatingIcon } from '@/components/shared/FloatingIcon';
 
 import { Globe,Code,Database,Server,Wifi,Cloud,Terminal,Cpu,Layers,Zap } from 'lucide-react';
 import Skills from '@/components/shared/Skills';
@@ -13,7 +13,7 @@ import EducationExperience from '@/components/shared/EducationExperience';
 import LatestBlogs from '@/components/shared/LatestBlogs';
 import Certification from '@/components/shared/Certification';
 import Contact from '@/components/shared/Contact';
-
+import { FloatingIcon } from '../components/shared/FloatingIcon';
 
 
 

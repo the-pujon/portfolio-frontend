@@ -1,20 +1,10 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
 import { motion,useAnimation,useInView } from 'framer-motion';
 import { ArrowRight,BookOpen } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '../ui/button';
 import { BlogCard } from '../ui/BlogCard';
-
-interface BlogPost {
-    id: string;
-    title: string;
-    excerpt: string;
-    coverImage: string;
-    date: string;
-    readTime: string;
-    category: string;
-    slug: string;
-}
 
 const LatestBlogs = () => {
     const ref = React.useRef(null);
@@ -27,39 +17,64 @@ const LatestBlogs = () => {
         }
     },[controls,isInView]);
 
-    // Mock data with actual Unsplash images
-    const blogPosts: BlogPost[] = [
+
+    interface Blog {
+        _id: string;
+        title: string;
+        content: string;
+        image: string[];
+        author: string;
+        category: string;
+        tags: string[];
+        createdAt: Date;
+        updatedAt: Date;
+        blogFeedback: {
+            blog: string;
+            rating: number;
+            email: string;
+            feedback: string;
+            createdAt: Date;
+            updatedAt: Date;
+        }[];
+    }
+
+    // Demo data based on the Blog interface
+    const blogPosts: Blog[] = [
         {
-            id: '1',
-            title: 'Building Scalable Web Applications with Next.js',
-            excerpt: 'Learn how to create performant and scalable web applications using Next.js and React. Discover best practices for server-side rendering, API routes, and deployment strategies...',
-            coverImage: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80',
-            date: '2024-03-15',
-            readTime: '5 min read',
-            category: 'Web Development',
-            slug: 'building-scalable-web-applications'
+            _id: "1",
+            title: "The Future of AI in Web Development",
+            content: "Artificial Intelligence is revolutionizing the way we build and interact with websites...",
+            image: ["https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8YWl8ZW58MHx8MHx8fDA%3D"],
+            author: "Jane Doe",
+            category: "Technology",
+            tags: ["AI","Web Development","Future Tech"],
+            createdAt: new Date("2023-03-15"),
+            updatedAt: new Date("2023-03-16"),
+            blogFeedback: [
+                {
+                    blog: "1" as any,
+                    rating: 4,
+                    email: "user1@example.com",
+                    feedback: "Great insights on AI's potential!",
+                    createdAt: new Date("2023-03-17"),
+                    updatedAt: new Date("2023-03-17"),
+                },
+            ],
         },
         {
-            id: '2',
-            title: 'Modern State Management in React',
-            excerpt: 'Exploring different state management solutions in React applications. From Context API to Redux Toolkit, learn which solution fits your needs...',
-            coverImage: 'https://images.unsplash.com/photo-1633356122544-f134324a6cee?q=80',
-            date: '2024-03-10',
-            readTime: '7 min read',
-            category: 'React',
-            slug: 'modern-state-management-react'
-        },
-        {
-            id: '3',
-            title: 'TypeScript Best Practices for 2024',
-            excerpt: 'Essential TypeScript patterns and practices for better code quality. Learn about advanced types, decorators, and error handling strategies...',
-            coverImage: 'https://images.unsplash.com/photo-1629904853716-f0bc54eea481?q=80',
-            date: '2024-03-05',
-            readTime: '6 min read',
-            category: 'TypeScript',
-            slug: 'typescript-best-practices'
+            _id: "2",
+            title: "Mastering React Hooks",
+            content: "React Hooks have transformed the way we write functional components...",
+            image: ["https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cmVhY3R8ZW58MHx8MHx8fDA%3D"],
+            author: "John Smith",
+            category: "Programming",
+            tags: ["React","JavaScript","Web Development"],
+            createdAt: new Date("2023-04-01"),
+            updatedAt: new Date("2023-04-02"),
+            blogFeedback: [],
         },
     ];
+
 
     const containerVariants = {
         hidden: { opacity: 0 },
@@ -139,9 +154,9 @@ const LatestBlogs = () => {
 
                 {/* Updated Blog Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {blogPosts.map((post) => (
-                        <motion.div key={post.id} variants={itemVariants}>
-                            <BlogCard post={post} />
+                    {blogPosts.map((post,i) => (
+                        <motion.div key={i} variants={itemVariants}>
+                            <BlogCard blog={post} />
                         </motion.div>
                     ))}
                 </div>

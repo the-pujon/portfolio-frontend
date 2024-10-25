@@ -1,15 +1,18 @@
-import React from 'react';
+"use client";
+
+import React,{ useRef,useEffect } from 'react';
 import { motion,useAnimation,useInView } from 'framer-motion';
+//import * as motion from 'framer-motion/client';
 import { Code,Server,Database,Braces,Palette,Cloud,Star } from 'lucide-react';
 import reactImg from '../../assets/react.png';
 import Image from 'next/image';
 
 const Skills: React.FC = () => {
-    const ref = React.useRef(null);
-    const isInView = useInView(ref,{ once: true });
+    const ref = useRef<HTMLDivElement>(null);
+    const isInView = useInView(ref as React.RefObject<Element>);
     const controls = useAnimation();
 
-    React.useEffect(() => {
+    useEffect(() => {
         if (isInView) {
             controls.start('visible');
         }
@@ -118,6 +121,7 @@ const Skills: React.FC = () => {
                 initial="hidden"
                 variants={containerVariants}
                 className="max-w-7xl mx-auto"
+
             >
                 <div className="flex flex-col items-center mb-20">
                     <div className="relative">
