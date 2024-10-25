@@ -389,3 +389,18 @@ body {
   height: 200px;
   backface-visibility: hidden;
 }
+
+.richText ul,
+.richText ol,
+.richText p,
+.richText h1,
+.richText h2,
+.richText h3,
+.richText h4,
+.richText h5,
+.richText h6,
+.richText blockquote,
+.richText li {
+  all: revert !important;
+  margin: 0 !important;
+}
