@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React from 'react';
+import React,{ useRef } from 'react';
 import { motion,useAnimation,useInView } from 'framer-motion';
 import { ArrowRight,BookOpen } from 'lucide-react';
 import Link from 'next/link';
@@ -7,8 +7,8 @@ import { Button } from '../ui/button';
 import { BlogCard } from '../ui/BlogCard';
 
 const LatestBlogs = () => {
-    const ref = React.useRef(null);
-    const isInView = useInView(ref,{ once: true });
+    const ref = useRef<HTMLDivElement>(null);
+    const isInView = useInView(ref as React.RefObject<Element>);
     const controls = useAnimation();
 
     React.useEffect(() => {

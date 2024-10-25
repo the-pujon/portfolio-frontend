@@ -2,10 +2,9 @@
 
 import React,{ useState } from 'react';
 import Image from 'next/image';
-import { motion,useScroll,useTransform,AnimatePresence } from 'framer-motion';
-import { Calendar,Clock,User,Tag,ThumbsUp,BookOpen,Star,MessageCircle,Quote } from 'lucide-react';
+import { motion,useScroll,useTransform } from 'framer-motion';
+import { Calendar,Clock,User,Tag,BookOpen,Star,MessageCircle,Quote } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
 import { BlogFeedbackForm } from '@/components/BlogFeedbackForm';
 import {
     Carousel,

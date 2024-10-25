@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React,{ useState } from 'react';
 import { motion } from 'framer-motion';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -14,14 +14,15 @@ interface BlogFeedbackFormProps {
     }) => void;
 }
 
-export const BlogFeedbackForm: React.FC<BlogFeedbackFormProps> = ({ blogId, onSubmit }) => {
-    const [rating, setRating] = useState(0);
-    const [email, setEmail] = useState('');
-    const [feedback, setFeedback] = useState('');
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export const BlogFeedbackForm: React.FC<BlogFeedbackFormProps> = ({ blogId,onSubmit }) => {
+    const [rating,setRating] = useState(0);
+    const [email,setEmail] = useState('');
+    const [feedback,setFeedback] = useState('');
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        onSubmit({ rating, email, feedback });
+        onSubmit({ rating,email,feedback });
         // Reset form
         setRating(0);
         setEmail('');
@@ -30,23 +31,25 @@ export const BlogFeedbackForm: React.FC<BlogFeedbackFormProps> = ({ blogId, onSu
 
     return (
         <motion.form
-            onSubmit={handleSubmit}
+            onSubmit={(e: React.FormEvent) => {
+                e.preventDefault();
+                handleSubmit(e);
+            }}
             className="mt-8 space-y-4"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0,y: 20 }}
+            animate={{ opacity: 1,y: 0 }}
             transition={{ duration: 0.5 }}
         >
             <div>
                 <label className="block text-sm font-medium mb-1">Rating</label>
                 <div className="flex space-x-1">
-                    {[1, 2, 3, 4, 5].map((star) => (
+                    {[1,2,3,4,5].map((star) => (
                         <button
                             key={star}
                             type="button"
                             onClick={() => setRating(star)}
-                            className={`focus:outline-none ${
-                                star <= rating ? 'text-yellow-400' : 'text-gray-300'
-                            }`}
+                            className={`focus:outline-none ${star <= rating ? 'text-yellow-400' : 'text-gray-300'
+                                }`}
                         >
                             <Star className="w-6 h-6" fill={star <= rating ? 'currentColor' : 'none'} />
                         </button>
