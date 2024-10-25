@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{ useRef } from 'react';
 import { motion,useAnimation,useInView } from 'framer-motion';
 import { Award,ExternalLink,Medal,Sparkles,Star } from 'lucide-react';
 import Image from 'next/image';
@@ -53,8 +53,8 @@ const certificates: Certificate[] = [
 ];
 
 const Certification = () => {
-    const ref = React.useRef(null);
-    const isInView = useInView(ref,{ once: true });
+    const ref = useRef<HTMLDivElement>(null);
+    const isInView = useInView(ref as React.RefObject<Element>);
     const controls = useAnimation();
     const [selectedImage,setSelectedImage] = React.useState<string | null>(null);
 

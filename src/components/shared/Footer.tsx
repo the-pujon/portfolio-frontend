@@ -4,9 +4,16 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { Github,Linkedin,Mail,Facebook,Heart,Code,Sparkles,ArrowUpRight } from 'lucide-react';
+import { usePathname } from 'next/navigation';
 
 const Footer = () => {
     const currentYear = new Date().getFullYear();
+    const pathname = usePathname();
+
+    if (pathname.includes('/dashboard')) {
+        return null;
+    }
+
 
     const socialLinks = [
         {
@@ -64,17 +71,17 @@ const Footer = () => {
                     {/* Social Links */}
                     <div className="flex space-x-6">
                         {socialLinks.map((social) => (
-                            <motion.a
+                            <a
                                 key={social.label}
                                 href={social.href}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className={`text-muted-foreground ${social.color} transition-all duration-300`}
-                                whileHover={{ y: -3,scale: 1.15 }}
-                                whileTap={{ scale: 0.95 }}
+                                className={`text-muted-foreground ${social.color} transition-all duration-700 hover:text-primary hover:scale-110 hover:rotate-[360deg]`}
+                            //whileHover={{ y: -3,scale: 1.15 }}
+                            //whileTap={{ scale: 0.95 }}
                             >
                                 <social.icon className="h-6 w-6" />
-                            </motion.a>
+                            </a>
                         ))}
                     </div>
 
