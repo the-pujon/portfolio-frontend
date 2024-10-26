@@ -32,17 +32,11 @@ const SignUp = () => {
         e.preventDefault()
         try {
             await signup({ ...formData,role: 'user' }).unwrap()
-            toast({
-                title: 'Account created successfully',
-                description: 'You can now log in with your new account.',
-            })
+            toast.success('Account created successfully')
             // Redirect or further actions here
         } catch (error) {
-            toast({
-                title: 'Error',
-                description: 'An error occurred during signup. Please try again.',
-                variant: 'destructive',
-            })
+            toast.error('An error occurred during signup. Please try again.')
+            console.log(error)
         }
     }
 
