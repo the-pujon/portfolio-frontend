@@ -28,7 +28,7 @@ const Sidebar = () => {
         { name: 'Add Experience',icon: Briefcase,path: '/dashboard/experience' },
         { name: 'Add Blogs',icon: PenTool,path: '/dashboard/blogs' },
         { name: 'Add Projects',icon: FolderKanban,path: '/dashboard/projects' },
-        { name: 'Add Skills',icon: Lightbulb,path: '/dashboard/skills' },
+        { name: 'Skill Management',icon: Lightbulb,path: '/dashboard/skills' },
         { name: 'Add Awards',icon: Award,path: '/dashboard/awards' },
         { name: 'Add Certifications',icon: Scroll,path: '/dashboard/certifications' },
         { name: 'Add Project Categories',icon: FolderTree,path: '/dashboard/project-categories' },
