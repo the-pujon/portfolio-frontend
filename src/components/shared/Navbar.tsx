@@ -15,7 +15,7 @@ const Navbar: React.FC = () => {
     const [scrolled,setScrolled] = useState(false);
     const pathname = usePathname();
 
-    console.log(pathname)
+    //console.log(pathname)
 
     const navItems = [
         { name: 'Home',icon: Home,path: '/' },
@@ -40,8 +40,13 @@ const Navbar: React.FC = () => {
             <nav className="container mx-auto flex justify-between items-center">
                 <Link href="/" className="flex items-center space-x-3 group">
                     <div className="relative w-10 h-10">
-                        <Image src={BannerImage} alt="Pujon Das Logo" layout="fill" objectFit="cover" className="rounded-full" />
-                        {/*<div>P</div>*/}
+                        <Image
+                            src={BannerImage}
+                            alt="Pujon Das Logo"
+                            fill
+                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                            className="rounded-full object-cover"
+                        />
                         <motion.div
                             className="absolute inset-0 rounded-full border-2 border-primary"
                             animate={{ scale: [1,1.1,1] }}

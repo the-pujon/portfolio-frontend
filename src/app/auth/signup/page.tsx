@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card,CardHeader,CardTitle,CardContent,CardFooter } from '@/components/ui/card'
 import { toast } from 'sonner'
+import { useRouter } from 'next/navigation'
 
 interface SignUpFormData {
     name: string;
@@ -22,6 +23,7 @@ const SignUp = () => {
         email: '',
         password: '',
     })
+    const router = useRouter()
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name,value } = e.target
@@ -33,6 +35,7 @@ const SignUp = () => {
         try {
             await signup({ ...formData,role: 'user' }).unwrap()
             toast.success('Account created successfully')
+            router.push('/auth/signin')
             // Redirect or further actions here
         } catch (error) {
             toast.error('An error occurred during signup. Please try again.')

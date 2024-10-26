@@ -4,11 +4,14 @@ const profileApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     // Create profile
     createProfile: builder.mutation({
-      query: (data) => ({
-        url: "/profile/create",
-        method: "POST",
-        body: data,
-      }),
+      query: (data) => {
+        console.log("inside create profile", data);
+        return {
+          url: "/profile/create",
+          method: "POST",
+          body: data,
+        };
+      },
       invalidatesTags: ["Profile"],
     }),
 
@@ -23,11 +26,14 @@ const profileApi = baseApi.injectEndpoints({
 
     // Update profile
     updateProfile: builder.mutation({
-      query: ({ id, data }) => ({
-        url: `/profile/${id}`,
-        method: "PATCH",
-        body: data,
-      }),
+      query: ({ id, data }) => {
+        console.log("inside update profile", data);
+        return {
+          url: `/profile/${id}`,
+          method: "PATCH",
+          body: data,
+        };
+      },
       invalidatesTags: ["Profile"],
     }),
 

@@ -2,12 +2,15 @@
 
 import React,{ useState } from 'react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { useSigninMutation } from '@/redux/features/auth/authApi'
 import { Mail,Lock } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card,CardHeader,CardTitle,CardContent,CardFooter } from '@/components/ui/card'
 import { toast } from 'sonner'
+import { useAppDispatch } from '@/redux/hook'
+import { setUser } from '@/redux/features/auth/authSlice'
 
 interface SignInFormData {
     email: string;
@@ -16,10 +19,12 @@ interface SignInFormData {
 
 const SignIn = () => {
     const [signin,{ isLoading }] = useSigninMutation()
+    const router = useRouter()
     const [formData,setFormData] = useState<SignInFormData>({
         email: '',
         password: '',
     })
+    const dispatch = useAppDispatch()
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name,value } = e.target
@@ -29,8 +34,11 @@ const SignIn = () => {
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         try {
-            await signin(formData).unwrap()
+            const data = await signin(formData).unwrap()
+            dispatch(setUser({ user: data.data,token: data.token }));
+            console.log(data)
             toast.success('Signed in successfully')
+            router.push('/dashboard')
             // Redirect or further actions here
         } catch (error) {
             toast.error('Invalid email or password. Please try again.')
