@@ -26,7 +26,7 @@ const Sidebar = () => {
         { name: 'Edit Profile',icon: Edit,path: '/dashboard/edit-profile' },
         { name: 'Education Management',icon: GraduationCap,path: '/dashboard/education-management' },
         { name: 'Experience Management',icon: Briefcase,path: '/dashboard/experience-management' },
-        { name: 'Add Blogs',icon: PenTool,path: '/dashboard/blogs' },
+        { name: 'Blogs Management',icon: PenTool,path: '/dashboard/blog-management' },
         { name: 'Projects Management',icon: FolderKanban,path: '/dashboard/project-management' },
         { name: 'Skill Management',icon: Lightbulb,path: '/dashboard/skills' },
         { name: 'Add Awards',icon: Award,path: '/dashboard/awards' },
