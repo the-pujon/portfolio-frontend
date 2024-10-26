@@ -1,18 +1,24 @@
 'use client'
 
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+
 import React,{ useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Dialog,DialogContent,DialogHeader,DialogTitle,DialogTrigger } from '@/components/ui/dialog'
 import { Table,TableBody,TableCell,TableHead,TableHeader,TableRow } from '@/components/ui/table'
 import { Plus,Pencil,Trash2 } from 'lucide-react'
 import { toast } from 'sonner'
-import { format,parse } from 'date-fns'
+import { format } from 'date-fns'
 import { useForm,Controller } from 'react-hook-form'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-
+import { useAppSelector } from '@/redux/hook'
+import { selectCurrentUser } from '@/redux/features/auth/authSlice'
+import { useCreateEducationMutation,useDeleteEducationMutation,useGetAllEducationsQuery,useUpdateEducationMutation } from '@/redux/features/education/educationApi'
 interface Education {
-    id: string;
+    _id: string;
     institution: string;
     degree: string;
     fieldOfStudy: string;
@@ -95,27 +101,56 @@ const EducationForm: React.FC<EducationFormProps> = ({ education,onSubmit }) => 
 };
 
 const EducationManagement = () => {
-    const [educations,setEducations] = useState<Education[]>([]);
     const [isAddDialogOpen,setIsAddDialogOpen] = useState(false);
     const [isEditDialogOpen,setIsEditDialogOpen] = useState(false);
     const [selectedEducation,setSelectedEducation] = useState<Education | null>(null);
 
-    const handleAddEducation = (newEducation: Education) => {
-        setEducations([...educations,{ ...newEducation,id: Date.now().toString() }]);
-        setIsAddDialogOpen(false);
-        toast.success('Education added successfully');
+    const currentUser = useAppSelector(selectCurrentUser);
+    const { data: educationsData,isLoading,isError } = useGetAllEducationsQuery({});
+    const [createEducation] = useCreateEducationMutation();
+    const [updateEducation] = useUpdateEducationMutation();
+    const [deleteEducation] = useDeleteEducationMutation();
+
+    const educations = educationsData?.data;
+
+    console.log("idr ki somossa",currentUser?._id)
+
+    const handleAddEducation = async (newEducation: Education) => {
+        try {
+            await createEducation({ ...newEducation,userId: currentUser?._id }).unwrap();
+            setIsAddDialogOpen(false);
+            toast.success('Education added successfully');
+        } catch (error) {
+            toast.error('Failed to add education');
+        }
     };
 
-    const handleUpdateEducation = (updatedEducation: Education) => {
-        setEducations(educations.map(edu => edu.id === updatedEducation.id ? updatedEducation : edu));
-        setIsEditDialogOpen(false);
-        toast.success('Education updated successfully');
+    const handleUpdateEducation = async (updatedEducation: Education) => {
+        try {
+            await updateEducation({ id: updatedEducation._id,data: { ...updatedEducation,userId: currentUser?._id } }).unwrap();
+            setIsEditDialogOpen(false);
+            toast.success('Education updated successfully');
+        } catch (error) {
+            toast.error('Failed to update education');
+        }
     };
 
-    const handleDeleteEducation = (id: string) => {
-        setEducations(educations.filter(edu => edu.id !== id));
-        toast.success('Education deleted successfully');
+    const handleDeleteEducation = async (id: string) => {
+        try {
+            await deleteEducation({ id,userId: currentUser?._id }).unwrap();
+            toast.success('Education deleted successfully');
+        } catch (error) {
+            toast.error('Failed to delete education');
+        }
     };
+
+    if (isLoading) {
+        return <div>Loading...</div>;
+    }
+
+    if (isError) {
+        return <div>Error loading educations</div>;
+    }
 
     return (
         <div className="container mx-auto py-10">
@@ -146,13 +181,13 @@ const EducationManagement = () => {
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    {educations.map((education) => (
-                        <TableRow key={education.id}>
+                    {educations?.map((education: Education) => (
+                        <TableRow key={education._id}>
                             <TableCell>{education.institution}</TableCell>
                             <TableCell>{education.degree}</TableCell>
                             <TableCell>{education.fieldOfStudy}</TableCell>
-                            <TableCell>{format(education.startDate,'MMM yyyy')}</TableCell>
-                            <TableCell>{format(education.endDate,'MMM yyyy')}</TableCell>
+                            <TableCell>{format(new Date(education.startDate),'MMM yyyy')}</TableCell>
+                            <TableCell>{format(new Date(education.endDate),'MMM yyyy')}</TableCell>
                             <TableCell>
                                 <div className="flex space-x-2">
                                     <Button
@@ -168,7 +203,7 @@ const EducationManagement = () => {
                                     <Button
                                         variant="outline"
                                         size="sm"
-                                        onClick={() => handleDeleteEducation(education.id)}
+                                        onClick={() => handleDeleteEducation(education._id)}
                                     >
                                         <Trash2 className="h-4 w-4" />
                                     </Button>

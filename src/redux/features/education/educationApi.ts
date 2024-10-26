@@ -1,61 +1,48 @@
 import baseApi from "../../api/baseApi";
 
 const educationApi = baseApi.injectEndpoints({
-  endpoints: (builder) => ({
-    // Create education
-    createEducation: builder.mutation({
-      query: (data) => ({
-        url: "/education/create",
-        method: "POST",
-        body: data, // Ensure that data includes userId
-      }),
-      invalidatesTags: ["Education", "Profile"],
-    }),
-
-    // Get all educations
-    getAllEducations: builder.query({
+  endpoints: (build) => ({
+    getAllEducations: build.query({
       query: () => ({
         url: "/education",
         method: "GET",
       }),
       providesTags: ["Education"],
     }),
-
-    // Get education by ID
-    getEducationById: builder.query({
-      query: (id) => ({
-        url: `/education/${id}`,
-        method: "GET",
-      }),
-      providesTags: ["Education"],
-    }),
-
-    // Update education
-    updateEducation: builder.mutation({
-      query: ({ id, data }) => ({
-        url: `/education/${id}`,
-        method: "PATCH",
+    createEducation: build.mutation({
+      query: (data) => ({
+        url: "/education/create",
+        method: "POST",
         body: data,
       }),
-      invalidatesTags: ["Education", "Profile"],
+      invalidatesTags: ["Education"],
     }),
-
-    // Delete education
-    deleteEducation: builder.mutation({
+    updateEducation: build.mutation({
+      query: ({ id, data }) => {
+        console.log("id ekhane", id);
+        console.log("data ekhane", data);
+        return {
+          url: `/education/${id}`,
+          method: "PATCH",
+          body: data,
+        };
+      },
+      invalidatesTags: ["Education"],
+    }),
+    deleteEducation: build.mutation({
       query: ({ id, userId }) => ({
         url: `/education/${id}`,
         method: "DELETE",
-        body: { userId }, // Include userId in the body
+        body: { userId },
       }),
-      invalidatesTags: ["Education", "Profile"],
+      invalidatesTags: ["Education"],
     }),
   }),
 });
 
 export const {
-  useCreateEducationMutation,
   useGetAllEducationsQuery,
-  useGetEducationByIdQuery,
+  useCreateEducationMutation,
   useUpdateEducationMutation,
   useDeleteEducationMutation,
 } = educationApi;
