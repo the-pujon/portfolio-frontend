@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 'use client'
 
 import React,{ useState } from 'react'
@@ -10,9 +11,17 @@ import { format } from 'date-fns'
 import { useForm,Controller } from 'react-hook-form'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { useAppSelector } from '@/redux/hook'
+import { selectCurrentUser } from '@/redux/features/auth/authSlice'
+import {
+    useCreateExperienceMutation,
+    useGetAllExperiencesQuery,
+    useUpdateExperienceMutation,
+    useDeleteExperienceMutation
+} from '@/redux/features/experience/experienceApi'
 
 interface Experience {
-    id: string;
+    _id: string;
     companyName: string;
     position: string;
     startDate: Date;
@@ -88,27 +97,54 @@ const ExperienceForm: React.FC<ExperienceFormProps> = ({ experience,onSubmit }) 
 };
 
 const ExperienceManagement = () => {
-    const [experiences,setExperiences] = useState<Experience[]>([]);
+    const currentUser = useAppSelector(selectCurrentUser);
+    const userId = currentUser?._id;
+
+    const { data: experiencesData,isLoading,refetch } = useGetAllExperiencesQuery({});
+    const experiences = experiencesData?.data;
+    const [createExperience] = useCreateExperienceMutation();
+    const [updateExperience] = useUpdateExperienceMutation();
+    const [deleteExperience] = useDeleteExperienceMutation();
+
     const [isAddDialogOpen,setIsAddDialogOpen] = useState(false);
     const [isEditDialogOpen,setIsEditDialogOpen] = useState(false);
     const [selectedExperience,setSelectedExperience] = useState<Experience | null>(null);
 
-    const handleAddExperience = (newExperience: Experience) => {
-        setExperiences([...experiences,{ ...newExperience,id: Date.now().toString() }]);
-        setIsAddDialogOpen(false);
-        toast.success('Experience added successfully');
+    const handleAddExperience = async (newExperience: Experience) => {
+        try {
+            await createExperience({ ...newExperience,userId }).unwrap();
+            setIsAddDialogOpen(false);
+            toast.success('Experience added successfully');
+            refetch();
+        } catch (error) {
+            toast.error('Failed to add experience');
+        }
     };
 
-    const handleUpdateExperience = (updatedExperience: Experience) => {
-        setExperiences(experiences.map(exp => exp.id === updatedExperience.id ? updatedExperience : exp));
-        setIsEditDialogOpen(false);
-        toast.success('Experience updated successfully');
+    const handleUpdateExperience = async (updatedExperience: Experience) => {
+        try {
+            await updateExperience({ id: updatedExperience._id,data: { ...updatedExperience,userId } }).unwrap();
+            setIsEditDialogOpen(false);
+            toast.success('Experience updated successfully');
+            refetch();
+        } catch (error) {
+            toast.error('Failed to update experience');
+        }
     };
 
-    const handleDeleteExperience = (id: string) => {
-        setExperiences(experiences.filter(exp => exp.id !== id));
-        toast.success('Experience deleted successfully');
+    const handleDeleteExperience = async (id: string) => {
+        try {
+            await deleteExperience({ id,userId }).unwrap();
+            toast.success('Experience deleted successfully');
+            refetch();
+        } catch (error) {
+            toast.error('Failed to delete experience');
+        }
     };
+
+    if (isLoading) {
+        return <div>Loading experiences...</div>;
+    }
 
     return (
         <div className="container mx-auto py-10">
@@ -138,12 +174,12 @@ const ExperienceManagement = () => {
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    {experiences.map((experience) => (
-                        <TableRow key={experience.id}>
+                    {experiences?.map((experience: Experience) => (
+                        <TableRow key={experience._id}>
                             <TableCell>{experience.companyName}</TableCell>
                             <TableCell>{experience.position}</TableCell>
-                            <TableCell>{format(experience.startDate,'MMM yyyy')}</TableCell>
-                            <TableCell>{format(experience.endDate,'MMM yyyy')}</TableCell>
+                            <TableCell>{format(new Date(experience.startDate),'MMM yyyy')}</TableCell>
+                            <TableCell>{format(new Date(experience.endDate),'MMM yyyy')}</TableCell>
                             <TableCell>
                                 <div className="flex space-x-2">
                                     <Button
@@ -159,7 +195,7 @@ const ExperienceManagement = () => {
                                     <Button
                                         variant="outline"
                                         size="sm"
-                                        onClick={() => handleDeleteExperience(experience.id)}
+                                        onClick={() => handleDeleteExperience(experience._id)}
                                     >
                                         <Trash2 className="h-4 w-4" />
                                     </Button>
