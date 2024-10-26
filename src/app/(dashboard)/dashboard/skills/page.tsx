@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 'use client'
 
-import React,{ useState,useRef } from 'react'
+import React,{ useState,useRef,useEffect } from 'react'
 import { Plus,Pencil,Trash2,X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card,CardFooter,CardHeader,CardTitle } from '@/components/ui/card'
@@ -14,47 +15,73 @@ import {
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import Image from 'next/image'
+import { useAppSelector } from '@/redux/hook'
+import { selectCurrentUser } from '@/redux/features/auth/authSlice'
+import {
+    useCreateSkillMutation,
+    useGetAllSkillsQuery,
+    useUpdateSkillMutation,
+    useDeleteSkillMutation
+} from '@/redux/features/skill/skillApi'
+import { toast } from 'sonner'
 
 interface Skill {
+    _id: string
     category: string
     name: string
     image: string
 }
 
 const SkillManagementPage = () => {
-    const [skills,setSkills] = useState<Skill[]>([
-        {
-            category: 'Programming',
-            name: 'JavaScript',
-            //description: 'Modern programming language for web development',
-            image: 'https://images.unsplash.com/photo-1627398242454-45a1465c2479?w=500&q=80',
-        },
-        {
-            category: 'Design',
-            name: 'UI/UX Design',
-            //description: 'Creating user-friendly and visually appealing interfaces',
-            image: 'https://images.unsplash.com/photo-1561070791-2526d30994b5?w=500&q=80',
-        },
-        {
-            category: 'Data Science',
-            name: 'Machine Learning',
-            //description: 'Developing algorithms that learn from data',
-            image: 'https://images.unsplash.com/photo-1527474305487-b87b222841cc?w=500&q=80',
-        },
-    ])
+    const currentUser = useAppSelector(selectCurrentUser)
+    const { data: skillsData,isLoading,refetch } = useGetAllSkillsQuery({})
+    const [createSkill] = useCreateSkillMutation()
+    const [updateSkill] = useUpdateSkillMutation()
+    const [deleteSkill] = useDeleteSkillMutation()
+    console.log("currentUser",currentUser)
+
+    console.log("skillsData",skillsData)
+
+    const skills = skillsData?.data
 
     const [editingSkill,setEditingSkill] = useState<Skill | null>(null)
 
-    const handleAddSkill = (newSkill: Skill) => {
-        setSkills([...skills,newSkill])
+    const handleAddSkill = async (newSkill: Omit<Skill,'_id'>) => {
+        try {
+            await createSkill({ ...newSkill,userId: currentUser?._id }).unwrap()
+            toast.success('Skill added successfully')
+            refetch()
+        } catch (error) {
+            toast.error('Failed to add skill')
+        }
     }
 
-    const handleEditSkill = (updatedSkill: Skill) => {
-        setSkills(skills.map((skill) => (skill.name === updatedSkill.name ? updatedSkill : skill)))
+    const handleEditSkill = async (updatedSkill: Skill | Omit<Skill,"_id">) => {
+        try {
+            const skillId = '_id' in updatedSkill ? updatedSkill._id : editingSkill?._id;
+            if (!skillId) throw new Error('Skill ID not found');
+
+            await updateSkill({ id: skillId,data: { ...updatedSkill,userId: currentUser?._id } }).unwrap();
+            toast.success('Skill updated successfully');
+            refetch();
+            setEditingSkill(null);
+        } catch (error) {
+            toast.error('Failed to update skill');
+        }
+    };
+
+    const handleDeleteSkill = async (skillId: string) => {
+        try {
+            await deleteSkill({ id: skillId,userId: currentUser?._id }).unwrap()
+            toast.success('Skill deleted successfully')
+            refetch()
+        } catch (error) {
+            toast.error('Failed to delete skill')
+        }
     }
 
-    const handleDeleteSkill = (skillName: string) => {
-        setSkills(skills.filter((skill) => skill.name !== skillName))
+    if (isLoading) {
+        return <div>Loading skills...</div>
     }
 
     return (
@@ -76,12 +103,12 @@ const SkillManagementPage = () => {
                 </Dialog>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {skills.map((skill) => (
+                {skills?.map((skill: Skill) => (
                     <SkillCard
-                        key={skill.name}
+                        key={skill._id}
                         skill={skill}
                         onEdit={() => setEditingSkill(skill)}
-                        onDelete={() => handleDeleteSkill(skill.name)}
+                        onDelete={() => handleDeleteSkill(skill._id)}
                     />
                 ))}
             </div>
@@ -133,9 +160,9 @@ const SkillCard: React.FC<{
 
 const SkillForm: React.FC<{
     skill?: Skill
-    onSubmit: (skill: Skill) => void
+    onSubmit: (skill: Skill | Omit<Skill,'_id'>) => void
 }> = ({ skill,onSubmit }) => {
-    const [formData,setFormData] = useState<Skill>(
+    const [formData,setFormData] = useState<Skill | Omit<Skill,'_id'>>(
         skill || {
             category: '',
             name: '',
@@ -209,7 +236,7 @@ const SkillForm: React.FC<{
             onSubmit({ ...formData,image: imageUrl })
         } catch (error) {
             console.error('Error submitting form:',error)
-            // Handle error (e.g., show error message to user)
+            toast.error('Failed to submit form')
         } finally {
             setIsUploading(false)
         }

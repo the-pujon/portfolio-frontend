@@ -1,5 +1,6 @@
-import { RootState } from "@/redux/store";
+//import { RootState } from "@/redux/store";
 import { createSlice } from "@reduxjs/toolkit";
+import { RootState } from "../../store";
 
 export interface TUser {
   _id: string;
