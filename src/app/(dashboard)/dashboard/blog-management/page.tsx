@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 'use client'
 
-import React,{ useState,useRef } from 'react'
+import React,{ useState,useRef,useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Dialog,DialogContent,DialogHeader,DialogTitle,DialogTrigger } from '@/components/ui/dialog'
 import { Table,TableBody,TableCell,TableHead,TableHeader,TableRow } from '@/components/ui/table'
@@ -12,6 +13,14 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Badge } from '@/components/ui/badge'
 import dynamic from 'next/dynamic'
+import { useAppSelector } from '@/redux/hook'
+import { selectCurrentUser } from '@/redux/features/auth/authSlice'
+import {
+    useCreateBlogMutation,
+    useGetAllBlogsQuery,
+    useUpdateBlogMutation,
+    useDeleteBlogMutation
+} from '@/redux/features/blog/blogApi'
 
 const RichTextEditor = dynamic(() => import('react-simple-wysiwyg'),{ ssr: false })
 
@@ -84,7 +93,7 @@ const BlogForm: React.FC<BlogFormProps> = ({ blog,onSubmit }) => {
             const formData = new FormData();
             formData.append('image',file);
             try {
-                const response = await fetch(`https://api.imgbb.com/1/upload?key=YOUR_IMGBB_API_KEY`,{
+                const response = await fetch(`https://api.imgbb.com/1/upload?key=${process.env.NEXT_PUBLIC_IMGBB_API_KEY}`,{
                     method: 'POST',
                     body: formData,
                 });
@@ -216,27 +225,54 @@ const BlogForm: React.FC<BlogFormProps> = ({ blog,onSubmit }) => {
 };
 
 const BlogManagement = () => {
-    const [blogs,setBlogs] = useState<Blog[]>([]);
+    const currentUser = useAppSelector(selectCurrentUser);
+    const userId = currentUser?._id;
+
+    const { data: blogsData,isLoading,refetch } = useGetAllBlogsQuery({});
+    const blogs = blogsData?.data;
+    const [createBlog] = useCreateBlogMutation();
+    const [updateBlog] = useUpdateBlogMutation();
+    const [deleteBlog] = useDeleteBlogMutation();
+
     const [isAddDialogOpen,setIsAddDialogOpen] = useState(false);
     const [isEditDialogOpen,setIsEditDialogOpen] = useState(false);
     const [selectedBlog,setSelectedBlog] = useState<Blog | null>(null);
 
-    const handleAddBlog = (newBlog: Blog) => {
-        setBlogs([...blogs,{ ...newBlog,_id: Date.now().toString(),createdAt: new Date(),updatedAt: new Date() }]);
-        setIsAddDialogOpen(false);
-        toast.success('Blog added successfully');
+    const handleAddBlog = async (newBlog: Blog) => {
+        try {
+            await createBlog({ ...newBlog,userId }).unwrap();
+            setIsAddDialogOpen(false);
+            toast.success('Blog added successfully');
+            refetch();
+        } catch (error) {
+            toast.error('Failed to add blog');
+        }
     };
 
-    const handleUpdateBlog = (updatedBlog: Blog) => {
-        setBlogs(blogs.map(blog => blog._id === updatedBlog._id ? { ...updatedBlog,updatedAt: new Date() } : blog));
-        setIsEditDialogOpen(false);
-        toast.success('Blog updated successfully');
+    const handleUpdateBlog = async (updatedBlog: Blog) => {
+        try {
+            await updateBlog({ id: updatedBlog._id,data: { ...updatedBlog,userId } }).unwrap();
+            setIsEditDialogOpen(false);
+            toast.success('Blog updated successfully');
+            refetch();
+        } catch (error) {
+            toast.error('Failed to update blog');
+        }
     };
 
-    const handleDeleteBlog = (id: string) => {
-        setBlogs(blogs.filter(blog => blog._id !== id));
-        toast.success('Blog deleted successfully');
+    const handleDeleteBlog = async (id: string) => {
+        try {
+            await deleteBlog(id).unwrap();
+            toast.success('Blog deleted successfully');
+            refetch();
+        } catch (error) {
+            toast.error('Failed to delete blog');
+        }
     };
+
+    if (isLoading) {
+        return <div>Loading blogs...</div>;
+    }
 
     return (
         <div className="container mx-auto py-10">
@@ -268,14 +304,14 @@ const BlogManagement = () => {
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    {blogs.map((blog) => (
+                    {blogs?.map((blog: Blog) => (
                         <TableRow key={blog._id}>
                             <TableCell>{blog.title}</TableCell>
                             <TableCell>{blog.author}</TableCell>
                             <TableCell>{blog.category}</TableCell>
                             <TableCell>{blog.tags.join(', ')}</TableCell>
-                            <TableCell>{format(blog.createdAt,'PPP')}</TableCell>
-                            <TableCell>{format(blog.updatedAt,'PPP')}</TableCell>
+                            <TableCell>{format(new Date(blog.createdAt),'PPP')}</TableCell>
+                            <TableCell>{format(new Date(blog.updatedAt),'PPP')}</TableCell>
                             <TableCell>
                                 <div className="flex space-x-2">
                                     <Button
