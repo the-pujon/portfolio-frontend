@@ -153,7 +153,7 @@ const Profile = () => {
 
             <div className="flex flex-col lg:flex-row gap-12">
                 {/* Sidebar */}
-                <aside className="lg:w-1/3 space-y-8">
+                <aside className="lg:w-1/3 space-y-8 sticky -top-24 self-start">
                     <Image
                         objectFit="cover"
                         width={500}
