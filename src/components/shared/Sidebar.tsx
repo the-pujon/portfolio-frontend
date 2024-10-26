@@ -24,7 +24,7 @@ const Sidebar = () => {
     const sidebarItems = [
         { name: 'Profile',icon: User,path: '/dashboard' },
         { name: 'Edit Profile',icon: Edit,path: '/dashboard/edit-profile' },
-        { name: 'Add Education',icon: GraduationCap,path: '/dashboard/education' },
+        { name: 'Education Management',icon: GraduationCap,path: '/dashboard/education-management' },
         { name: 'Add Experience',icon: Briefcase,path: '/dashboard/experience' },
         { name: 'Add Blogs',icon: PenTool,path: '/dashboard/blogs' },
         { name: 'Projects Management',icon: FolderKanban,path: '/dashboard/project-management' },
