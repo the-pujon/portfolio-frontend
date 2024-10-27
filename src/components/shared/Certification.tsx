@@ -75,7 +75,7 @@ const Certification = () => {
     };
 
     return (
-        <section className="py-24 px-4 relative overflow-hidden bg-gradient-to-br from-background via-primary/5 to-secondary/10">
+        <section className="py-12 sm:py-16 md:py-24 px-4 sm:px-6 md:px-8 relative overflow-hidden bg-gradient-to-br from-background via-primary/5 to-secondary/10">
             <motion.div
                 ref={ref}
                 animate={controls}
@@ -84,12 +84,12 @@ const Certification = () => {
                 className="max-w-7xl mx-auto relative"
             >
                 {/* Enhanced header section */}
-                <div className="text-center mb-16">
+                <div className="text-center mb-12 sm:mb-16">
                     <div className="relative inline-block">
-                        <span className="text-xs font-medium text-primary/80 tracking-wider uppercase mb-4 block">
+                        <span className="text-xs sm:text-sm font-medium text-primary/80 tracking-wider uppercase mb-2 sm:mb-4 block">
                             Professional Achievements
                         </span>
-                        <h2 className="text-6xl font-bold relative z-10 tracking-tight">
+                        <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold relative z-10 tracking-tight">
                             <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary via-secondary to-primary/50">
                                 Certified
                             </span>{" "}
@@ -98,11 +98,11 @@ const Certification = () => {
                                 <div className="absolute -bottom-2 left-0 w-full h-[2px] bg-gradient-to-r from-primary/50 via-secondary to-primary animate-shimmer" />
                             </span>
                         </h2>
-                        <div className="absolute -top-8 right-12 text-primary/20 animate-pulse">
-                            <Award className="w-16 h-16" />
+                        <div className="absolute -top-6 -right-6 sm:-top-8 sm:right-0 text-primary/20 animate-pulse">
+                            <Award className="w-12 h-12 sm:w-16 sm:h-16" />
                         </div>
                     </div>
-                    <p className="text-xl mt-8 max-w-3xl mx-auto font-light leading-relaxed">
+                    <p className="text-base sm:text-lg md:text-xl mt-4 sm:mt-6 max-w-3xl mx-auto font-light leading-relaxed">
                         <span className="text-primary">Validated expertise</span>{" "}
                         <span className="text-muted-foreground">
                             through industry-recognized certifications and
@@ -123,9 +123,9 @@ const Certification = () => {
                 >
                     <CarouselContent>
                         {certificates.map((certificate) => (
-                            <CarouselItem key={certificate.id}>
+                            <CarouselItem key={certificate.id} className="sm:basis-4/5 md:basis-3/4 lg:basis-full">
                                 <Card className="relative overflow-hidden rounded-xl bg-gradient-to-br from-background/80 via-background to-muted/20 backdrop-blur-sm border-primary/10">
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-6">
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 p-4 sm:p-6">
                                         {/* Left side - Certificate Image */}
                                         <div className="relative aspect-[4/3] rounded-lg overflow-hidden group">
                                             <Image
@@ -141,50 +141,46 @@ const Certification = () => {
                                             <Button
                                                 onClick={() => setSelectedImage(certificate.image)}
                                                 variant="secondary"
-                                                size="lg"
+                                                size="sm"
                                                 className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-all duration-300 scale-90 group-hover:scale-100"
                                             >
                                                 View Certificate
                                             </Button>
 
                                             {/* Floating Badge */}
-                                            <Badge className="absolute top-4 right-4 bg-primary/90 text-primary-foreground">
+                                            <Badge className="absolute top-2 right-2 bg-primary/90 text-primary-foreground text-xs">
                                                 {certificate.category}
                                             </Badge>
-
-                                            {/* Decorative Corner Elements */}
-                                            <div className="absolute top-0 left-0 w-16 h-16 bg-gradient-to-br from-primary/20 to-transparent transform -translate-x-8 -translate-y-8 group-hover:translate-x-0 group-hover:translate-y-0 transition-transform duration-500" />
-                                            <div className="absolute bottom-0 right-0 w-16 h-16 bg-gradient-to-tl from-secondary/20 to-transparent transform translate-x-8 translate-y-8 group-hover:translate-x-0 group-hover:translate-y-0 transition-transform duration-500" />
                                         </div>
 
                                         {/* Right side - Certificate Details */}
-                                        <div className="flex flex-col justify-center space-y-6 relative">
+                                        <div className="flex flex-col justify-center space-y-4">
                                             {/* Issuer and Title */}
                                             <div>
-                                                <div className="flex items-center gap-2 mb-2">
-                                                    <Medal className="w-5 h-5 text-primary" />
-                                                    <span className="text-base text-muted-foreground">{certificate.issuedBy}</span>
+                                                <div className="flex items-center gap-2 mb-1">
+                                                    <Medal className="w-4 h-4 text-primary" />
+                                                    <span className="text-sm text-muted-foreground">{certificate.issuedBy}</span>
                                                 </div>
-                                                <h3 className="text-2xl font-bold mb-3 bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
+                                                <h3 className="text-lg sm:text-xl font-bold mb-2 bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
                                                     {certificate.title}
                                                 </h3>
-                                                <p className="text-muted-foreground leading-relaxed mb-4">
+                                                <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed mb-2">
                                                     {certificate.description}
                                                 </p>
                                             </div>
 
                                             {/* Skills Section */}
                                             <div className="space-y-2">
-                                                <h4 className="text-sm font-medium text-primary flex items-center gap-2">
-                                                    <Star className="w-4 h-4" />
+                                                <h4 className="text-xs font-medium text-primary flex items-center gap-2">
+                                                    <Star className="w-3 h-3" />
                                                     Key Skills
                                                 </h4>
-                                                <div className="flex flex-wrap gap-2">
+                                                <div className="flex flex-wrap gap-1">
                                                     {certificate.skills.map((skill,index) => (
                                                         <Badge
                                                             key={index}
                                                             variant="secondary"
-                                                            className="bg-primary/5 hover:bg-primary/10 transition-colors"
+                                                            className="bg-primary/5 hover:bg-primary/10 transition-colors text-xs"
                                                         >
                                                             {skill}
                                                         </Badge>
@@ -193,31 +189,29 @@ const Certification = () => {
                                             </div>
 
                                             {/* Date and Actions */}
-                                            <div className="space-y-4">
-                                                <div className="flex items-center gap-2 text-muted-foreground">
-                                                    <Sparkles className="w-4 h-4 text-primary" />
+                                            <div className="space-y-2">
+                                                <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                                                    <Sparkles className="w-3 h-3 text-primary" />
                                                     <span>Issued: {certificate.date}</span>
                                                 </div>
 
                                                 <Button
                                                     onClick={() => window.open(certificate.credentialLink)}
                                                     variant="default"
+                                                    size="sm"
                                                     className="w-full group hover:scale-105 transition-transform duration-300"
                                                 >
                                                     <span>Verify Credential</span>
-                                                    <ExternalLink className="w-4 h-4 ml-2 group-hover:rotate-45 transition-transform duration-300" />
+                                                    <ExternalLink className="w-3 h-3 ml-2 group-hover:rotate-45 transition-transform duration-300" />
                                                 </Button>
                                             </div>
-
-                                            {/* Decorative Background Element */}
-                                            <div className="absolute -top-4 -right-4 w-32 h-32 bg-gradient-radial from-primary/5 to-transparent rounded-full blur-xl" />
                                         </div>
                                     </div>
                                 </Card>
                             </CarouselItem>
                         ))}
                     </CarouselContent>
-                    <div className="flex items-center justify-center gap-4 mt-8">
+                    <div className="flex items-center justify-center gap-4 mt-6">
                         <CarouselPrevious className="relative static translate-y-0 hover:scale-110 transition-transform duration-300" />
                         <CarouselNext className="relative static translate-y-0 hover:scale-110 transition-transform duration-300" />
                     </div>

@@ -39,7 +39,7 @@ const About: React.FC = () => {
     };
 
     return (
-        <section id="about" className="py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-background via-primary/5 to-secondary/10 relative overflow-hidden">
+        <section id="about" className="py-12 sm:py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-background via-primary/5 to-secondary/10 relative overflow-hidden">
             <motion.div
                 ref={ref}
                 animate={controls}
@@ -47,9 +47,9 @@ const About: React.FC = () => {
                 variants={containerVariants}
                 className="max-w-7xl mx-auto"
             >
-                <div className="flex flex-col items-center mb-20">
+                <div className="flex flex-col items-center mb-12 sm:mb-20">
                     <div className="relative">
-                        <h2 className="text-6xl md:text-6xl font-bold relative z-10 tracking-tight text-center">
+                        <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold relative z-10 tracking-tight text-center">
                             <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary via-secondary to-primary/50">
                                 The
                             </span>{" "}
@@ -61,21 +61,21 @@ const About: React.FC = () => {
                                 <div className="absolute -bottom-2 left-0 w-full h-[2px] bg-gradient-to-r from-primary/50 via-secondary to-primary animate-shimmer" />
                             </span>
                         </h2>
-                        <div className="absolute -top-8 -right-8 text-primary/20 animate-pulse">
-                            <Brain className="w-16 h-16" />
+                        <div className="absolute -top-6 -right-6 sm:-top-8 sm:-right-8 text-primary/20 animate-pulse">
+                            <Brain className="w-12 h-12 sm:w-16 sm:h-16" />
                         </div>
                     </div>
-                    <div className="text-xl md:text-xl mt-8 max-w-4xl font-light text-center leading-relaxed">
+                    <div className="text-lg sm:text-xl md:text-xl mt-6 sm:mt-8 max-w-4xl font-light text-center leading-relaxed px-4">
                         <p className="text-muted-forgournd">From learning the fundamentals to mastering <span className='text-primary'>full-stack development</span>, here&apos;s my journey in tech.</p>
                     </div>
                 </div>
 
-                <div className="flex flex-col lg:flex-row items-center lg:items-center gap-16">
+                <div className="flex flex-col lg:flex-row items-center lg:items-start gap-12 lg:gap-16">
                     <motion.div
                         variants={itemVariants}
                         className="w-full lg:w-2/5"
                     >
-                        <div className="relative w-96 h-96 mx-auto lg:w-full lg:h-auto aspect-square">
+                        <div className="relative w-full max-w-[300px] sm:max-w-[400px] h-auto aspect-square mx-auto">
                             <Image
                                 src={BannerImage}
                                 alt="Pujon Das Auvi"
@@ -115,14 +115,14 @@ const About: React.FC = () => {
                             variants={itemVariants}
                             className="mt-6 text-center"
                         >
-                            <h3 className="text-3xl font-bold text-primary">Pujon Das Auvi</h3>
-                            <p className="text-xl text-muted-foreground">Full Stack Developer & Tech Enthusiast</p>
+                            <h3 className="text-2xl sm:text-3xl font-bold text-primary">Pujon Das Auvi</h3>
+                            <p className="text-lg sm:text-xl text-muted-foreground">Full Stack Developer & Tech Enthusiast</p>
                         </motion.div>
                     </motion.div>
 
                     <div className="w-full lg:w-3/5">
-                        <motion.div variants={itemVariants} className="mb-10">
-                            <h3 className="text-xl md:text-3xl font-bold mb-6 tracking-tight">
+                        <motion.div variants={itemVariants} className="mb-8 sm:mb-10">
+                            <h3 className="text-2xl sm:text-3xl font-bold mb-4 sm:mb-6 tracking-tight">
                                 <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary via-secondary to-primary/50">
                                     Architect of
                                 </span>{" "}
@@ -131,7 +131,7 @@ const About: React.FC = () => {
                                     <div className="absolute -bottom-2 left-0 w-full h-[2px] bg-gradient-to-r from-primary/50 via-secondary to-primary animate-shimmer" />
                                 </span>
                             </h3>
-                            <p className="text-lg md:text-lg mb-8 font-light leading-relaxed">
+                            <p className="text-base sm:text-lg md:text-lg mb-6 sm:mb-8 font-light leading-relaxed">
                                 <span className="text-primary">Transforming visions into reality</span>{" "}
                                 <span className="text-muted-foreground">
                                     — where creativity meets precision in every line of
@@ -140,7 +140,7 @@ const About: React.FC = () => {
                                     code
                                 </span>
                             </p>
-                            <div className="text-muted-foreground text-sm md:text-base">
+                            <div className="text-muted-foreground text-sm sm:text-base space-y-4">
                                 <p>
                                     Hi, I&apos;m Pujon Das Auvi, a Full-stack Developer based in Dhaka, Bangladesh, with a passion for building scalable, user-friendly web applications. I specialize in both front-end and back-end technologies, allowing me to create seamless, fully integrated web solutions from scratch.
 
@@ -169,7 +169,7 @@ const About: React.FC = () => {
 
                         <motion.div
                             variants={containerVariants}
-                            className="grid grid-cols-1 md:grid-cols-3 gap-6"
+                            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6"
                         >
                             {[
 

@@ -5,7 +5,7 @@ import Banner from '@/components/shared/Banner';
 import About from '@/components/shared/About';
 //import { FloatingIcon } from '@/components/shared/FloatingIcon';
 
-import { Globe,Code,Database,Server,Wifi,Cloud,Terminal,Cpu,Layers,Zap } from 'lucide-react';
+//import { Globe,Code,Database,Server,Wifi,Cloud,Terminal,Cpu,Layers,Zap } from 'lucide-react';
 //import Skills from '@/components/shared/Skills';
 import MySkill from '@/components/shared/MySkill';
 import TopProjects from './../components/shared/TopProjects';
@@ -13,18 +13,18 @@ import EducationExperience from '@/components/shared/EducationExperience';
 import LatestBlogs from '@/components/shared/LatestBlogs';
 import Certification from '@/components/shared/Certification';
 import Contact from '@/components/shared/Contact';
-import { FloatingIcon } from '../components/shared/FloatingIcon';
+//import { FloatingIcon } from '../components/shared/FloatingIcon';
 
 
 
 const Home: React.FC = () => {
   return (
     <div className="bg-background text-foreground relative overflow-hidden">
-      <div className='fixed inset-0'>
+      {/*<div className='fixed inset-0'>
         {[Code,Database,Server,Wifi,Cloud,Terminal,Cpu,Globe,Layers,Zap].map((icon,index) => (
           <FloatingIcon key={index} icon={icon} delay={index * 0.5} />
         ))}
-      </div>
+      </div>*/}
       <Banner />
       <About />
       {/*<Skills />*/}

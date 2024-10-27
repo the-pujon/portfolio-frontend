@@ -6,8 +6,8 @@ import { Input } from '../ui/input';
 import { Textarea } from '../ui/textarea';
 
 const Contact = () => {
-    const ref = React.useRef(null);
-    const isInView = useInView(ref,{ once: true });
+    const ref = React.useRef<HTMLDivElement>(null);
+    const isInView = useInView(ref as React.RefObject<Element>,{ once: true });
     const controls = useAnimation();
     const [hoveredCard,setHoveredCard] = React.useState<number | null>(null);
 
@@ -40,7 +40,7 @@ const Contact = () => {
     };
 
     return (
-        <section className="py-24 px-4 relative overflow-hidden bg-gradient-to-br from-background via-primary/5 to-secondary/10">
+        <section id="contact" className="py-12 sm:py-16 md:py-24 px-4 sm:px-6 md:px-8 relative overflow-hidden bg-gradient-to-br from-background via-primary/5 to-secondary/10">
             <motion.div
                 ref={ref}
                 animate={controls}
@@ -49,17 +49,17 @@ const Contact = () => {
                 className="max-w-7xl mx-auto relative"
             >
                 {/* Enhanced Header section */}
-                <div className="text-center mb-16">
+                <div className="text-center mb-12 sm:mb-16">
                     <div className="relative inline-block">
                         <motion.span
-                            className="text-xs font-medium text-primary/80 tracking-wider uppercase mb-4 block"
+                            className="text-xs sm:text-sm font-medium text-primary/80 tracking-wider uppercase mb-2 sm:mb-4 block"
                             initial={{ opacity: 0,y: -20 }}
                             animate={{ opacity: 1,y: 0 }}
                             transition={{ duration: 0.5 }}
                         >
                             Let&apos;s Create Something Amazing Together
                         </motion.span>
-                        <h2 className="text-6xl font-bold relative z-10 tracking-tight">
+                        <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold relative z-10 tracking-tight">
                             <motion.span
                                 className="bg-clip-text text-transparent bg-gradient-to-r from-primary via-secondary to-primary/50"
                                 initial={{ opacity: 0,x: -20 }}
@@ -81,7 +81,7 @@ const Contact = () => {
                             </span>
                         </h2>
                         <motion.div
-                            className="absolute -top-8 right-12 text-primary/20"
+                            className="absolute -top-6 sm:-top-8 right-0 sm:right-12 text-primary/20"
                             animate={{
                                 rotate: [0,10,-10,0],
                                 scale: [1,1.1,0.9,1]
@@ -92,11 +92,11 @@ const Contact = () => {
                                 ease: "easeInOut"
                             }}
                         >
-                            <MessageSquare className="w-16 h-16" />
+                            <MessageSquare className="w-12 h-12 sm:w-16 sm:h-16" />
                         </motion.div>
                     </div>
                     <motion.p
-                        className="text-xl mt-8 max-w-3xl mx-auto font-light leading-relaxed"
+                        className="text-base sm:text-lg md:text-xl mt-4 sm:mt-6 md:mt-8 max-w-3xl mx-auto font-light leading-relaxed"
                         initial={{ opacity: 0,y: 20 }}
                         animate={{ opacity: 1,y: 0 }}
                         transition={{ duration: 0.5,delay: 0.6 }}
@@ -112,10 +112,10 @@ const Contact = () => {
                 </div>
 
                 {/* Contact Grid */}
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12 items-start">
                     {/* Contact Information */}
-                    <motion.div variants={itemVariants} className="space-y-8">
-                        <h3 className="text-2xl font-semibold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
+                    <motion.div variants={itemVariants} className="space-y-6 sm:space-y-8">
+                        <h3 className="text-xl sm:text-2xl font-semibold mb-4 sm:mb-6 bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
                             Let&apos;s Start a Conversation
                         </h3>
 
@@ -147,68 +147,66 @@ const Contact = () => {
                                     description: "Open for local & remote opportunities"
                                 }
                             ].map((item,index) => (
-                                <motion.a
-                                    key={index}
-                                    href={item.link}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="block p-6 rounded-lg border border-primary/10 bg-card hover:bg-primary/5 transition-all duration-500 group relative overflow-hidden"
-                                    onHoverStart={() => setHoveredCard(index)}
-                                    onHoverEnd={() => setHoveredCard(null)}
-                                    whileHover={{
-                                        scale: 1.02,
-                                        boxShadow: "0 10px 30px -15px rgba(0, 0, 0, 0.3)"
-                                    }}
-                                    whileTap={{ scale: 0.98 }}
-                                >
-                                    {/* Gradient overlay on hover */}
-                                    <div className={`absolute inset-0 bg-gradient-to-r ${item.gradient} opacity-0 group-hover:opacity-10 transition-opacity duration-500`} />
+                                <a href={item.link} key={index} target="_blank" rel="noopener noreferrer">
+                                    <motion.div
+                                        className="block p-6 rounded-lg border border-primary/10 bg-card hover:bg-primary/5 transition-all duration-500 group relative overflow-hidden"
+                                        onHoverStart={() => setHoveredCard(index)}
+                                        onHoverEnd={() => setHoveredCard(null)}
+                                        whileHover={{
+                                            scale: 1.02,
+                                            boxShadow: "0 10px 30px -15px rgba(0, 0, 0, 0.3)"
+                                        }}
+                                        whileTap={{ scale: 0.98 }}
+                                    >
+                                        {/* Gradient overlay on hover */}
+                                        <div className={`absolute inset-0 bg-gradient-to-r ${item.gradient} opacity-0 group-hover:opacity-10 transition-opacity duration-500`} />
 
-                                    <div className="flex items-center gap-4 relative z-10">
-                                        <div className="p-3 rounded-full bg-primary/10 text-primary group-hover:scale-110 transition-transform duration-500">
-                                            <item.icon className="w-6 h-6" />
+                                        <div className="flex items-center gap-4 relative z-10">
+                                            <div className="p-3 rounded-full bg-primary/10 text-primary group-hover:scale-110 transition-transform duration-500">
+                                                <item.icon className="w-6 h-6" />
+                                            </div>
+                                            <div className="flex-grow">
+                                                <h4 className="text-sm font-medium text-muted-foreground">
+                                                    {item.title}
+                                                </h4>
+                                                <p className="text-base font-semibold text-foreground group-hover:text-primary transition-colors duration-300">
+                                                    {item.content}
+                                                </p>
+                                                <AnimatePresence>
+                                                    {hoveredCard === index && (
+                                                        <motion.p
+                                                            initial={{ opacity: 0,height: 0 }}
+                                                            animate={{ opacity: 1,height: "auto" }}
+                                                            exit={{ opacity: 0,height: 0 }}
+                                                            className="text-xs text-muted-foreground mt-2"
+                                                        >
+                                                            {item.description}
+                                                        </motion.p>
+                                                    )}
+                                                </AnimatePresence>
+                                            </div>
+                                            <motion.div
+                                                animate={{ x: hoveredCard === index ? 0 : 10,opacity: hoveredCard === index ? 1 : 0 }}
+                                                className="text-primary"
+                                            >
+                                                <ArrowUpRight className="w-5 h-5" />
+                                            </motion.div>
                                         </div>
-                                        <div className="flex-grow">
-                                            <h4 className="text-sm font-medium text-muted-foreground">
-                                                {item.title}
-                                            </h4>
-                                            <p className="text-base font-semibold text-foreground group-hover:text-primary transition-colors duration-300">
-                                                {item.content}
-                                            </p>
-                                            <AnimatePresence>
-                                                {hoveredCard === index && (
-                                                    <motion.p
-                                                        initial={{ opacity: 0,height: 0 }}
-                                                        animate={{ opacity: 1,height: "auto" }}
-                                                        exit={{ opacity: 0,height: 0 }}
-                                                        className="text-xs text-muted-foreground mt-2"
-                                                    >
-                                                        {item.description}
-                                                    </motion.p>
-                                                )}
-                                            </AnimatePresence>
-                                        </div>
-                                        <motion.div
-                                            animate={{ x: hoveredCard === index ? 0 : 10,opacity: hoveredCard === index ? 1 : 0 }}
-                                            className="text-primary"
-                                        >
-                                            <ArrowUpRight className="w-5 h-5" />
-                                        </motion.div>
-                                    </div>
-                                </motion.a>
+                                    </motion.div>
+                                </a>
                             ))}
                         </div>
                     </motion.div>
 
                     {/* Enhanced Contact Form */}
                     <motion.div variants={itemVariants} className="relative">
-                        <div className="p-8 rounded-lg border border-primary/10 bg-card/80 backdrop-blur-sm relative overflow-hidden">
+                        <div className="p-6 sm:p-8 rounded-lg border border-primary/10 bg-card/80 backdrop-blur-sm relative overflow-hidden">
                             <div className="relative z-10">
-                                <h3 className="text-2xl font-semibold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
+                                <h3 className="text-xl sm:text-2xl font-semibold mb-4 sm:mb-6 bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
                                     Send Message
                                 </h3>
-                                <form className="space-y-6">
-                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                                <form className="space-y-4 sm:space-y-6">
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                                         <div className="space-y-2">
                                             <label htmlFor="name" className="text-sm text-muted-foreground flex items-center gap-2">
                                                 <Star className="w-4 h-4 text-primary" />
@@ -252,7 +250,7 @@ const Contact = () => {
                                         <Textarea
                                             id="message"
                                             placeholder="Your message here..."
-                                            className="min-h-[150px] bg-background/50 border-primary/10 focus:border-primary transition-colors duration-300"
+                                            className="min-h-[120px] sm:min-h-[150px] bg-background/50 border-primary/10 focus:border-primary transition-colors duration-300"
                                         />
                                     </div>
                                     <Button
@@ -266,8 +264,8 @@ const Contact = () => {
                             </div>
 
                             {/* Enhanced decorative elements */}
-                            <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full blur-3xl animate-pulse" />
-                            <div className="absolute bottom-0 left-0 w-32 h-32 bg-secondary/5 rounded-full blur-3xl animate-pulse" />
+                            <div className="absolute top-0 right-0 w-24 sm:w-32 h-24 sm:h-32 bg-primary/5 rounded-full blur-3xl animate-pulse" />
+                            <div className="absolute bottom-0 left-0 w-24 sm:w-32 h-24 sm:h-32 bg-secondary/5 rounded-full blur-3xl animate-pulse" />
                         </div>
                     </motion.div>
                 </div>
@@ -275,7 +273,7 @@ const Contact = () => {
 
             {/* Enhanced background decorations */}
             <motion.div
-                className="absolute top-0 right-0 w-96 h-96 bg-gradient-radial from-primary/10 to-transparent rounded-full filter blur-3xl"
+                className="absolute top-0 right-0 w-48 sm:w-72 md:w-96 h-48 sm:h-72 md:h-96 bg-gradient-radial from-primary/10 to-transparent rounded-full filter blur-3xl"
                 animate={{
                     scale: [1,1.1,1],
                     opacity: [0.3,0.5,0.3],
@@ -283,7 +281,7 @@ const Contact = () => {
                 transition={{ duration: 8,repeat: Infinity }}
             />
             <motion.div
-                className="absolute bottom-0 left-0 w-96 h-96 bg-gradient-radial from-secondary/10 to-transparent rounded-full filter blur-3xl"
+                className="absolute bottom-0 left-0 w-48 sm:w-72 md:w-96 h-48 sm:h-72 md:h-96 bg-gradient-radial from-secondary/10 to-transparent rounded-full filter blur-3xl"
                 animate={{
                     scale: [1,1.2,1],
                     opacity: [0.3,0.5,0.3],

@@ -21,7 +21,7 @@ const Navbar: React.FC = () => {
         { name: 'Home',icon: Home,path: '/' },
         { name: 'Projects',icon: Briefcase,path: '/projects' },
         { name: 'Blogs',icon: User,path: '/blog' },
-        { name: 'Contact',icon: Mail,path: '/contact' },
+        { name: 'Contact',icon: Mail,path: '#contact' },
         { name: 'Dashboard',icon: Home,path: '/dashboard' }
 
     ];
@@ -82,7 +82,7 @@ const Navbar: React.FC = () => {
 
                 <div className="flex space-x-1">
                     <Button asChild variant="outline" className="relative overflow-hidden group border-none text-white">
-                        <Link href="/resume" className="flex items-center">
+                        <Link href="https://drive.google.com/file/d/14HhcrGMJjLBY2iZzgrhxdC5msw3gvxQV/view?usp=sharing" target="_blank" rel="noopener noreferrer" className="flex items-center">
                             <span className="relative z-10 flex items-center transition-transform duration-500 group-hover:translate-x-1 text-white">
                                 <FileText className="mr-2 h-4 w-4" />
                                 Resume

@@ -16,27 +16,30 @@ interface Skill {
 
 
 const MySkill: React.FC = () => {
-    const { data: skillsData,isLoading,isError } = useGetAllSkillsQuery({});
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { data: skillsData,isLoading,isError,error } = useGetAllSkillsQuery({});
     const skills = skillsData?.data;
 
-    if (isLoading) {
-        return <div>Loading skills...</div>;
-    }
+    console.log(error)
 
-    if (isError) {
-        return <div>Error loading skills. Please try again later.</div>;
-    }
+    //if (isLoading) {
+    //    return <div>Loading skills...</div>;
+    //}
+
+    //if (isError) {
+    //    return <div>Error loading skills. Please try again later.</div>;
+    //}
 
     return (
         <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5 }}
-            className="p-8 container mx-auto"
+            className="p-4 sm:p-6 md:p-8 container mx-auto"
         >
-            <div className="flex flex-col items-center mb-20">
+            <div className="flex flex-col items-center mb-10 sm:mb-16 md:mb-20">
                 <div className="relative">
-                    <h2 className="text-6xl md:text-7xl font-bold relative z-10 tracking-tight text-center">
+                    <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold relative z-10 tracking-tight text-center">
                         <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary via-secondary to-primary/50">
                             Tech
                         </span>{" "}
@@ -44,18 +47,18 @@ const MySkill: React.FC = () => {
                             <span className="text-foreground">Arsenal</span>
                         </span>
                     </h2>
-                    <div className="absolute -top-8 -right-8 text-primary/20 animate-pulse">
-                        <Code className="w-16 h-16" />
+                    <div className="absolute -top-4 -right-4 sm:-top-6 sm:-right-6 md:-top-8 md:-right-8 text-primary/20 animate-pulse">
+                        <Code className="w-10 h-10 sm:w-12 sm:h-12 md:w-16 md:h-16" />
                     </div>
                 </div>
-                <div className="text-xl md:text-2xl mt-8 max-w-4xl font-light text-center leading-relaxed">
+                <div className="text-lg sm:text-xl md:text-2xl mt-4 sm:mt-6 md:mt-8 max-w-4xl font-light text-center leading-relaxed px-4">
                     <p className="text-muted-foreground">
                         Unleashing a <span className='text-primary font-semibold'>powerhouse of skills</span> to craft
                         <span className='text-secondary font-semibold'> digital marvels</span>
                     </p>
                 </div>
                 <motion.div
-                    className="mt-6 px-6 py-2 bg-primary/10 rounded-full text-primary text-sm font-medium"
+                    className="mt-4 sm:mt-6 px-4 sm:px-6 py-2 bg-primary/10 rounded-full text-primary text-xs sm:text-sm font-medium"
                     initial={{ opacity: 0,y: 20 }}
                     animate={{ opacity: 1,y: 0 }}
                     transition={{ delay: 0.5 }}
@@ -69,7 +72,7 @@ const MySkill: React.FC = () => {
                     return (
                         <motion.div
                             key={skill._id}
-                            className="w-32 h-36 m-2"
+                            className="w-20 sm:w-24 md:w-28 h-24 sm:h-28 md:h-32 m-1 sm:m-2"
                             initial={{ opacity: 0,y: 50 }}
                             animate={{ opacity: 1,y: 0 }}
                             transition={{ duration: 0.5,delay: index * 0.1 }}
@@ -81,14 +84,14 @@ const MySkill: React.FC = () => {
                             >
                                 <div className="hexagon-content flex flex-col items-center justify-center bg-primary/10">
                                     <motion.div
-                                        className="icon-container mb-2"
+                                        className="icon-container mb-1"
                                         whileHover={{ rotate: 360 }}
                                         transition={{ duration: 0.5 }}
                                     >
-                                        <Image src={skill.image} alt={skill.name} width={32} height={32} />
+                                        <Image src={skill.image} alt={skill.name} width={20} height={20} className="sm:w-6 sm:h-6 md:w-7 md:h-7" />
                                     </motion.div>
-                                    <h3 className="text-base font-semibold text-center">{skill.name}</h3>
-                                    <span className="text-xs text-muted-foreground flex items-center gap-1">
+                                    <h3 className="text-[10px] sm:text-xs md:text-sm font-semibold text-center">{skill.name}</h3>
+                                    <span className="text-[8px] sm:text-[10px] md:text-xs text-muted-foreground hidden sm:flex items-center gap-1">
                                         {
                                             skill.category.toLowerCase() === 'frontend' && <Globe className="w-4 h-4" />
                                         }
@@ -111,7 +114,8 @@ const MySkill: React.FC = () => {
                                             skill.category.toLowerCase() === 'security' && <Lock className="w-4 h-4" />
                                         }
 
-                                        {skill.category}</span>
+                                        <span className="hidden sm:inline">{skill.category}</span>
+                                    </span>
                                 </div>
                             </motion.div>
                         </motion.div>
