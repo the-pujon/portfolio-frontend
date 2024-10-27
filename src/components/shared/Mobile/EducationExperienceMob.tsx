@@ -4,8 +4,7 @@ import { motion } from 'framer-motion';
 import { Briefcase,GraduationCap } from 'lucide-react';
 import EducationExperienceCard from '@/components/ui/EducationExperienceCard';
 
-const EducationExperienceMob = ({ timelineData }: { timelineData: any }) => {
-
+const EducationExperienceMob = ({ timelineData }: { timelineData: any[] }) => {
     const itemVariants = {
         hidden: { y: 20,opacity: 0 },
         visible: {
@@ -17,6 +16,9 @@ const EducationExperienceMob = ({ timelineData }: { timelineData: any }) => {
             },
         },
     };
+
+    const experiences = timelineData.filter(item => item.type === 'experience');
+    const educations = timelineData.filter(item => item.type === 'education');
 
     return (
         <div className="block md:hidden space-y-8 sm:space-y-12">
@@ -34,7 +36,7 @@ const EducationExperienceMob = ({ timelineData }: { timelineData: any }) => {
                     </span>
                 </div>
                 <div className="space-y-4">
-                    {timelineData.map((item: any,index: any) => (
+                    {experiences.map((item,index) => (
                         <motion.div
                             key={index}
                             variants={itemVariants}
@@ -42,7 +44,7 @@ const EducationExperienceMob = ({ timelineData }: { timelineData: any }) => {
                             whileHover={{ scale: 1.02,boxShadow: "0 10px 30px -15px rgba(0, 0, 0, 0.3)" }}
                             transition={{ type: 'spring',stiffness: 300 }}
                         >
-                            <EducationExperienceCard item={item.experience} />
+                            <EducationExperienceCard item={item} />
                         </motion.div>
                     ))}
                 </div>
@@ -62,7 +64,7 @@ const EducationExperienceMob = ({ timelineData }: { timelineData: any }) => {
                     </span>
                 </div>
                 <div className="space-y-4">
-                    {timelineData.map((item: any,index: any) => (
+                    {educations.map((item,index) => (
                         <motion.div
                             key={index}
                             variants={itemVariants}
@@ -70,7 +72,7 @@ const EducationExperienceMob = ({ timelineData }: { timelineData: any }) => {
                             whileHover={{ scale: 1.02,boxShadow: "0 10px 30px -15px rgba(0, 0, 0, 0.3)" }}
                             transition={{ type: 'spring',stiffness: 300 }}
                         >
-                            <EducationExperienceCard item={item.education} /><EducationExperienceCard item={item.education} />
+                            <EducationExperienceCard item={item} />
                         </motion.div>
                     ))}
                 </div>

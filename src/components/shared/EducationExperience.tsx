@@ -1,14 +1,20 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+'use client'
+
 import React from 'react';
 import { motion,useAnimation,useInView } from 'framer-motion';
 import { GraduationCap,Briefcase,Star } from 'lucide-react';
 import EducationExperienceCard from '../ui/EducationExperienceCard';
 import EducationExperienceMob from './Mobile/EducationExperienceMob';
+import { useGetAllEducationsQuery } from '@/redux/features/education/educationApi';
+import { useGetAllExperiencesQuery } from '@/redux/features/experience/experienceApi';
 
 const EducationExperience = () => {
     const ref = React.useRef(null);
     const isInView = useInView(ref,{ once: true });
     const controls = useAnimation();
+
+    const { data: educationsData,isLoading: isEducationLoading } = useGetAllEducationsQuery({});
+    const { data: experiencesData,isLoading: isExperienceLoading } = useGetAllExperiencesQuery({});
 
     React.useEffect(() => {
         if (isInView) {
@@ -38,56 +44,39 @@ const EducationExperience = () => {
         },
     };
 
-    const timelineData = [
-        {
-            experience: {
-                title: "Senior Full Stack Developer",
-                organization: "Tech Company Name",
-                location: "City, Country",
-                duration: "2021 - Present",
-                points: [
-                    "Led development of enterprise-scale web applications",
-                    "Mentored junior developers and conducted code reviews",
-                    "Implemented CI/CD pipelines reducing deployment time by 40%",
-                ],
-            },
-            education: {
-                title: "Bachelor of Science in Computer Science",
-                organization: "University Name",
-                location: "City, Country",
-                duration: "2019 - 2023",
-                points: [
-                    "Graduated with First Class Honours",
-                    "Specialized in Software Engineering",
-                    "Led multiple academic projects",
-                ],
-            }
-        },
-        {
-            experience: {
-                title: "Full Stack Developer",
-                organization: "Startup Name",
-                location: "City, Country",
-                duration: "2019 - 2021",
-                points: [
-                    "Developed and maintained multiple client projects",
-                    "Implemented responsive designs and RESTful APIs",
-                    "Reduced loading times by 60% through optimization",
-                ],
-            },
-            education: {
-                title: "Higher Secondary Certificate",
-                organization: "College Name",
-                location: "City, Country",
-                duration: "2017 - 2019",
-                points: [
-                    "Science Group",
-                    "Achieved GPA 5.00",
-                    "College Programming Club President",
-                ],
-            }
-        },
-    ];
+    //if (isEducationLoading || isExperienceLoading) {
+    //    return <div>Loading education and experience data...</div>;
+    //}
+
+    const educations = educationsData?.data || [];
+    const experiences = experiencesData?.data || [];
+
+    // Format education data
+    const formattedEducations = educations.map(edu => ({
+        ...edu,
+        title: edu.degree,
+        organization: edu.institution,
+        location: edu.fieldOfStudy,
+        duration: `${new Date(edu.startDate).getFullYear()} - ${new Date(edu.endDate).getFullYear()}`,
+        points: [edu.fieldOfStudy],
+        type: 'education'
+    }));
+
+    // Format experience data
+    const formattedExperiences = experiences.map(exp => ({
+        ...exp,
+        title: exp.position,
+        organization: exp.companyName,
+        location: '',
+        duration: `${new Date(exp.startDate).getFullYear()} - ${new Date(exp.endDate).getFullYear()}`,
+        points: [],
+        type: 'experience'
+    }));
+
+    // Combine and sort education and experience data
+    const timelineData = [...formattedEducations,...formattedExperiences].sort((a,b) =>
+        new Date(b.startDate).getTime() - new Date(a.startDate).getTime()
+    );
 
     return (
         <section id="education-experience" className="py-12 sm:py-16 md:py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-primary/10 to-secondary/10 relative overflow-hidden">
@@ -164,7 +153,6 @@ const EducationExperience = () => {
                 {/* Mobile Layout */}
                 <EducationExperienceMob timelineData={timelineData} />
 
-
                 {/* Desktop Layout */}
                 <div className="hidden md:block">
                     <div className="grid grid-cols-2 gap-8 mb-12">
@@ -202,35 +190,22 @@ const EducationExperience = () => {
                                 className="grid grid-cols-2 gap-8 mb-12 relative"
                             >
                                 <motion.div
-                                    className="bg-card p-6 rounded-lg shadow-lg relative overflow-hidden"
+                                    className={`bg-card p-6 rounded-lg shadow-lg relative overflow-hidden ${item.type === 'experience' ? '' : 'col-start-2'}`}
                                     whileHover={{ scale: 1.02,boxShadow: "0 10px 30px -15px rgba(0, 0, 0, 0.3)" }}
                                     transition={{ type: 'spring',stiffness: 300 }}
                                 >
-                                    {/*{renderCardContent(item.experience)}
-                                    */}
-                                    <EducationExperienceCard item={item.experience} />
+                                    <EducationExperienceCard item={item} />
                                 </motion.div>
 
                                 {/* Timeline dot */}
                                 <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10">
                                     <div className="w-4 h-4 bg-primary rounded-full border-4 border-background" />
                                 </div>
-
-                                <motion.div
-                                    className="bg-card p-6 rounded-lg shadow-lg relative overflow-hidden"
-                                    whileHover={{ scale: 1.02,boxShadow: "0 10px 30px -15px rgba(0, 0, 0, 0.3)" }}
-                                    transition={{ type: 'spring',stiffness: 300 }}
-                                >
-                                    {/*{renderCardContent(item.education)}
-                                    */}
-                                    <EducationExperienceCard item={item.education} />
-                                </motion.div>
                             </motion.div>
                         ))}
                     </div>
                 </div>
             </motion.div>
-
         </section>
     );
 };

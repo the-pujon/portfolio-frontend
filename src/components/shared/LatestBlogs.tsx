@@ -14,6 +14,7 @@ const LatestBlogs = () => {
     const isInView = useInView(ref as React.RefObject<Element>);
     const controls = useAnimation();
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { data: blogsData,isLoading,isError } = useGetAllBlogsQuery({});
     const blogs = blogsData?.data || [];
 
