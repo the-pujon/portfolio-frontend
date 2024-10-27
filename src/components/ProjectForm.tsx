@@ -60,25 +60,32 @@ const ProjectForm: React.FC<ProjectFormProps> = ({ project,onSubmit }) => {
         setFormData({ ...formData,[name]: value })
     }
 
-    const handleRichTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-        setFormData({ ...formData,fullDescription: e.target.value })
-    }
+    const handleRichTextChange = (e: React.SyntheticEvent<HTMLElement>) => {
+        const target = e.target as HTMLElement;
+        setFormData({ ...formData,fullDescription: target.innerHTML });
+    };
 
-    const handleThumbnailUpload = async (file: File) => {
-        // Implement image upload logic here
-        // For now, we'll just use a placeholder URL
-        const url = URL.createObjectURL(file)
-        setFormData({ ...formData,thumbnailImage: url })
-        setThumbnailPreview(url)
-    }
+    const handleThumbnailUpload = async (file: File | FileList) => {
+        let url: string;
+        if (file instanceof File) {
+            // Handle single file upload
+            url = URL.createObjectURL(file);
+        } else {
+            // Handle FileList (multiple files)
+            // For thumbnail, we'll just use the first file
+            url = URL.createObjectURL(file[0]);
+        }
+        setFormData({ ...formData,thumbnailImage: url });
+        setThumbnailPreview(url);
+    };
 
-    const handleImagesUpload = async (files: FileList) => {
-        // Implement multiple image upload logic here
-        // For now, we'll just use placeholder URLs
-        const urls = Array.from(files).map(file => URL.createObjectURL(file))
-        setFormData({ ...formData,images: [...(formData.images || []),...urls] })
-        setImagesPreview([...imagesPreview,...urls])
-    }
+    //const handleImagesUpload = async (files: FileList) => {
+    //    // Implement multiple image upload logic here
+    //    // For now, we'll just use placeholder URLs
+    //    const urls = Array.from(files).map(file => URL.createObjectURL(file))
+    //    setFormData({ ...formData,images: [...(formData.images || []),...urls] })
+    //    setImagesPreview([...imagesPreview,...urls])
+    //}
 
     const handleImageDelete = (index: number) => {
         const newImages = [...(formData.images || [])]
@@ -145,7 +152,7 @@ const ProjectForm: React.FC<ProjectFormProps> = ({ project,onSubmit }) => {
                         </div>
                         <div className="space-y-2">
                             <Label>Project Images</Label>
-                            <ImageUpload onUpload={handleImagesUpload} multiple preview={imagesPreview} onDelete={handleImageDelete} />
+                            <ImageUpload onUpload={handleThumbnailUpload} multiple preview={imagesPreview} onDelete={handleImageDelete} />
                         </div>
                     </div>
                     <div className="space-y-2">
