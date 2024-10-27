@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 'use client'
 
 import React,{ useState,useEffect } from 'react'
@@ -10,86 +11,62 @@ import { toast } from 'sonner'
 import { Project } from '@/types/project'
 import { Badge } from '@/components/ui/badge'
 import { Popover,PopoverContent,PopoverTrigger } from '@/components/ui/popover'
-
-const demoProjects: Project[] = [
-    {
-        id: '1',
-        title: 'E-commerce Platform',
-        shortDescription: 'A full-featured online shopping platform',
-        fullDescription: '<p>This e-commerce platform offers a seamless shopping experience with features like product search, cart management, and secure checkout.</p>',
-        thumbnailImage: 'https://images.unsplash.com/photo-1563013544-824ae1b704d3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80',
-        images: [
-            'https://images.unsplash.com/photo-1563013544-824ae1b704d3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80',
-            'https://images.unsplash.com/photo-1472851294608-062f824d29cc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80'
-        ],
-        videoDemo: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-        liveLink: 'https://example-ecommerce.com',
-        clientGithub: 'https://github.com/example/ecommerce-frontend',
-        serverGithub: 'https://github.com/example/ecommerce-backend',
-        category: 'Web',
-        projectDuration: '6 months',
-        projectTeamSize: '5',
-        projectType: 'Client',
-        projectStatus: 'Completed',
-        projectStack: 'React, Node.js, MongoDB',
-        projectChallenges: 'Implementing real-time inventory updates and handling high traffic loads',
-        tags: ['e-commerce','web-app','responsive'],
-        technologies: ['React','Node.js','MongoDB','Express','Redux'],
-        keyFeatures: ['Product search','Cart management','Secure checkout','User reviews']
-    },
-    {
-        id: '2',
-        title: 'Task Management App',
-        shortDescription: 'A collaborative task management solution',
-        fullDescription: '<p>This task management app helps teams organize and track their projects efficiently with features like task assignment, due dates, and progress tracking.</p>',
-        thumbnailImage: 'https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1472&q=80',
-        images: [
-            'https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1472&q=80',
-            'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80'
-        ],
-        liveLink: 'https://example-taskmanager.com',
-        clientGithub: 'https://github.com/example/taskmanager-frontend',
-        serverGithub: 'https://github.com/example/taskmanager-backend',
-        category: 'Web',
-        projectDuration: '4 months',
-        projectTeamSize: '3',
-        projectType: 'Personal',
-        projectStatus: 'In Progress',
-        projectStack: 'Vue.js, Firebase',
-        projectChallenges: 'Implementing real-time updates and offline functionality',
-        tags: ['productivity','collaboration','project-management'],
-        technologies: ['Vue.js','Firebase','Vuex','PWA'],
-        keyFeatures: ['Task assignment','Due date tracking','Progress visualization','Team collaboration']
-    }
-]
+import { useAppSelector } from '@/redux/hook'
+import { selectCurrentUser } from '@/redux/features/auth/authSlice'
+import { useCreateProjectMutation,useGetAllProjectsQuery,useUpdateProjectMutation,useDeleteProjectMutation } from '@/redux/features/project/projectApi'
 
 const ProjectManagement = () => {
-    const [projects,setProjects] = useState<Project[]>(demoProjects)
+    const currentUser = useAppSelector(selectCurrentUser)
+    const { data: projectsData,isLoading,refetch } = useGetAllProjectsQuery({})
+    const [createProject,{ isLoading: isCreating }] = useCreateProjectMutation()
+    const [updateProject,{ isLoading: isUpdating }] = useUpdateProjectMutation()
+    const [deleteProject,{ isLoading: isDeleting }] = useDeleteProjectMutation()
+
+    const [projects,setProjects] = useState<Project[]>([])
     const [isAddDialogOpen,setIsAddDialogOpen] = useState(false)
     const [isEditDialogOpen,setIsEditDialogOpen] = useState(false)
     const [selectedProject,setSelectedProject] = useState<Project | null>(null)
 
     useEffect(() => {
-        // Fetch projects from API
-        // setProjects(fetchedProjects)
-    },[])
+        if (projectsData) {
+            setProjects(projectsData.data)
+        }
+    },[projectsData])
 
     const handleAddProject = async (project: Project) => {
-        const newProject = { ...project,id: Date.now().toString() }
-        setProjects([...projects,newProject])
-        setIsAddDialogOpen(false)
-        toast({ title: 'Project added successfully' })
+        try {
+            await createProject({ ...project,userId: currentUser?._id }).unwrap()
+            setIsAddDialogOpen(false)
+            toast.success('Project added successfully')
+            refetch()
+        } catch (error) {
+            toast.error('Failed to add project')
+        }
     }
 
     const handleUpdateProject = async (updatedProject: Project) => {
-        setProjects(projects.map(p => p.id === updatedProject.id ? updatedProject : p))
-        setIsEditDialogOpen(false)
-        toast({ title: 'Project updated successfully' })
+        try {
+            await updateProject({ id: updatedProject._id,data: { ...updatedProject,userId: currentUser?._id } }).unwrap()
+            setIsEditDialogOpen(false)
+            toast.success('Project updated successfully')
+            refetch()
+        } catch (error) {
+            toast.error('Failed to update project')
+        }
     }
 
     const handleDeleteProject = async (id: string) => {
-        setProjects(projects.filter(p => p.id !== id))
-        toast({ title: 'Project deleted successfully' })
+        try {
+            await deleteProject({ id,userId: currentUser?._id }).unwrap()
+            toast.success('Project deleted successfully')
+            refetch()
+        } catch (error) {
+            toast.error('Failed to delete project')
+        }
+    }
+
+    if (isLoading) {
+        return <div>Loading projects...</div>
     }
 
     return (
@@ -125,11 +102,11 @@ const ProjectManagement = () => {
                 </TableHeader>
                 <TableBody>
                     {projects.map((project) => (
-                        <TableRow key={project.id}>
+                        <TableRow key={project._id}>
                             <TableCell className="font-medium">{project.title}</TableCell>
                             <TableCell>{project.category}</TableCell>
                             <TableCell>
-                                <Badge variant={project.projectStatus === 'Completed' ? 'success' : 'default'}>
+                                <Badge variant={project.projectStatus === 'Completed' ? 'default' : 'destructive'}>
                                     {project.projectStatus}
                                 </Badge>
                             </TableCell>
@@ -200,7 +177,7 @@ const ProjectManagement = () => {
                                     <Button
                                         variant="outline"
                                         size="sm"
-                                        onClick={() => handleDeleteProject(project.id)}
+                                        onClick={() => handleDeleteProject(project._id)}
                                     >
                                         <Trash2 className="h-4 w-4" />
                                     </Button>
