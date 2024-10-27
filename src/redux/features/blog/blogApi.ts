@@ -48,6 +48,15 @@ const blogApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["Blog"],
     }),
+
+    // Add feedback
+    addFeedback: builder.mutation({
+      query: ({ id, data }) => ({
+        url: `/blog/${id}/feedback`,
+        method: "POST",
+        body: data,
+      }),
+    }),
   }),
 });
 

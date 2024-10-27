@@ -1,6 +1,6 @@
 'use client'
 
-import React,{ useState } from 'react';
+import React,{ useState,useEffect } from 'react';
 import Image from 'next/image';
 import { motion,useScroll,useTransform } from 'framer-motion';
 import { Calendar,Clock,User,Tag,BookOpen,Star,MessageCircle,Quote } from 'lucide-react';
@@ -14,15 +14,8 @@ import {
     CarouselPrevious,
 } from "@/components/ui/carousel";
 import { Card,CardContent } from "@/components/ui/card";
-
-interface BlogFeedback {
-    blog: string;
-    rating: number;
-    email: string;
-    feedback: string;
-    createdAt: Date;
-    updatedAt: Date;
-}
+import { useGetBlogByIdQuery,useUpdateBlogMutation } from '@/redux/features/blog/blogApi';
+import { useParams } from 'next/navigation';
 
 interface Blog {
     _id: string;
@@ -34,96 +27,45 @@ interface Blog {
     tags: string[];
     createdAt: Date;
     updatedAt: Date;
-    blogFeedback: BlogFeedback[];
+    feedback?: {
+        rating: number;
+        email: string;
+        feedback: string;
+    }[];
 }
 
 const BlogDetailsPage = () => {
-    const [blog,setBlog] = useState<Blog>({
-        _id: "1",
-        title: "The Future of AI in Web Development",
-        content: "Artificial Intelligence is revolutionizing the way we build and interact with websites. As we stand on the brink of a new era in web development, AI is poised to play a pivotal role in shaping the future of digital experiences. From personalized user interfaces to intelligent chatbots, the possibilities are endless.\n\nOne of the most significant impacts of AI in web development is in the realm of user experience. AI algorithms can analyze user behavior and preferences to create highly personalized websites that adapt in real-time to individual users. This level of customization was once a distant dream, but AI is making it a reality.\n\nMoreover, AI is streamlining the development process itself. Automated coding assistants powered by machine learning can suggest code completions, identify bugs, and even generate entire sections of code. This not only speeds up development but also reduces errors and improves overall code quality.\n\nAs we look to the future, we can expect AI to become an integral part of every aspect of web development, from design to deployment. The websites of tomorrow will be smarter, more responsive, and more intuitive than ever before, thanks to the power of artificial intelligence.",
-        image: ["https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8YWl8ZW58MHx8MHx8fDA%3D"],
-        author: "Jane Doe",
-        category: "Technology",
-        tags: ["AI","Web Development","Future Tech"],
-        createdAt: new Date("2023-03-15"),
-        updatedAt: new Date("2023-03-16"),
-        blogFeedback: [
-            {
-                blog: "1",
-                rating: 4,
-                email: "user1@example.com",
-                feedback: "Great insights on AI's potential!",
-                createdAt: new Date("2023-03-17"),
-                updatedAt: new Date("2023-03-17"),
-            },
-            {
-                blog: "2",
-                rating: 4,
-                email: "user1@example.com",
-                feedback: "Great insights on AI's potential!",
-                createdAt: new Date("2023-03-17"),
-                updatedAt: new Date("2023-03-17"),
-            },
-            {
-                blog: "3",
-                rating: 4,
-                email: "user1@example.com",
-                feedback: "Great insights on AI's potential!",
-                createdAt: new Date("2023-03-17"),
-                updatedAt: new Date("2023-03-17"),
-            },
-            {
-                blog: "11",
-                rating: 4,
-                email: "user1@example.com",
-                feedback: "Great insights on AI's potential!",
-                createdAt: new Date("2023-03-17"),
-                updatedAt: new Date("2023-03-17"),
-            },
-            {
-                blog: "21",
-                rating: 4,
-                email: "user1@example.com",
-                feedback: "Great insights on AI's potential!",
-                createdAt: new Date("2023-03-17"),
-                updatedAt: new Date("2023-03-17"),
-            },
-            {
-                blog: "31",
-                rating: 4,
-                email: "user1@example.com",
-                feedback: "Great insights on AI's potential!",
-                createdAt: new Date("2023-03-17"),
-                updatedAt: new Date("2023-03-17"),
-            },
-        ],
-    });
+    const params = useParams();
+    const blogId = params.id as string;
+
+    const { data: blogData,isLoading,isError } = useGetBlogByIdQuery(blogId);
+    const [updateBlog] = useUpdateBlogMutation();
+
+    const [blog,setBlog] = useState<Blog | null>(null);
+
+    useEffect(() => {
+        if (blogData) {
+            setBlog(blogData.data);
+        }
+    },[blogData]);
 
     const { scrollYProgress } = useScroll();
     const backgroundY = useTransform(scrollYProgress,[0,1],['0%','100%']);
 
-    const handleFeedbackSubmit = (newFeedback: {
+    const handleFeedbackSubmit = async (newFeedback: {
         rating: number;
         email: string;
         feedback: string;
     }) => {
-        // Here you would typically send this data to your backend
-        // For now, let's just add it to the existing feedback
-        const updatedFeedback = [
-            ...blog.blogFeedback,
-            {
-                blog: blog._id,
-                ...newFeedback,
-                createdAt: new Date(),
-                updatedAt: new Date(),
-            },
-        ];
-
-        setBlog({
-            ...blog,
-            blogFeedback: updatedFeedback,
-        });
+        if (blog) {
+            const updatedFeedback = [...(blog.feedback || []),newFeedback];
+            try {
+                await updateBlog({ id: blog._id,data: { feedback: updatedFeedback } }).unwrap();
+                setBlog({ ...blog,feedback: updatedFeedback });
+            } catch (error) {
+                console.error('Failed to update feedback:',error);
+            }
+        }
     };
 
     const containerVariants = {
@@ -147,6 +89,14 @@ const BlogDetailsPage = () => {
             },
         },
     };
+
+    if (isLoading) {
+        return <div>Loading blog...</div>;
+    }
+
+    if (isError || !blog) {
+        return <div>Error loading blog. Please try again later.</div>;
+    }
 
     return (
         <motion.div
@@ -251,7 +201,7 @@ const BlogDetailsPage = () => {
                         <MessageCircle className="w-10 h-10 mr-3 text-primary" />
                         Reader Feedback
                     </h2>
-                    {blog.blogFeedback.length > 0 ? (
+                    {blog.feedback && blog.feedback.length > 0 ? (
                         <Carousel
                             opts={{
                                 align: "start",
@@ -260,7 +210,7 @@ const BlogDetailsPage = () => {
                             className="w-full"
                         >
                             <CarouselContent>
-                                {blog.blogFeedback.map((feedback,index) => (
+                                {blog.feedback.map((feedback,index) => (
                                     <CarouselItem key={index} className="md:basis-1/2 pl-4">
                                         <motion.div
                                             initial={{ opacity: 0,y: 50 }}

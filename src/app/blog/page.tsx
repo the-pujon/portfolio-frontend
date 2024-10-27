@@ -7,6 +7,7 @@ import { BlogCard } from '@/components/ui/BlogCard';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { BookOpen,Search } from 'lucide-react';
+import { useGetAllBlogsQuery } from '@/redux/features/blog/blogApi';
 
 export interface Blog {
     _id: string;
@@ -28,53 +29,18 @@ export interface Blog {
     }[];
 }
 
-// Demo data based on the Blog interface
-const blogs: Blog[] = [
-    {
-        _id: "1",
-        title: "The Future of AI in Web Development",
-        content: "Artificial Intelligence is revolutionizing the way we build and interact with websites...",
-        image: ["https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8YWl8ZW58MHx8MHx8fDA%3D"],
-        author: "Jane Doe",
-        category: "Technology",
-        tags: ["AI","Web Development","Future Tech"],
-        createdAt: new Date("2023-03-15"),
-        updatedAt: new Date("2023-03-16"),
-        blogFeedback: [
-            {
-                blog: "1" as any,
-                rating: 4,
-                email: "user1@example.com",
-                feedback: "Great insights on AI's potential!",
-                createdAt: new Date("2023-03-17"),
-                updatedAt: new Date("2023-03-17"),
-            },
-        ],
-    },
-    {
-        _id: "2",
-        title: "Mastering React Hooks",
-        content: "React Hooks have transformed the way we write functional components...",
-        image: ["https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cmVhY3R8ZW58MHx8MHx8fDA%3D"],
-        author: "John Smith",
-        category: "Programming",
-        tags: ["React","JavaScript","Web Development"],
-        createdAt: new Date("2023-04-01"),
-        updatedAt: new Date("2023-04-02"),
-        blogFeedback: [],
-    },
-];
-
 const BlogPage = () => {
     const [searchTerm,setSearchTerm] = useState('');
+    const { data: blogsData,isLoading,isError } = useGetAllBlogsQuery({});
 
     const filteredBlogs = useMemo(() => {
-        return blogs.filter(blog =>
+        if (!blogsData?.data) return [];
+        return blogsData.data.filter((blog: Blog) =>
             blog.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
             blog.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
             blog.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()))
         );
-    },[searchTerm]);
+    },[searchTerm,blogsData]);
 
     const containerVariants = {
         hidden: { opacity: 0 },
@@ -97,6 +63,14 @@ const BlogPage = () => {
             },
         },
     };
+
+    if (isLoading) {
+        return <div>Loading blogs...</div>;
+    }
+
+    if (isError) {
+        return <div>Error loading blogs. Please try again later.</div>;
+    }
 
     return (
         <div className="min-h-screen py-24 px-4 relative overflow-hidden bg-gradient-to-b from-primary/10 to-secondary/10">
@@ -157,7 +131,7 @@ const BlogPage = () => {
                             variants={containerVariants}
                             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
                         >
-                            {filteredBlogs.map(blog => (
+                            {filteredBlogs.map((blog: Blog) => (
                                 <motion.div key={blog._id} variants={itemVariants}>
                                     <BlogCard blog={blog} />
                                 </motion.div>
