@@ -31,10 +31,7 @@ export const BlogFeedbackForm: React.FC<BlogFeedbackFormProps> = ({ blogId,onSub
 
     return (
         <motion.form
-            onSubmit={(e: React.FormEvent) => {
-                e.preventDefault();
-                handleSubmit(e);
-            }}
+            onSubmit={handleSubmit}
             className="mt-8 space-y-4"
             initial={{ opacity: 0,y: 20 }}
             animate={{ opacity: 1,y: 0 }}

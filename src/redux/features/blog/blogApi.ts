@@ -56,6 +56,7 @@ const blogApi = baseApi.injectEndpoints({
         method: "POST",
         body: data,
       }),
+      invalidatesTags: ["Blog"],
     }),
   }),
 });
@@ -66,4 +67,5 @@ export const {
   useGetBlogByIdQuery,
   useUpdateBlogMutation,
   useDeleteBlogMutation,
+  useAddFeedbackMutation,
 } = blogApi;

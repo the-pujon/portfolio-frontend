@@ -1,6 +1,6 @@
 'use client'
 
-import React,{ useState,useEffect } from 'react';
+import React,{ useState,useEffect,useCallback } from 'react';
 import Image from 'next/image';
 import { motion,useScroll,useTransform } from 'framer-motion';
 import { Calendar,Clock,User,Tag,BookOpen,Star,MessageCircle,Quote } from 'lucide-react';
@@ -14,7 +14,7 @@ import {
     CarouselPrevious,
 } from "@/components/ui/carousel";
 import { Card,CardContent } from "@/components/ui/card";
-import { useGetBlogByIdQuery,useUpdateBlogMutation } from '@/redux/features/blog/blogApi';
+import { useGetBlogByIdQuery,useAddFeedbackMutation } from '@/redux/features/blog/blogApi';
 import { useParams } from 'next/navigation';
 
 interface Blog {
@@ -38,8 +38,8 @@ const BlogDetailsPage = () => {
     const params = useParams();
     const blogId = params.id as string;
 
-    const { data: blogData,isLoading,isError } = useGetBlogByIdQuery(blogId);
-    const [updateBlog] = useUpdateBlogMutation();
+    const { data: blogData,isLoading,isError,refetch } = useGetBlogByIdQuery(blogId);
+    const [addFeedback] = useAddFeedbackMutation();
 
     const [blog,setBlog] = useState<Blog | null>(null);
 
@@ -52,21 +52,21 @@ const BlogDetailsPage = () => {
     const { scrollYProgress } = useScroll();
     const backgroundY = useTransform(scrollYProgress,[0,1],['0%','100%']);
 
-    const handleFeedbackSubmit = async (newFeedback: {
+    const handleFeedbackSubmit = useCallback(async (newFeedback: {
         rating: number;
         email: string;
         feedback: string;
     }) => {
         if (blog) {
-            const updatedFeedback = [...(blog.feedback || []),newFeedback];
             try {
-                await updateBlog({ id: blog._id,data: { feedback: updatedFeedback } }).unwrap();
-                setBlog({ ...blog,feedback: updatedFeedback });
+                await addFeedback({ id: blog._id,data: newFeedback }).unwrap();
+                // Refetch the blog data to get the updated feedback
+                await refetch();
             } catch (error) {
-                console.error('Failed to update feedback:',error);
+                console.error('Failed to add feedback:',error);
             }
         }
-    };
+    },[blog,addFeedback,refetch]);
 
     const containerVariants = {
         hidden: { opacity: 0 },
@@ -100,7 +100,7 @@ const BlogDetailsPage = () => {
 
     return (
         <motion.div
-            className="min-h-screen py-16 px-4 bg-gradient-to-b from-primary/5 to-secondary/5 relative overflow-hidden"
+            className="min-h-screen h-full py-16 px-4 bg-gradient-to-b from-primary/5 to-secondary/5 relative overflow-hidden"
             initial="hidden"
             animate="visible"
             variants={containerVariants}
@@ -224,7 +224,7 @@ const BlogDetailsPage = () => {
                                                         <div className="flex justify-between items-start mb-6">
                                                             <div>
                                                                 <p className="font-semibold text-xl text-foreground">{feedback.email.split('@')[0]}</p>
-                                                                <p className="text-sm text-muted-foreground">{new Date(feedback.createdAt).toLocaleDateString()}</p>
+                                                                {/*<p className="text-sm text-muted-foreground">{new Date(feedback.createdAt).toLocaleDateString()}</p>*/}
                                                             </div>
                                                             <div className="flex">
                                                                 {[1,2,3,4,5].map((star) => (
