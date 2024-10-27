@@ -23,10 +23,13 @@ const projectApi = baseApi.injectEndpoints({
 
     // Get project by ID
     getProjectById: builder.query({
-      query: (id) => ({
-        url: `/project/${id}`,
-        method: "GET",
-      }),
+      query: (id) => {
+        console.log("id paisi", id);
+        return {
+          url: `/project/${id}`,
+          method: "GET",
+        };
+      },
       providesTags: ["Project"],
     }),
 
@@ -59,6 +62,15 @@ const projectApi = baseApi.injectEndpoints({
       }),
       providesTags: ["Profile"],
     }),
+
+    //give feedback
+    giveFeedback: builder.mutation({
+      query: (data) => ({
+        url: "/project/feedback",
+        method: "POST",
+        body: data,
+      }),
+    }),
   }),
 });
 
@@ -69,4 +81,5 @@ export const {
   useUpdateProjectMutation,
   useDeleteProjectMutation,
   useGetProfileByUserIdQuery,
+  useGiveFeedbackMutation,
 } = projectApi;

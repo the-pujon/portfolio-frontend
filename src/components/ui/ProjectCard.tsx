@@ -6,11 +6,13 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card,CardContent } from "@/components/ui/card";
 import Image from "next/image";
+import { Project } from "@/types/project"; // Assuming you've created this type based on the interface
+import Link from "next/link";
 
-const ProjectCard = ({ project,index }: { project: any,index: any }) => {
+const ProjectCard = ({ project,index }: { project: Project,index: number }) => {
     return (
         <motion.div
-            key={project.id}
+            key={project._id}
             initial={{ opacity: 0,y: 20 }}
             animate={{ opacity: 1,y: 0 }}
             transition={{ duration: 0.5,delay: index * 0.1 }}
@@ -22,35 +24,25 @@ const ProjectCard = ({ project,index }: { project: any,index: any }) => {
                     <div className="absolute inset-0 bg-gradient-to-t from-primary/10 via-white/10 to-secondary/10 animate-gradient -z-10" />
                 </div>
 
-                {/* Enhanced status badge */}
+                {/* Status badge */}
                 <div className="absolute top-4 left-4 z-10">
                     <Badge className="bg-background/50 backdrop-blur-md border-primary/20 text-primary px-4 py-1.5 flex items-center gap-2 shadow-lg">
-                        {project.status === "Production" && (
+                        {project.projectStatus === "Production" && (
                             <Zap className="h-3 w-3" />
                         )}
-                        {project.status === "Beta" && (
+                        {project.projectStatus === "Beta" && (
                             <Trophy className="h-3 w-3" />
                         )}
-                        {project.status}
+                        {project.projectStatus}
                     </Badge>
                 </div>
 
-                {/* Enhanced featured badge */}
-                {project.featured && (
-                    <div className="absolute top-4 right-4 z-10">
-                        <Badge className="bg-primary text-white px-3 py-1 flex items-center gap-2 animate-pulse">
-                            <Star className="h-3 w-3" fill="currentColor" />
-                            Featured
-                        </Badge>
-                    </div>
-                )}
-
                 <CardContent className="p-0 flex flex-col h-full">
-                    {/* Enhanced image container */}
+                    {/* Image container */}
                     <div className="relative w-full aspect-[16/10] overflow-hidden">
                         <Image
-                            src={project.image}
-                            alt={project.title}
+                            src={project.thumbnailImage || ''}
+                            alt={project.title || ''}
                             fill
                             className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                         />
@@ -62,37 +54,43 @@ const ProjectCard = ({ project,index }: { project: any,index: any }) => {
                                     exit={{ opacity: 0,y: 20 }}
                                     className="flex flex-wrap gap-2"
                                 >
-                                    {/* Enhanced buttons */}
-                                    <Button
-                                        size="sm"
-                                        className="bg-primary/90 hover:bg-primary text-white backdrop-blur-sm hover:scale-105 transition-all"
-                                        onClick={() => window.open(project.github.client)}
-                                    >
-                                        <Github className="h-4 w-4 mr-2" />
-                                        Client
-                                    </Button>
-                                    <Button
-                                        size="sm"
-                                        className="bg-primary/90 hover:bg-primary text-white backdrop-blur-sm hover:scale-105 transition-all"
-                                        onClick={() => window.open(project.github.server)}
-                                    >
-                                        <Github className="h-4 w-4 mr-2" />
-                                        Server
-                                    </Button>
-                                    <Button
-                                        size="sm"
-                                        className="bg-secondary/90 hover:bg-secondary text-white backdrop-blur-sm hover:scale-105 transition-all"
-                                        onClick={() => window.open(project.live)}
-                                    >
-                                        <ExternalLink className="h-4 w-4 mr-2" />
-                                        Live Demo
-                                    </Button>
+                                    {/* Buttons */}
+                                    {project.clientGithub && (
+                                        <Button
+                                            size="sm"
+                                            className="bg-primary/90 hover:bg-primary text-white backdrop-blur-sm hover:scale-105 transition-all"
+                                            onClick={() => window.open(project.clientGithub)}
+                                        >
+                                            <Github className="h-4 w-4 mr-2" />
+                                            Client
+                                        </Button>
+                                    )}
+                                    {project.serverGithub && (
+                                        <Button
+                                            size="sm"
+                                            className="bg-primary/90 hover:bg-primary text-white backdrop-blur-sm hover:scale-105 transition-all"
+                                            onClick={() => window.open(project.serverGithub)}
+                                        >
+                                            <Github className="h-4 w-4 mr-2" />
+                                            Server
+                                        </Button>
+                                    )}
+                                    {project.liveLink && (
+                                        <Button
+                                            size="sm"
+                                            className="bg-secondary/90 hover:bg-secondary text-white backdrop-blur-sm hover:scale-105 transition-all"
+                                            onClick={() => window.open(project.liveLink)}
+                                        >
+                                            <ExternalLink className="h-4 w-4 mr-2" />
+                                            Live Demo
+                                        </Button>
+                                    )}
                                 </motion.div>
                             </AnimatePresence>
                         </div>
                     </div>
 
-                    {/* Enhanced content container */}
+                    {/* Content container */}
                     <div className="p-6 flex flex-col flex-grow bg-gradient-to-b from-transparent to-muted/5">
                         {/* Title and category */}
                         <div className="space-y-2 mb-4">
@@ -108,7 +106,7 @@ const ProjectCard = ({ project,index }: { project: any,index: any }) => {
                                 </Badge>
                             </div>
                             <p className="text-muted-foreground line-clamp-2">
-                                {project.description}
+                                {project.shortDescription}
                             </p>
                         </div>
 
@@ -118,20 +116,19 @@ const ProjectCard = ({ project,index }: { project: any,index: any }) => {
                             <div className="flex items-center gap-4 text-sm text-muted-foreground">
                                 <div className="flex items-center gap-1">
                                     <Star className="h-4 w-4" />
-                                    <span>{project.stats.stars}</span>
+                                    <span>{project.feedbacks?.length || 0}</span>
                                 </div>
                                 <div className="flex items-center gap-1">
                                     <Github className="h-4 w-4" />
-                                    <span>{project.stats.forks}</span>
+                                    <span>{project.projectTeamSize}</span>
                                 </div>
                             </div>
 
-                            {/* Enhanced technology badges */}
+                            {/* Technology badges */}
                             <div className="flex flex-wrap gap-2 pt-2 border-t border-primary/10">
-                                {/*eslint-disable-next-line @typescript-eslint/no-unused-vars*/}
-                                {project.technologies.map((tech: any,_idx: any) => (
+                                {project.technologies?.map((tech,idx) => (
                                     <Badge
-                                        key={tech}
+                                        key={idx}
                                         variant="secondary"
                                         className="bg-primary/5 hover:bg-primary/10 transition-colors hover:scale-105 duration-300"
                                     >
@@ -140,17 +137,18 @@ const ProjectCard = ({ project,index }: { project: any,index: any }) => {
                                 ))}
                             </div>
 
-                            {/* Enhanced Show Details button */}
+                            {/* Show Details button */}
                             <motion.div className="pt-4 z-10 cursor-pointer">
-                                <Button
-                                    variant="ghost"
-                                    className="w-full group/btn hover:bg-primary hover:text-white border border-primary/20 transition-all duration-300"
-                                >
-                                    <span className="flex items-center gap-2">
-                                        Explore Project
-                                        <ArrowUpRight className="h-4 w-4 group-hover/btn:translate-x-1 group-hover/btn:-translate-y-1 transition-transform duration-300" />
-                                    </span>
-                                </Button>
+                                <Link href={`/projects/${project._id}`}>
+                                    <Button
+                                        variant="ghost"
+                                        className="w-full group/btn hover:bg-primary hover:text-white border border-primary/20 transition-all duration-300"
+                                    >
+                                        <span className="flex items-center gap-2">
+                                            Explore Project
+                                            <ArrowUpRight className="h-4 w-4 group-hover/btn:translate-x-1 group-hover/btn:-translate-y-1 transition-transform duration-300" />
+                                        </span>
+                                    </Button></Link>
                             </motion.div>
                         </div>
                     </div>

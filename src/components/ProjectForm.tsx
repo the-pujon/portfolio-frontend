@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client'
 
 import React,{ useState,KeyboardEvent } from 'react'
@@ -11,7 +12,9 @@ import ImageUpload from './ImageUpload'
 import { Label } from '@/components/ui/label'
 import { Card,CardContent,CardHeader,CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { X } from 'lucide-react'
+import { X,Plus } from 'lucide-react'
+import { ContentEditableEvent } from 'react-simple-wysiwyg'
+import { uploadToImgBB } from '@/utils/imgbbUpload'
 
 const RichTextEditor = dynamic(() => import('react-simple-wysiwyg'),{ ssr: false })
 
@@ -24,9 +27,16 @@ const ProjectForm: React.FC<ProjectFormProps> = ({ project,onSubmit }) => {
     const [formData,setFormData] = useState<Project>(project || {} as Project)
     const [thumbnailPreview,setThumbnailPreview] = useState<string | null>(project?.thumbnailImage || null)
     const [imagesPreview,setImagesPreview] = useState<string[]>(project?.images || [])
+    const [thumbnailFile,setThumbnailFile] = useState<File | null>(null);
+    const [imageFiles,setImageFiles] = useState<File[]>([]);
 
     const [tagInput,setTagInput] = useState('')
     const [techInput,setTechInput] = useState('')
+    const [featureInput,setFeatureInput] = useState('')
+    const [challengeInput,setChallengeInput] = useState('')
+    const [solutionInput,setSolutionInput] = useState('')
+
+    const [isUploading,setIsUploading] = useState(false);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name,value } = e.target
@@ -60,32 +70,29 @@ const ProjectForm: React.FC<ProjectFormProps> = ({ project,onSubmit }) => {
         setFormData({ ...formData,[name]: value })
     }
 
-    const handleRichTextChange = (e: React.SyntheticEvent<HTMLElement>) => {
-        const target = e.target as HTMLElement;
-        setFormData({ ...formData,fullDescription: target.innerHTML });
+    const handleRichTextChange = (e: ContentEditableEvent) => {
+        setFormData({ ...formData,fullDescription: e.target.value });
     };
 
-    const handleThumbnailUpload = async (file: File | FileList) => {
-        let url: string;
+    const handleThumbnailUpload = (file: File | FileList) => {
         if (file instanceof File) {
-            // Handle single file upload
-            url = URL.createObjectURL(file);
-        } else {
-            // Handle FileList (multiple files)
-            // For thumbnail, we'll just use the first file
-            url = URL.createObjectURL(file[0]);
+            const url = URL.createObjectURL(file);
+            setThumbnailPreview(url);
+            setThumbnailFile(file);
         }
-        setFormData({ ...formData,thumbnailImage: url });
-        setThumbnailPreview(url);
     };
 
-    //const handleImagesUpload = async (files: FileList) => {
-    //    // Implement multiple image upload logic here
-    //    // For now, we'll just use placeholder URLs
-    //    const urls = Array.from(files).map(file => URL.createObjectURL(file))
-    //    setFormData({ ...formData,images: [...(formData.images || []),...urls] })
-    //    setImagesPreview([...imagesPreview,...urls])
-    //}
+    const handleImagesUpload = (files: File | FileList) => {
+        let fileArray: File[];
+        if (files instanceof FileList) {
+            fileArray = Array.from(files);
+        } else {
+            fileArray = [files];
+        }
+        const urls = fileArray.map(file => URL.createObjectURL(file));
+        setImagesPreview(prev => [...prev,...urls]);
+        setImageFiles(prev => [...prev,...fileArray]);
+    };
 
     const handleImageDelete = (index: number) => {
         const newImages = [...(formData.images || [])]
@@ -94,10 +101,60 @@ const ProjectForm: React.FC<ProjectFormProps> = ({ project,onSubmit }) => {
         setImagesPreview(newImages)
     }
 
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault()
-        onSubmit(formData)
+    const handleAddItem = (field: 'keyFeatures' | 'challenges' | 'solutions',value: string) => {
+        if (value.trim() !== '') {
+            setFormData({
+                ...formData,
+                [field]: [...(formData[field] || []),value.trim()]
+            })
+            if (field === 'keyFeatures') setFeatureInput('')
+            if (field === 'challenges') setChallengeInput('')
+            if (field === 'solutions') setSolutionInput('')
+        }
     }
+
+    const handleRemoveItem = (field: 'keyFeatures' | 'challenges' | 'solutions',index: number) => {
+        setFormData({
+            ...formData,
+            [field]: formData[field]?.filter((_: any,i: any) => i !== index) || []
+        })
+    }
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setIsUploading(true);
+
+        try {
+            // Upload thumbnail
+            let thumbnailUrl = formData.thumbnailImage;
+            if (thumbnailFile) {
+                thumbnailUrl = await uploadToImgBB(thumbnailFile);
+            }
+
+            // Upload new images
+            const newImageUrls = await Promise.all(
+                imageFiles.map(file => uploadToImgBB(file))
+            );
+
+            // Combine existing image URLs with new ones
+            const allImageUrls = [...(formData.images || []),...newImageUrls];
+
+            // Prepare final form data
+            const finalFormData = {
+                ...formData,
+                thumbnailImage: thumbnailUrl,
+                images: allImageUrls,
+            };
+
+            // Submit the form
+            await onSubmit(finalFormData);
+        } catch (error) {
+            console.error('Error uploading images:',error);
+            // Handle error (e.g., show error message to user)
+        } finally {
+            setIsUploading(false);
+        }
+    };
 
     return (
         <form onSubmit={handleSubmit} className="space-y-6 max-w-full mx-auto p-6 rounded-lg ">
@@ -152,7 +209,7 @@ const ProjectForm: React.FC<ProjectFormProps> = ({ project,onSubmit }) => {
                         </div>
                         <div className="space-y-2">
                             <Label>Project Images</Label>
-                            <ImageUpload onUpload={handleThumbnailUpload} multiple preview={imagesPreview} onDelete={handleImageDelete} />
+                            <ImageUpload onUpload={handleImagesUpload} multiple preview={imagesPreview} onDelete={handleImageDelete} />
                         </div>
                     </div>
                     <div className="space-y-2">
@@ -312,7 +369,104 @@ const ProjectForm: React.FC<ProjectFormProps> = ({ project,onSubmit }) => {
                 </CardContent>
             </Card>
 
-            <Button type="submit" className="w-full">Submit Project</Button>
+            <Card className="overflow-hidden bg-none shadow-none border-none">
+                <CardHeader className="bg-primary text-primary-foreground">
+                    <CardTitle>Additional Details</CardTitle>
+                </CardHeader>
+                <CardContent className="grid gap-4 p-6">
+                    <div className="space-y-2">
+                        <Label>Key Features</Label>
+                        <div className="flex space-x-2">
+                            <Input
+                                value={featureInput}
+                                onChange={(e) => setFeatureInput(e.target.value)}
+                                placeholder="Add a key feature"
+                            />
+                            <Button type="button" onClick={() => handleAddItem('keyFeatures',featureInput)}>
+                                <Plus className="h-4 w-4" />
+                            </Button>
+                        </div>
+                        <div className="flex flex-wrap gap-2 mt-2">
+                            {formData.keyFeatures?.map((feature,index) => (
+                                <Badge key={index} variant="secondary" className="text-sm">
+                                    {feature}
+                                    <Button
+                                        type="button"
+                                        variant="ghost"
+                                        size="sm"
+                                        className="ml-1 h-4 w-4 p-0"
+                                        onClick={() => handleRemoveItem('keyFeatures',index)}
+                                    >
+                                        <X className="h-3 w-3" />
+                                    </Button>
+                                </Badge>
+                            ))}
+                        </div>
+                    </div>
+                    <div className="space-y-2">
+                        <Label>Challenges</Label>
+                        <div className="flex space-x-2">
+                            <Input
+                                value={challengeInput}
+                                onChange={(e) => setChallengeInput(e.target.value)}
+                                placeholder="Add a challenge"
+                            />
+                            <Button type="button" onClick={() => handleAddItem('challenges',challengeInput)}>
+                                <Plus className="h-4 w-4" />
+                            </Button>
+                        </div>
+                        <div className="flex flex-wrap gap-2 mt-2">
+                            {formData.challenges?.map((challenge,index) => (
+                                <Badge key={index} variant="secondary" className="text-sm">
+                                    {challenge}
+                                    <Button
+                                        type="button"
+                                        variant="ghost"
+                                        size="sm"
+                                        className="ml-1 h-4 w-4 p-0"
+                                        onClick={() => handleRemoveItem('challenges',index)}
+                                    >
+                                        <X className="h-3 w-3" />
+                                    </Button>
+                                </Badge>
+                            ))}
+                        </div>
+                    </div>
+                    <div className="space-y-2">
+                        <Label>Solutions</Label>
+                        <div className="flex space-x-2">
+                            <Input
+                                value={solutionInput}
+                                onChange={(e) => setSolutionInput(e.target.value)}
+                                placeholder="Add a solution"
+                            />
+                            <Button type="button" onClick={() => handleAddItem('solutions',solutionInput)}>
+                                <Plus className="h-4 w-4" />
+                            </Button>
+                        </div>
+                        <div className="flex flex-wrap gap-2 mt-2">
+                            {formData.solutions?.map((solution,index) => (
+                                <Badge key={index} variant="secondary" className="text-sm">
+                                    {solution}
+                                    <Button
+                                        type="button"
+                                        variant="ghost"
+                                        size="sm"
+                                        className="ml-1 h-4 w-4 p-0"
+                                        onClick={() => handleRemoveItem('solutions',index)}
+                                    >
+                                        <X className="h-3 w-3" />
+                                    </Button>
+                                </Badge>
+                            ))}
+                        </div>
+                    </div>
+                </CardContent>
+            </Card>
+
+            <Button type="submit" className="w-full" disabled={isUploading}>
+                {isUploading ? 'Uploading...' : 'Submit Project'}
+            </Button>
         </form>
     )
 }

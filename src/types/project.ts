@@ -1,22 +1,28 @@
 export interface Project {
-  _id: string;
-  title: string;
-  shortDescription: string;
-  fullDescription: string;
-  thumbnailImage: string;
-  images: string[];
+  title?: string;
+  shortDescription?: string;
+  fullDescription?: string;
+  thumbnailImage?: string;
+  images?: string[];
   videoDemo?: string;
   liveLink?: string;
   clientGithub?: string;
   serverGithub?: string;
-  category: string;
-  projectDuration: string;
-  projectTeamSize: string;
-  projectType: string;
-  projectStatus: string;
-  projectStack: string;
-  projectChallenges: string;
-  tags: string[];
-  technologies: string[];
-  keyFeatures: string[];
+  category?: string;
+  projectDuration?: string;
+  projectTeamSize?: string;
+  projectType?: string;
+  projectStatus?: string;
+  projectStack?: string;
+  projectChallenges?: string;
+  tags?: string[];
+  technologies?: string[];
+  keyFeatures?: string[];
+  challenges?: string[]; // Add this line
+  solutions?: string[]; // Add this line
+  feedbacks?: {
+    rating: number;
+    email: string;
+    feedback: string;
+  }[];
 }

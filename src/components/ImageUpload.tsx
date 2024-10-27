@@ -5,12 +5,12 @@ import { X } from 'lucide-react'
 
 interface ImageUploadProps {
     onUpload: (file: File | FileList) => void
-    preview?: string | string[] | null
     multiple?: boolean
+    preview?: string | string[] | null
     onDelete?: (index: number) => void
 }
 
-const ImageUpload: React.FC<ImageUploadProps> = ({ onUpload,preview,multiple,onDelete }) => {
+const ImageUpload: React.FC<ImageUploadProps> = ({ onUpload,multiple,preview,onDelete }) => {
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files) {
             if (multiple) {
@@ -23,7 +23,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ onUpload,preview,multiple,onD
 
     return (
         <div>
-            <Input type="file" onChange={handleFileChange} multiple={multiple} />
+            <Input type="file" onChange={handleFileChange} multiple={multiple} accept="image/*" />
             {preview && (
                 <div className="mt-2 flex flex-wrap gap-2">
                     {Array.isArray(preview) ? (
@@ -32,6 +32,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ onUpload,preview,multiple,onD
                                 <img src={url} alt={`Preview ${index}`} className="w-24 h-24 object-cover rounded" />
                                 {onDelete && (
                                     <Button
+                                        type="button"
                                         variant="destructive"
                                         size="icon"
                                         className="absolute top-0 right-0"
