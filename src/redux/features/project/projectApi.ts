@@ -70,6 +70,7 @@ const projectApi = baseApi.injectEndpoints({
         method: "POST",
         body: data,
       }),
+      invalidatesTags: ["Project"],
     }),
   }),
 });

@@ -46,9 +46,11 @@ export default function ProjectDetails() {
             projectId: id as string,
         }
 
-        await giveFeedback(feedbackData);
+        const res = await giveFeedback(feedbackData);
+        console.log(res)
         // Here you would typically send this data to your backend
-        console.log({ rating: userRating,email: userEmail,feedback: userFeedback });
+        //console.log({ rating: userRating,email: userEmail,feedback: userFeedback });
+
         toast.success("Feedback Submitted");
         // Reset form
         setUserRating(0);

@@ -177,7 +177,7 @@ const ProjectManagement = () => {
                                     <Button
                                         variant="outline"
                                         size="sm"
-                                        onClick={() => handleDeleteProject(project._id)}
+                                        onClick={() => handleDeleteProject(project._id!)}
                                     >
                                         <Trash2 className="h-4 w-4" />
                                     </Button>

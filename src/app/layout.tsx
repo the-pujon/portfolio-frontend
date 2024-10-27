@@ -4,6 +4,7 @@ import Navbar from "@/components/shared/Navbar";
 import Footer from "@/components/shared/Footer";
 import FontLoader from "@/components/shared/FontLoader";
 import Providers from "@/lib/Provider";
+import { Toaster } from "sonner";
 
 export const metadata: Metadata = {
   title: "Portfolio - Pujon",
@@ -24,6 +25,7 @@ export default function RootLayout({
           {children}
           <Footer />
         </Providers>
+        <Toaster position="top-right" />
       </FontLoader>
 
     </html>
