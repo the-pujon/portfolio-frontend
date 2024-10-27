@@ -1,6 +1,8 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 'use client'
 
-import React from 'react';
+import React,{ useRef } from 'react';
 import { motion,useAnimation,useInView } from 'framer-motion';
 import { GraduationCap,Briefcase,Star } from 'lucide-react';
 import EducationExperienceCard from '../ui/EducationExperienceCard';
@@ -9,8 +11,8 @@ import { useGetAllEducationsQuery } from '@/redux/features/education/educationAp
 import { useGetAllExperiencesQuery } from '@/redux/features/experience/experienceApi';
 
 const EducationExperience = () => {
-    const ref = React.useRef(null);
-    const isInView = useInView(ref,{ once: true });
+    const ref = useRef<HTMLDivElement>(null);
+    const isInView = useInView(ref as React.RefObject<Element>);
     const controls = useAnimation();
 
     const { data: educationsData,isLoading: isEducationLoading } = useGetAllEducationsQuery({});
@@ -52,7 +54,7 @@ const EducationExperience = () => {
     const experiences = experiencesData?.data || [];
 
     // Format education data
-    const formattedEducations = educations.map(edu => ({
+    const formattedEducations = educations.map((edu: any) => ({
         ...edu,
         title: edu.degree,
         organization: edu.institution,
@@ -63,7 +65,7 @@ const EducationExperience = () => {
     }));
 
     // Format experience data
-    const formattedExperiences = experiences.map(exp => ({
+    const formattedExperiences = experiences.map((exp: any) => ({
         ...exp,
         title: exp.position,
         organization: exp.companyName,
