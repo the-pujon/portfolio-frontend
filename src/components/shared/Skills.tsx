@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import React,{ useRef,useEffect } from 'react';
@@ -6,11 +7,72 @@ import { motion,useAnimation,useInView } from 'framer-motion';
 import { Code,Server,Database,Braces,Palette,Cloud,Star } from 'lucide-react';
 import reactImg from '../../assets/react.png';
 import Image from 'next/image';
+import { useGetAllSkillsQuery } from '@/redux/features/skill/skillApi';
+
+// Define the API response type
+interface SkillResponse {
+    success: boolean;
+    data: Skill[];
+    message: string;
+}
+
+interface Skill {
+    category: string;
+    name: string;
+    image: string;
+}
 
 const Skills: React.FC = () => {
     const ref = useRef<HTMLDivElement>(null);
     const isInView = useInView(ref as React.RefObject<Element>);
     const controls = useAnimation();
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { data: skillsData,isLoading } = useGetAllSkillsQuery(undefined) as {
+        data: SkillResponse | undefined;
+        isLoading: boolean;
+    };
+
+    // Helper function to map categories to icons
+    const getIconForCategory = (category: string) => {
+        const iconMap: { [key: string]: any } = {
+            'Frontend': Code,
+            'Backend': Server,
+            'Databases': Database,
+            'Languages': Braces,
+            'Design': Palette,
+            'DevOps & Tools': Cloud,
+        };
+        return iconMap[category] || Star;
+    };
+
+    // Transform API data into categories
+    const skillCategories = React.useMemo(() => {
+        // Check if skillsData exists and is an array
+        if (!skillsData?.data) return [];
+
+        const categorizedSkills = skillsData.data.reduce((acc: {
+            [key: string]: {
+                icon: any;
+                title: string;
+                skills: { name: string; image: string; }[];
+            }
+        },skill: Skill) => {
+            if (!acc[skill.category]) {
+                acc[skill.category] = {
+                    icon: getIconForCategory(skill.category),
+                    title: skill.category,
+                    skills: []
+                };
+            }
+            acc[skill.category].skills.push({
+                name: skill.name,
+                image: skill.image
+            });
+            return acc;
+        },{});
+
+        return Object.values(categorizedSkills);
+    },[skillsData]);
 
     useEffect(() => {
         if (isInView) {
@@ -40,78 +102,9 @@ const Skills: React.FC = () => {
         },
     };
 
-    const skillCategories = [
-        {
-            icon: Code,
-            title: "Frontend",
-            skills: [
-                { name: "React",image: reactImg },
-                { name: "Next.js",image: reactImg },
-                { name: "TypeScript",image: reactImg },
-                { name: "Tailwind CSS",image: reactImg },
-                { name: "Redux",image: reactImg },
-                { name: "Zustand",image: reactImg },
-            ],
-        },
-        {
-            icon: Server,
-            title: "Backend",
-            skills: [
-                { name: "Node.js",image: reactImg },
-                { name: "Express",image: reactImg },
-                { name: "Python",image: reactImg },
-                { name: "Django",image: reactImg },
-                { name: "RESTful APIs",image: reactImg },
-                { name: "GraphQL",image: reactImg },
-            ],
-        },
-        {
-            icon: Database,
-            title: "Databases",
-            skills: [
-                { name: "MongoDB",image: reactImg },
-                { name: "PostgreSQL",image: reactImg },
-                { name: "MySQL",image: reactImg },
-                { name: "Redis",image: reactImg },
-                { name: "Prisma",image: reactImg },
-                { name: "Mongoose",image: reactImg },
-            ],
-        },
-        {
-            icon: Braces,
-            title: "Languages",
-            skills: [
-                { name: "JavaScript",image: reactImg },
-                { name: "TypeScript",image: reactImg },
-                { name: "Python",image: reactImg },
-                { name: "Java",image: reactImg },
-                { name: "C++",image: reactImg },
-                { name: "SQL",image: reactImg },
-            ],
-        },
-        {
-            icon: Palette,
-            title: "Design",
-            skills: [
-                { name: "Figma",image: reactImg },
-                { name: "Adobe XD",image: reactImg },
-                { name: "UI/UX Design",image: reactImg },
-                { name: "Responsive Design",image: reactImg },
-            ],
-        },
-        {
-            icon: Cloud,
-            title: "DevOps & Tools",
-            skills: [
-                { name: "Git",image: reactImg },
-                { name: "Docker",image: reactImg },
-                { name: "CI/CD",image: reactImg },
-                { name: "AWS",image: reactImg },
-                { name: "Heroku",image: reactImg },
-                { name: "Vercel",image: reactImg },
-            ],
-        },
-    ];
+    //if (isLoading) {
+    //    return <div>Loading...</div>; // Add proper loading state
+    //}
 
     return (
         <section id="skills" className="py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-primary/10 to-secondary/10 relative overflow-hidden">
@@ -188,11 +181,10 @@ const Skills: React.FC = () => {
                                                 transition={{ type: 'spring',stiffness: 300 }}
                                             >
                                                 <Image
-                                                    src={reactImg}
-                                                    alt="Alex Johnson"
+                                                    src={skill.image || reactImg}
+                                                    alt={skill.name}
                                                     width={20}
                                                     height={20}
-                                                //className='circle w-full h-full object-cover'
                                                 />
                                                 {skill.name}
                                             </motion.li>

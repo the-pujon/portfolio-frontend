@@ -7,12 +7,13 @@ import About from '@/components/shared/About';
 
 //import { Globe,Code,Database,Server,Wifi,Cloud,Terminal,Cpu,Layers,Zap } from 'lucide-react';
 //import Skills from '@/components/shared/Skills';
-import MySkill from '@/components/shared/MySkill';
+//import MySkill from '@/components/shared/MySkill';
 import TopProjects from './../components/shared/TopProjects';
 import EducationExperience from '@/components/shared/EducationExperience';
 import LatestBlogs from '@/components/shared/LatestBlogs';
 import Certification from '@/components/shared/Certification';
 import Contact from '@/components/shared/Contact';
+import Skills from '@/components/shared/Skills';
 //import { FloatingIcon } from '../components/shared/FloatingIcon';
 
 
@@ -27,8 +28,8 @@ const Home: React.FC = () => {
       </div>*/}
       <Banner />
       <About />
-      {/*<Skills />*/}
-      <MySkill />
+      <Skills />
+      {/*<MySkill />*/}
       <TopProjects />
 
       <EducationExperience />
