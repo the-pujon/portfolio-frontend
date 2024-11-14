@@ -13,7 +13,8 @@ import { useAppSelector } from '@/redux/hook';
 import { selectCurrentUser } from '@/redux/features/auth/authSlice';
 import { useGetProfileByIdQuery,useUpdateProfileMutation } from '@/redux/features/profile/profileApi';
 import { toast } from 'sonner';
-
+import dynamic from 'next/dynamic';
+const RichTextEditor = dynamic(() => import('react-simple-wysiwyg'),{ ssr: false })
 interface ProfileFormData {
     name: string;
     email: string;
@@ -222,7 +223,9 @@ const EditProfile = () => {
                         <Controller
                             name="about"
                             control={control}
-                            render={({ field }) => <Textarea {...field} />}
+                            render={({ field }) => (
+                                <RichTextEditor value={field.value} onChange={field.onChange} />
+                            )}
                         />
                     </div>
 
