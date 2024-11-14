@@ -10,6 +10,15 @@ import { Linkedin,Twitter,Github,Award,MapPin,Mail,Briefcase,Download,Calendar,E
 import Link from 'next/link';
 import Image from 'next/image';
 
+// Import hooks from Redux slices
+import { useGetProfileByIdQuery } from '@/redux/features/profile/profileApi';
+import { useGetAllSkillsQuery } from '@/redux/features/skill/skillApi';
+import { useGetAllProjectsQuery } from '@/redux/features/project/projectApi';
+import { useGetAllExperiencesQuery } from '@/redux/features/experience/experienceApi';
+import { useGetAllEducationsQuery } from '@/redux/features/education/educationApi';
+import { useAppSelector } from '@/redux/hook';
+import { selectCurrentUser } from '@/redux/features/auth/authSlice';
+
 interface CertificateType {
     id: number;
     title: string;
@@ -23,107 +32,34 @@ interface CertificateType {
 }
 
 const Profile = () => {
-    // Demo data based on provided interfaces
-    const profile = {
-        name: "Jane Doe",
-        email: "jane.doe@example.com",
-        designation: "Senior Software Engineer",
-        department: "Engineering",
-        location: {
-            city: "San Francisco",
-            country: "USA"
-        },
-        heroImage: "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80",
-        about: "Passionate software engineer with 8+ years of experience in full-stack development. Specializing in React, Node.js, and cloud technologies.",
-        aboutImage: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=688&q=80",
-        skills: [
-            { name: "React",description: "Frontend development",image: "https://example.com/react.png" },
-            { name: "Node.js",description: "Backend development",image: "https://example.com/nodejs.png" },
-            { name: "TypeScript",description: "Type-safe JavaScript",image: "https://example.com/typescript.png" },
-            { name: "AWS",description: "Cloud infrastructure",image: "https://example.com/aws.png" },
-            { name: "Docker",description: "Containerization",image: "https://example.com/docker.png" },
-        ],
-        projects: [
-            {
-                title: "E-commerce Platform",
-                shortDescription: "A full-stack e-commerce solution",
-                thumbnailImage: "https://example.com/ecommerce-thumbnail.jpg",
-                liveLink: "https://ecommerce-example.com",
-                technologies: ["React","Node.js","MongoDB"],
-                keyFeatures: ["User authentication","Product catalog","Shopping cart"],
-            },
-            {
-                title: "Task Management App",
-                shortDescription: "A collaborative task management tool",
-                thumbnailImage: "https://example.com/taskapp-thumbnail.jpg",
-                liveLink: "https://taskapp-example.com",
-                technologies: ["Vue.js","Express","PostgreSQL"],
-                keyFeatures: ["Real-time updates","Team collaboration","Task prioritization"],
-            },
-        ],
-        experiences: [
-            {
-                companyName: "TechCorp",
-                position: "Senior Software Engineer",
-                startDate: new Date("2019-01-01"),
-                endDate: new Date(),
-            },
-            {
-                companyName: "InnovateTech",
-                position: "Software Engineer",
-                startDate: new Date("2016-03-01"),
-                endDate: new Date("2018-12-31"),
-            },
-        ],
-        education: [
-            {
-                institution: "Stanford University",
-                degree: "M.S.",
-                fieldOfStudy: "Computer Science",
-                startDate: new Date("2014-09-01"),
-                endDate: new Date("2016-06-30"),
-            },
-            {
-                institution: "MIT",
-                degree: "B.S.",
-                fieldOfStudy: "Computer Science",
-                startDate: new Date("2010-09-01"),
-                endDate: new Date("2014-05-31"),
-            },
-        ],
-        certifications: [
-            {
-                id: 1,
-                title: "AWS Certified Solutions Architect",
-                issuedBy: "Amazon Web Services",
-                date: "2023-05-15",
-                image: "https://example.com/aws-cert.jpg",
-                credentialLink: "https://aws.amazon.com/certification/certified-solutions-architect-associate/",
-                category: "Cloud Computing",
-                description: "Validates expertise in designing distributed systems on AWS",
-                skills: ["AWS","Cloud Architecture","Scalability","Security"],
-            },
-            {
-                id: 2,
-                title: "Google Cloud Professional Developer",
-                issuedBy: "Google Cloud",
-                date: "2022-11-30",
-                image: "https://example.com/gcp-cert.jpg",
-                credentialLink: "https://cloud.google.com/certification/cloud-developer",
-                category: "Cloud Computing",
-                description: "Demonstrates ability to design, build, and manage applications on Google Cloud",
-                skills: ["Google Cloud Platform","App Engine","Cloud Functions","BigQuery"],
-            },
-        ],
-        awards: ["Best Innovation Award 2022","Employee of the Year 2021"],
-        socialMedia: {
-            linkedin: "https://linkedin.com/in/janedoe",
-            twitter: "https://twitter.com/janedoe",
-            github: "https://github.com/janedoe"
-        },
-        introduction: "Hi, I'm Jane! I love building scalable web applications and exploring new technologies.",
-        resume: "https://example.com/jane-doe-resume.pdf",
-    };
+
+    const currentUser = useAppSelector(selectCurrentUser)
+    const profileId = currentUser?._id;
+
+    // Fetch data using hooks
+    const { data: profileData,isLoading: profileLoading,error: profileError } = useGetProfileByIdQuery(profileId);
+    const { data: skillsData,isLoading: skillsLoading,error: skillsError } = useGetAllSkillsQuery({});
+    const { data: projectsData,isLoading: projectsLoading,error: projectsError } = useGetAllProjectsQuery({});
+    const { data: experiencesData,isLoading: experiencesLoading,error: experiencesError } = useGetAllExperiencesQuery({});
+    const { data: educationsData,isLoading: educationsLoading,error: educationsError } = useGetAllEducationsQuery({});
+
+
+
+    // Handle loading and error states
+    if (profileLoading || skillsLoading || projectsLoading || experiencesLoading || educationsLoading) {
+        return <div>Loading...</div>;
+    }
+
+    if (profileError || skillsError || projectsError || experiencesError || educationsError) {
+        return <div>Error loading data</div>;
+    }
+
+    // Use fetched data
+    const profile = profileData?.data || {};
+    const skills = skillsData?.data || [];
+    const projects = projectsData?.data || [];
+    const experiences = experiencesData?.data || [];
+    const education = educationsData?.data || [];
 
     return (
         <motion.div
@@ -146,7 +82,7 @@ const Profile = () => {
                     <p className="text-2xl text-primary/80 mb-2">{profile.designation}</p>
                     <div className="flex items-center text-lg text-muted-foreground">
                         <MapPin className="w-5 h-5 mr-2" />
-                        {profile.location.city}, {profile.location.country}
+                        {profile.location?.city}, {profile.location?.country}
                     </div>
                 </div>
             </section>
@@ -162,8 +98,6 @@ const Profile = () => {
                         src={profile.aboutImage}
                         alt={profile.name}
                         className="w-full rounded-xl shadow-lg"
-                    //whileHover={{ scale: 1.05 }}
-                    //transition={{ duration: 0.3 }}
                     />
                     <div className="space-y-4 bg-secondary/10 p-6 rounded-xl">
                         <div className="flex items-center text-muted-foreground">
@@ -178,7 +112,7 @@ const Profile = () => {
                     <div className="bg-secondary/10 p-6 rounded-xl">
                         <h3 className="text-xl font-semibold mb-4">Connect</h3>
                         <div className="flex gap-6">
-                            {profile.socialMedia.linkedin && (
+                            {profile.socialMedia?.linkedin && (
                                 <Link
                                     href={profile.socialMedia.linkedin}
                                     target="_blank"
@@ -188,12 +122,12 @@ const Profile = () => {
                                     <Linkedin className="w-7 h-7" />
                                 </Link>
                             )}
-                            {profile.socialMedia.twitter && (
+                            {profile.socialMedia?.twitter && (
                                 <a href={profile.socialMedia.twitter} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary transition-colors">
                                     <Twitter className="w-6 h-6" />
                                 </a>
                             )}
-                            {profile.socialMedia.github && (
+                            {profile.socialMedia?.github && (
                                 <a href={profile.socialMedia.github} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary transition-colors">
                                     <Github className="w-6 h-6" />
                                 </a>
@@ -228,7 +162,7 @@ const Profile = () => {
                             Skills
                         </h2>
                         <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
-                            {profile.skills.map((skill,index) => (
+                            {skills.map((skill,index) => (
                                 <motion.div
                                     key={index}
                                     className="flex items-center p-4 bg-secondary/20 rounded-xl shadow-sm"
@@ -253,7 +187,7 @@ const Profile = () => {
                             Projects
                         </h2>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                            {profile.projects.map((project,index) => (
+                            {projects.map((project,index) => (
                                 <motion.div
                                     key={index}
                                     className="bg-secondary/20 p-6 rounded-xl shadow-sm"
@@ -287,7 +221,7 @@ const Profile = () => {
                             Experience
                         </h2>
                         <div className="space-y-6">
-                            {profile.experiences.map((exp,index) => (
+                            {experiences.map((exp,index) => (
                                 <motion.div
                                     key={index}
                                     className="bg-secondary/20 p-6 rounded-xl shadow-sm"
@@ -297,7 +231,7 @@ const Profile = () => {
                                     <p className="text-lg text-muted-foreground">{exp.companyName}</p>
                                     <div className="flex items-center text-sm text-muted-foreground mt-2">
                                         <Calendar className="w-4 h-4 mr-2" />
-                                        {exp.startDate.toLocaleDateString()} - {exp.endDate.toLocaleDateString()}
+                                        {new Date(exp.startDate).toLocaleDateString()} - {new Date(exp.endDate).toLocaleDateString()}
                                     </div>
                                 </motion.div>
                             ))}
@@ -313,7 +247,7 @@ const Profile = () => {
                             Education
                         </h2>
                         <div className="space-y-6">
-                            {profile.education.map((edu,index) => (
+                            {education.map((edu,index) => (
                                 <motion.div
                                     key={index}
                                     className="bg-secondary/20 p-6 rounded-xl shadow-sm"
@@ -323,7 +257,7 @@ const Profile = () => {
                                     <p className="text-lg text-muted-foreground">{edu.institution}</p>
                                     <div className="flex items-center text-sm text-muted-foreground mt-2">
                                         <Calendar className="w-4 h-4 mr-2" />
-                                        {edu.startDate.toLocaleDateString()} - {edu.endDate.toLocaleDateString()}
+                                        {new Date(edu.startDate).toLocaleDateString()} - {new Date(edu.endDate).toLocaleDateString()}
                                     </div>
                                 </motion.div>
                             ))}
