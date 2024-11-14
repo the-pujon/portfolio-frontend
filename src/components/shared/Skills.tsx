@@ -3,7 +3,7 @@
 
 import React,{ useRef,useEffect } from 'react';
 import { motion,useAnimation,useInView } from 'framer-motion';
-//import * as motion from 'framer-motion/client';
+
 import { Code,Server,Database,Braces,Palette,Cloud,Star } from 'lucide-react';
 import reactImg from '../../assets/react.png';
 import Image from 'next/image';
