@@ -9,8 +9,11 @@ import { Rocket,Linkedin,GithubIcon,Globe,Code,Database,Server,Wifi,Cloud,Termin
 import { FloatingIcon } from './FloatingIcon';
 import { SocialIcons } from './SocialIcons';
 import BannerImage from "@/assets/bannerImage.png"
+import { ProfileType } from '@/app/page';
 
-const Banner: React.FC = () => {
+const Banner: React.FC<ProfileType> = ({ name,designation,heroImage,socialMedia }) => {
+    console.log(heroImage)
+    console.log(socialMedia)
     return (
         <section id="home" className="relative min-h-screen overflow-hidden flex items-center justify-center py-20 px-4 sm:px-6 lg:px-8">
             <div className="absolute inset-0 bg-gradient-to-br from-primary/30 to-secondary/10" />
@@ -34,7 +37,7 @@ const Banner: React.FC = () => {
                             transition={{ type: "spring",stiffness: 300 }}
                         >
                             <Image
-                                src={BannerImage}
+                                src={heroImage || BannerImage}
                                 alt="Alex Johnson"
                                 width={800}
                                 height={800}
@@ -50,8 +53,8 @@ const Banner: React.FC = () => {
                     transition={{ duration: 0.8,delay: 0.2 }}
                     className="w-full md:w-1/2 lg:pl-12 text-center md:text-left"
                 >
-                    <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4">Pujon Das Auvi</h1>
-                    <h2 className="text-lg sm:text-xl lg:text-2xl text-primary mb-6">Full Stack Developer</h2>
+                    <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4">{name}</h1>
+                    <h2 className="text-lg sm:text-xl lg:text-2xl text-primary mb-6">{designation}</h2>
                     <p className="text-muted-foreground mb-8 text-sm sm:text-base">
                         Transforming ideas into robust, user-friendly applications. Specializing in React, Node.js, and modern web technologies. Passionate about creating efficient and elegant solutions.
                     </p>
@@ -65,10 +68,11 @@ const Banner: React.FC = () => {
                             <span className="absolute inset-0 bg-white/30 z-20 transition-transform duration-500 translate-x-full group-hover:translate-x-0" />
                         </Button>
                     </div>
-                    <div className="flex justify-center lg:justify-start space-x-6">
-                        <SocialIcons icon={Linkedin} link="https://www.linkedin.com/in/alex-johnson-dev/" />
-                        <SocialIcons icon={GithubIcon} link="https://github.com/alex-johnson-dev" />
-                        <SocialIcons icon={FacebookIcon} link="https://www.facebook.com/alex.johnson.dev" />
+                    <div className="flex justify-center lg:justify-start gap-4 items-center">
+                        <SocialIcons icon={Linkedin} link={socialMedia?.linkedin as string} name="linkedin" />
+                        <SocialIcons icon={GithubIcon} link={socialMedia?.github as string} name="github" />
+                        <SocialIcons icon={FacebookIcon} link={socialMedia?.facebook as string} name="facebook" />
+                        <SocialIcons icon={GithubIcon} link={socialMedia?.leetcode as string} name="leetcode" />
                     </div>
                 </motion.div>
             </div>

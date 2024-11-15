@@ -5,7 +5,7 @@ import { motion,useAnimation,useInView } from 'framer-motion';
 import { Brain,Code,Database,Server,Sparkles,Award } from 'lucide-react';
 import BannerImage from "@/assets/bannerImage.png";
 
-const About: React.FC = () => {
+const About: React.FC<{ about: string,aboutImage: string }> = ({ about,aboutImage }) => {
     const ref = useRef<HTMLDivElement>(null);
     const isInView = useInView(ref as React.RefObject<Element>);
     const controls = useAnimation();
@@ -77,7 +77,7 @@ const About: React.FC = () => {
                     >
                         <div className="relative w-full max-w-[300px] sm:max-w-[400px] h-auto aspect-square mx-auto">
                             <Image
-                                src={BannerImage}
+                                src={aboutImage || BannerImage}
                                 alt="Pujon Das Auvi"
                                 layout="fill"
                                 objectFit="cover"
@@ -140,30 +140,8 @@ const About: React.FC = () => {
                                     code
                                 </span>
                             </p>
-                            <div className="text-muted-foreground text-sm sm:text-base space-y-4">
-                                <p>
-                                    Hi, I&apos;m Pujon Das Auvi, a Full-stack Developer based in Dhaka, Bangladesh, with a passion for building scalable, user-friendly web applications. I specialize in both front-end and back-end technologies, allowing me to create seamless, fully integrated web solutions from scratch.
+                            <div className="text-muted-foreground text-sm sm:text-base space-y-4 richText" dangerouslySetInnerHTML={{ __html: about }}>
 
-                                    <br />
-                                    <br />
-
-                                    On the front end, I work with modern tools like React, Next.js, Redux, Zustand, and Tailwind CSS to design responsive, visually appealing interfaces. I prioritize clean, maintainable code and performance optimization to deliver fast and efficient web experiences.
-
-                                    <br />
-                                    <br />
-
-                                    On the back end, my expertise includes Node.js, Express, MongoDB, Mongoose, Prisma, SQL, and PostgreSQL. I focus on building robust RESTful APIs and GraphQL systems, ensuring scalability, security, and efficient database management. Recently, I&apos;ve expanded my skills to include Docker and testing frameworks like Jest and Mocha, further enhancing my DevOps capabilities.
-
-                                    <br />
-                                    <br />
-
-                                    Over the years, I have built numerous web applications, from single-page applications to complex e-commerce platforms, portfolio blogs, and beyond. Each project reflects my commitment to delivering high-quality code, optimal performance, and exceptional user experiences.
-
-                                    <br />
-                                    <br />
-
-                                    I&apos;m always eager to learn new technologies and tools, and I&apos;m driven by a commitment to creativity and quality in everything I build. Feel free to explore my projects or reach out for collaborations!
-                                </p>
                             </div>
                         </motion.div>
 

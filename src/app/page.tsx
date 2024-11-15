@@ -14,11 +14,50 @@ import LatestBlogs from '@/components/shared/LatestBlogs';
 import Certification from '@/components/shared/Certification';
 import Contact from '@/components/shared/Contact';
 import Skills from '@/components/shared/Skills';
+import { useAppSelector } from '@/redux/hook';
+import { selectCurrentUser } from '@/redux/features/auth/authSlice';
+import { useGetProfileByIdQuery } from '@/redux/features/profile/profileApi';
 //import { FloatingIcon } from '../components/shared/FloatingIcon';
 
-
-
+export interface ProfileType {
+  name?: string;
+  email?: string;
+  designation?: string;
+  department?: string;
+  location?: {
+    city?: string;
+    country?: string;
+  };
+  heroImage?: string;
+  about?: string;
+  aboutImage?: string;
+  socialMedia: {
+    linkedin?: string;
+    twitter?: string;
+    facebook?: string;
+    instagram?: string;
+    youtube?: string;
+    github?: string;
+    leetcode?: string;
+  };
+  introduction?: string;
+  resume?: string;
+}
 const Home: React.FC = () => {
+
+  const currentUser = useAppSelector(selectCurrentUser);
+  const profileId = currentUser?._id;
+
+
+
+  // Fetch data using hooks
+  const { data: profileData } = useGetProfileByIdQuery(profileId);
+  const profile: ProfileType = profileData?.data || {};
+
+  console.log(profile)
+
+
+
   return (
     <div className="bg-background text-foreground relative overflow-hidden">
       {/*<div className='fixed inset-0'>
@@ -26,8 +65,8 @@ const Home: React.FC = () => {
           <FloatingIcon key={index} icon={icon} delay={index * 0.5} />
         ))}
       </div>*/}
-      <Banner />
-      <About />
+      <Banner name={profile.name} designation={profile.designation} heroImage={profile.heroImage} socialMedia={profile.socialMedia} />
+      <About about={profile.about as string} aboutImage={profile.aboutImage as string} />
       <Skills />
       {/*<MySkill />*/}
       <TopProjects />
