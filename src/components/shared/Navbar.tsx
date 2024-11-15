@@ -9,11 +9,15 @@ import { FileText,Menu,X,Home,Briefcase,User,Mail } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import BannerImage from "@/assets/bannerImage.png"
 import Image from 'next/image';
+import { useAppSelector } from '@/redux/hook';
+import { useCurrentToken } from '@/redux/features/auth/authSlice';
 
 const Navbar: React.FC = () => {
     const [isOpen,setIsOpen] = useState(false);
     const [scrolled,setScrolled] = useState(false);
     const pathname = usePathname();
+
+    const currentToken = useAppSelector(useCurrentToken)
 
     //console.log(pathname)
 
@@ -22,8 +26,7 @@ const Navbar: React.FC = () => {
         { name: 'Projects',icon: Briefcase,path: '/projects' },
         { name: 'Blogs',icon: User,path: '/blog' },
         { name: 'Contact',icon: Mail,path: '#contact' },
-        { name: 'Dashboard',icon: Home,path: '/dashboard' }
-
+        ...(currentToken ? [{ name: 'Dashboard',icon: Home,path: '/dashboard' }] : [])
     ];
 
     useEffect(() => {

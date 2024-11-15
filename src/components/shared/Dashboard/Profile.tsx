@@ -31,10 +31,62 @@ interface CertificateType {
     skills: string[];
 }
 
-const Profile = () => {
+interface ProfileType {
+    heroImage: string;
+    name: string;
+    designation: string;
+    location: {
+        city: string;
+        country: string;
+    };
+    aboutImage: string;
+    email: string;
+    department: string;
+    socialMedia: {
+        linkedin?: string;
+        twitter?: string;
+        github?: string;
+    };
+    resume: string;
+    about: string;
+    certifications: CertificateType[];
+    awards: string[];
+}
 
-    const currentUser = useAppSelector(selectCurrentUser)
+interface SkillType {
+    image: string;
+    name: string;
+    description: string;
+}
+
+interface ProjectType {
+    thumbnailImage: string;
+    title: string;
+    shortDescription: string;
+    technologies: string[];
+    liveLink: string;
+}
+
+interface ExperienceType {
+    position: string;
+    companyName: string;
+    startDate: string;
+    endDate: string;
+}
+
+interface EducationType {
+    degree: string;
+    fieldOfStudy: string;
+    institution: string;
+    startDate: string;
+    endDate: string;
+}
+
+const Profile = () => {
+    const currentUser = useAppSelector(selectCurrentUser);
     const profileId = currentUser?._id;
+
+
 
     // Fetch data using hooks
     const { data: profileData,isLoading: profileLoading,error: profileError } = useGetProfileByIdQuery(profileId);
@@ -42,8 +94,6 @@ const Profile = () => {
     const { data: projectsData,isLoading: projectsLoading,error: projectsError } = useGetAllProjectsQuery({});
     const { data: experiencesData,isLoading: experiencesLoading,error: experiencesError } = useGetAllExperiencesQuery({});
     const { data: educationsData,isLoading: educationsLoading,error: educationsError } = useGetAllEducationsQuery({});
-
-
 
     // Handle loading and error states
     if (profileLoading || skillsLoading || projectsLoading || experiencesLoading || educationsLoading) {
@@ -55,11 +105,11 @@ const Profile = () => {
     }
 
     // Use fetched data
-    const profile = profileData?.data || {};
-    const skills = skillsData?.data || [];
-    const projects = projectsData?.data || [];
-    const experiences = experiencesData?.data || [];
-    const education = educationsData?.data || [];
+    const profile: ProfileType = profileData?.data || {};
+    const skills: SkillType[] = skillsData?.data || [];
+    const projects: ProjectType[] = projectsData?.data || [];
+    const experiences: ExperienceType[] = experiencesData?.data || [];
+    const education: EducationType[] = educationsData?.data || [];
 
     return (
         <motion.div
@@ -150,7 +200,7 @@ const Profile = () => {
                             <Sparkles className="w-8 h-8 mr-2 text-primary" />
                             About
                         </h2>
-                        <p className="text-lg text-muted-foreground leading-relaxed">{profile.about}</p>
+                        <div className="text-lg text-muted-foreground leading-relaxed richText" dangerouslySetInnerHTML={{ __html: profile.about }} />
                     </section>
 
                     <Separator />
