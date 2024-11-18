@@ -335,9 +335,9 @@ const Profile = () => {
                                     <p className="text-muted-foreground mb-2">Date: {cert.date}</p>
                                     <p className="text-muted-foreground mb-4">{cert.description}</p>
                                     <div className="flex flex-wrap gap-2 mb-4">
-                                        {cert.skills.map((skill,index) => (
+                                        {/*{cert?.skills?.map((skill,index) => (
                                             <Badge key={index} variant="secondary">{skill}</Badge>
-                                        ))}
+                                        ))}*/}
                                     </div>
                                     <Button variant="outline" asChild className="w-full">
                                         <a href={cert.credentialLink} target="_blank" rel="noopener noreferrer">

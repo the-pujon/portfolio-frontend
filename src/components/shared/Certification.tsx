@@ -1,9 +1,9 @@
 import React,{ useRef } from 'react';
 import { motion,useAnimation,useInView } from 'framer-motion';
-import { Award,ExternalLink,Medal,Sparkles,Star } from 'lucide-react';
+import { Award,Medal,Sparkles,Star } from 'lucide-react';
 import Image from 'next/image';
 import { Button } from '../ui/button';
-import { Dialog,DialogContent } from '../ui/dialog';
+import { Dialog,DialogContent,DialogTitle } from '../ui/dialog';
 import { Badge } from '../ui/badge';
 import { Card } from '../ui/card';
 import {
@@ -13,50 +13,18 @@ import {
     CarouselNext,
     CarouselPrevious,
 } from "@/components/ui/carousel";
-
-interface Certificate {
-    id: number;
-    title: string;
-    issuedBy: string;
-    date: string;
-    image: string;
-    credentialLink: string;
-    category: string;
-    description: string;
-    skills: string[];
-}
-
-const certificates: Certificate[] = [
-    {
-        id: 1,
-        title: "Advanced Full Stack Development",
-        issuedBy: "Meta",
-        date: "2024",
-        image: "https://images.unsplash.com/photo-1496469888073-80de7e952517?q=80",
-        credentialLink: "https://credential.link",
-        category: "Development",
-        description: "Comprehensive certification in modern full-stack development, covering React, Node.js, and cloud deployment.",
-        skills: ["React","Node.js","Cloud Computing","Database Design"]
-    },
-    {
-        id: 2,
-        title: "Advanced Full Stack Development",
-        issuedBy: "Meta",
-        date: "2024",
-        image: "https://images.unsplash.com/photo-1496469888073-80de7e952517?q=80",
-        credentialLink: "https://credential.link",
-        category: "Development",
-        description: "Comprehensive certification in modern full-stack development, covering React, Node.js, and cloud deployment.",
-        skills: ["React","Node.js","Cloud Computing","Database Design"]
-    },
-    // Add more certificates...
-];
+import { useGetAllCertificatesQuery } from '@/redux/features/certificate/certificateApi';
+import { Certificate } from '@/types/certificate';
 
 const Certification = () => {
     const ref = useRef<HTMLDivElement>(null);
     const isInView = useInView(ref as React.RefObject<Element>);
     const controls = useAnimation();
     const [selectedImage,setSelectedImage] = React.useState<string | null>(null);
+    const {
+        data: certificatesData
+    } = useGetAllCertificatesQuery({});
+    const certificates = certificatesData?.data || []
 
     React.useEffect(() => {
         if (isInView) {
@@ -122,8 +90,8 @@ const Certification = () => {
                     className="w-full max-w-5xl mx-auto"
                 >
                     <CarouselContent>
-                        {certificates.map((certificate) => (
-                            <CarouselItem key={certificate.id} className="sm:basis-4/5 md:basis-3/4 lg:basis-full">
+                        {certificates.map((certificate: Certificate) => (
+                            <CarouselItem key={certificate._id} className="sm:basis-4/5 md:basis-3/4 lg:basis-full">
                                 <Card className="relative overflow-hidden rounded-xl bg-gradient-to-br from-background/80 via-background to-muted/20 backdrop-blur-sm border-primary/10">
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 p-4 sm:p-6">
                                         {/* Left side - Certificate Image */}
@@ -195,7 +163,7 @@ const Certification = () => {
                                                     <span>Issued: {certificate.date}</span>
                                                 </div>
 
-                                                <Button
+                                                {/*<Button
                                                     onClick={() => window.open(certificate.credentialLink)}
                                                     variant="default"
                                                     size="sm"
@@ -203,7 +171,7 @@ const Certification = () => {
                                                 >
                                                     <span>Verify Credential</span>
                                                     <ExternalLink className="w-3 h-3 ml-2 group-hover:rotate-45 transition-transform duration-300" />
-                                                </Button>
+                                                </Button>*/}
                                             </div>
                                         </div>
                                     </div>
@@ -219,7 +187,9 @@ const Certification = () => {
 
                 {/* Enhanced Certificate Modal */}
                 <Dialog open={!!selectedImage} onOpenChange={() => setSelectedImage(null)}>
-                    <DialogContent className="max-w-4xl w-full p-0 overflow-hidden bg-background/80 backdrop-blur-sm">
+
+                    <DialogTitle></DialogTitle>
+                    <DialogContent aria-describedby={undefined} className="max-w-4xl w-full p-0 overflow-hidden bg-background/80 backdrop-blur-sm">
                         {selectedImage && (
                             <div className="relative aspect-[16/10] w-full">
                                 <Image

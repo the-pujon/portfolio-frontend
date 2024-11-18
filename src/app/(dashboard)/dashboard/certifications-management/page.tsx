@@ -38,7 +38,9 @@ const CertificationsManagement = () => {
     const [updateCertificate] = useUpdateCertificateMutation();
     const [deleteCertificate] = useDeleteCertificateMutation();
 
-    const certificates = certificatesData?.data;
+    const certificates = certificatesData?.data || [];
+
+    console.log(certificates)
 
     const [editingCertificate,setEditingCertificate] =
         useState<Certificate | null>(null);
