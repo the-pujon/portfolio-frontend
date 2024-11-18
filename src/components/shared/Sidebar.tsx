@@ -30,7 +30,7 @@ const Sidebar = () => {
         { name: 'Projects Management',icon: FolderKanban,path: '/dashboard/project-management' },
         { name: 'Skill Management',icon: Lightbulb,path: '/dashboard/skills' },
         { name: 'Add Awards',icon: Award,path: '/dashboard/awards' },
-        { name: 'Add Certifications',icon: Scroll,path: '/dashboard/certifications' },
+        { name: 'Add Certifications',icon: Scroll,path: '/dashboard/certifications-management' },
         { name: 'Add Project Categories',icon: FolderTree,path: '/dashboard/project-categories' },
         { name: 'Add Project Sub Categories',icon: GitFork,path: '/dashboard/project-subcategories' },
         { name: 'Contact Details',icon: PhoneCall,path: '/dashboard/contact' },
