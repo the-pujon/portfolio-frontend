@@ -19,8 +19,10 @@ export interface Project {
   tags?: string[];
   technologies?: string[];
   keyFeatures?: string[];
-  challenges?: string[]; // Add this line
-  solutions?: string[]; // Add this line
+  challenges?: string[];
+  solutions?: string[];
+  featured?: boolean;
+  priority?: number;
   feedbacks?: {
     rating: number;
     email: string;

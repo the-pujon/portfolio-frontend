@@ -1,74 +1,75 @@
+// frontend/src/components/ProjectForm.tsx
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client'
 
-import React,{ useState,KeyboardEvent } from 'react'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
-import { Select,SelectContent,SelectItem,SelectTrigger,SelectValue } from '@/components/ui/select'
-import { Project } from '@/types/project'
-import dynamic from 'next/dynamic'
-import ImageUpload from './ImageUpload'
-import { Label } from '@/components/ui/label'
-import { Card,CardContent,CardHeader,CardTitle } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { X,Plus } from 'lucide-react'
-import { ContentEditableEvent } from 'react-simple-wysiwyg'
-import { uploadToImgBB } from '@/utils/imgbbUpload'
+import React,{ useState,KeyboardEvent } from 'react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Select,SelectContent,SelectItem,SelectTrigger,SelectValue } from '@/components/ui/select';
+import { Project } from '@/types/project';
+import dynamic from 'next/dynamic';
+import ImageUpload from './ImageUpload';
+import { Label } from '@/components/ui/label';
+import { Card,CardContent,CardHeader,CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { X,Plus } from 'lucide-react';
+import { ContentEditableEvent } from 'react-simple-wysiwyg';
+import { uploadToImgBB } from '@/utils/imgbbUpload';
 
-const RichTextEditor = dynamic(() => import('react-simple-wysiwyg'),{ ssr: false })
+const RichTextEditor = dynamic(() => import('react-simple-wysiwyg'),{ ssr: false });
 
 interface ProjectFormProps {
-    project?: Project
-    onSubmit: (project: Project) => void
+    project?: Project;
+    onSubmit: (project: Project) => void;
 }
 
 const ProjectForm: React.FC<ProjectFormProps> = ({ project,onSubmit }) => {
-    const [formData,setFormData] = useState<Project>(project || {} as Project)
-    const [thumbnailPreview,setThumbnailPreview] = useState<string | null>(project?.thumbnailImage || null)
-    const [imagesPreview,setImagesPreview] = useState<string[]>(project?.images || [])
+    const [formData,setFormData] = useState<Project>(project || {} as Project);
+    const [thumbnailPreview,setThumbnailPreview] = useState<string | null>(project?.thumbnailImage || null);
+    const [imagesPreview,setImagesPreview] = useState<string[]>(project?.images || []);
     const [thumbnailFile,setThumbnailFile] = useState<File | null>(null);
     const [imageFiles,setImageFiles] = useState<File[]>([]);
 
-    const [tagInput,setTagInput] = useState('')
-    const [techInput,setTechInput] = useState('')
-    const [featureInput,setFeatureInput] = useState('')
-    const [challengeInput,setChallengeInput] = useState('')
-    const [solutionInput,setSolutionInput] = useState('')
+    const [tagInput,setTagInput] = useState('');
+    const [techInput,setTechInput] = useState('');
+    const [featureInput,setFeatureInput] = useState('');
+    const [challengeInput,setChallengeInput] = useState('');
+    const [solutionInput,setSolutionInput] = useState('');
 
     const [isUploading,setIsUploading] = useState(false);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        const { name,value } = e.target
-        setFormData({ ...formData,[name]: value })
-    }
+        const { name,value } = e.target;
+        setFormData({ ...formData,[name]: value });
+    };
 
     const handleTagKeyDown = (e: KeyboardEvent<HTMLInputElement>,field: 'tags' | 'technologies') => {
         if (e.key === 'Enter' && e.currentTarget.value.trim() !== '') {
-            e.preventDefault()
-            const newValue = e.currentTarget.value.trim()
+            e.preventDefault();
+            const newValue = e.currentTarget.value.trim();
             if (!formData[field]?.includes(newValue)) {
                 setFormData({
                     ...formData,
                     [field]: [...(formData[field] || []),newValue]
-                })
+                });
             }
-            e.currentTarget.value = ''
-            if (field === 'tags') setTagInput('')
-            if (field === 'technologies') setTechInput('')
+            e.currentTarget.value = '';
+            if (field === 'tags') setTagInput('');
+            if (field === 'technologies') setTechInput('');
         }
-    }
+    };
 
     const removeTag = (tag: string,field: 'tags' | 'technologies') => {
         setFormData({
             ...formData,
             [field]: formData[field]?.filter(t => t !== tag) || []
-        })
-    }
+        });
+    };
 
     const handleSelectChange = (name: string,value: string) => {
-        setFormData({ ...formData,[name]: value })
-    }
+        setFormData({ ...formData,[name]: value });
+    };
 
     const handleRichTextChange = (e: ContentEditableEvent) => {
         setFormData({ ...formData,fullDescription: e.target.value });
@@ -95,30 +96,30 @@ const ProjectForm: React.FC<ProjectFormProps> = ({ project,onSubmit }) => {
     };
 
     const handleImageDelete = (index: number) => {
-        const newImages = [...(formData.images || [])]
-        newImages.splice(index,1)
-        setFormData({ ...formData,images: newImages })
-        setImagesPreview(newImages)
-    }
+        const newImages = [...(formData.images || [])];
+        newImages.splice(index,1);
+        setFormData({ ...formData,images: newImages });
+        setImagesPreview(newImages);
+    };
 
     const handleAddItem = (field: 'keyFeatures' | 'challenges' | 'solutions',value: string) => {
         if (value.trim() !== '') {
             setFormData({
                 ...formData,
                 [field]: [...(formData[field] || []),value.trim()]
-            })
-            if (field === 'keyFeatures') setFeatureInput('')
-            if (field === 'challenges') setChallengeInput('')
-            if (field === 'solutions') setSolutionInput('')
+            });
+            if (field === 'keyFeatures') setFeatureInput('');
+            if (field === 'challenges') setChallengeInput('');
+            if (field === 'solutions') setSolutionInput('');
         }
-    }
+    };
 
     const handleRemoveItem = (field: 'keyFeatures' | 'challenges' | 'solutions',index: number) => {
         setFormData({
             ...formData,
             [field]: formData[field]?.filter((_: any,i: any) => i !== index) || []
-        })
-    }
+        });
+    };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -468,7 +469,7 @@ const ProjectForm: React.FC<ProjectFormProps> = ({ project,onSubmit }) => {
                 {isUploading ? 'Uploading...' : 'Submit Project'}
             </Button>
         </form>
-    )
-}
+    );
+};
 
-export default ProjectForm
+export default ProjectForm;
