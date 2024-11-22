@@ -13,7 +13,7 @@ import ImageUpload from './ImageUpload';
 import { Label } from '@/components/ui/label';
 import { Card,CardContent,CardHeader,CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { X,Plus } from 'lucide-react';
+import { X,Plus,Star } from 'lucide-react';
 import { ContentEditableEvent } from 'react-simple-wysiwyg';
 import { uploadToImgBB } from '@/utils/imgbbUpload';
 
@@ -266,6 +266,35 @@ const ProjectForm: React.FC<ProjectFormProps> = ({ project,onSubmit }) => {
                                     <SelectItem value="personal">Personal</SelectItem>
                                     <SelectItem value="client">Client</SelectItem>
                                     <SelectItem value="open-source">Open Source</SelectItem>
+                                </SelectContent>
+                            </Select>
+                        </div>
+                        <div className="space-y-2">
+                            <Label htmlFor="features">Features</Label>
+                            <Select name="features" onValueChange={(value) => handleSelectChange('features',value)}>
+                                <SelectTrigger>
+                                    <SelectValue placeholder="Select feature availability" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="true">True</SelectItem>
+                                    <SelectItem value="false">False</SelectItem>
+                                </SelectContent>
+                            </Select>
+                        </div>
+
+                        <div className="space-y-2">
+                            <Label htmlFor="priority">Priority</Label>
+                            <Select name="priority" onValueChange={(value) => handleSelectChange('priority',value)}>
+                                <SelectTrigger>
+                                    <SelectValue placeholder="Select project priority" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="0">0</SelectItem>
+                                    {[1,2,3,4,5,6].map((num) => (
+                                        <SelectItem key={num} value={num.toString()}>
+                                            <Star className="inline h-4 w-4 mr-1" /> {num}
+                                        </SelectItem>
+                                    ))}
                                 </SelectContent>
                             </Select>
                         </div>

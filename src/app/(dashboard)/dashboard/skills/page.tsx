@@ -158,89 +158,214 @@ const SkillCard: React.FC<{
     </Card>
 )
 
+//const SkillForm: React.FC<{
+//    skill?: Skill
+//    onSubmit: (skill: Skill | Omit<Skill,'_id'>) => void
+//}> = ({ skill,onSubmit }) => {
+//    const [formData,setFormData] = useState<Skill | Omit<Skill,'_id'>>(
+//        skill || {
+//            category: '',
+//            name: '',
+//            image: '',
+//        }
+//    )
+//    const [previewImage,setPreviewImage] = useState<string | null>(skill?.image || null)
+//    const [isUploading,setIsUploading] = useState(false)
+//    const fileInputRef = useRef<HTMLInputElement>(null)
+
+//    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+//        const { name,value } = e.target
+//        setFormData({ ...formData,[name]: value })
+//    }
+
+//    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+//        const file = e.target.files?.[0]
+//        if (file) {
+//            const reader = new FileReader()
+//            reader.onloadend = () => {
+//                setPreviewImage(reader.result as string)
+//            }
+//            reader.readAsDataURL(file)
+//        }
+//    }
+
+//    const handleRemoveImage = () => {
+//        setPreviewImage(null)
+//        if (fileInputRef.current) {
+//            fileInputRef.current.value = ''
+//        }
+//    }
+
+//    const uploadToImgBB = async (file: File): Promise<string> => {
+//        const formData = new FormData()
+//        formData.append('image',file)
+
+//        const url = `https://api.imgbb.com/1/upload?key=2a7dd4f3a0ddddff8fc1a8d2b584a995`
+
+//        try {
+//            const response = await fetch(url,{
+//                method: 'POST',
+//                body: formData,
+//            })
+
+//            if (!response.ok) {
+//                throw new Error('Failed to upload image')
+//            }
+
+//            const data = await response.json()
+//            return data.data.url
+//        } catch (error) {
+//            console.error('Error uploading image:',error)
+//            throw new Error('Failed to upload image')
+//        }
+//    }
+
+//    const handleSubmit = async (e: React.FormEvent) => {
+//        e.preventDefault()
+//        setIsUploading(true)
+
+//        try {
+//            let imageUrl = formData.image
+//            if (previewImage && previewImage !== skill?.image) {
+//                const file = fileInputRef.current?.files?.[0]
+//                if (file) {
+//                    imageUrl = await uploadToImgBB(file)
+//                }
+//            }
+
+//            onSubmit({ ...formData,image: imageUrl })
+//        } catch (error) {
+//            console.error('Error submitting form:',error)
+//            toast.error('Failed to submit form')
+//        } finally {
+//            setIsUploading(false)
+//        }
+//    }
+
+//    return (
+//        <form onSubmit={handleSubmit} className="space-y-4">
+//            <div>
+//                <Label htmlFor="category">Category</Label>
+//                <Input
+//                    id="category"
+//                    name="category"
+//                    value={formData.category}
+//                    onChange={handleChange}
+//                    required
+//                />
+//            </div>
+//            <div>
+//                <Label htmlFor="name">Name</Label>
+//                <Input id="name" name="name" value={formData.name} onChange={handleChange} required />
+//            </div>
+//            <div>
+//                <Label htmlFor="image">Image</Label>
+//                <Input
+//                    id="image"
+//                    name="image"
+//                    type="file"
+//                    accept="image/*"
+//                    onChange={handleImageChange}
+//                    ref={fileInputRef}
+//                />
+//            </div>
+//            {previewImage && (
+//                <div className="relative w-full h-40">
+//                    <img
+//                        src={previewImage}
+//                        alt="Preview"
+//                        className="w-full h-full object-cover rounded-md"
+//                    />
+//                    <Button
+//                        type="button"
+//                        variant="destructive"
+//                        size="icon"
+//                        className="absolute top-2 right-2"
+//                        onClick={handleRemoveImage}
+//                    >
+//                        <X className="h-4 w-4" />
+//                    </Button>
+//                </div>
+//            )}
+//            <Button type="submit" disabled={isUploading}>
+//                {isUploading ? 'Uploading...' : skill ? 'Update Skill' : 'Add Skill'}
+//            </Button>
+//        </form>
+//    )
+//}
+
 const SkillForm: React.FC<{
-    skill?: Skill
-    onSubmit: (skill: Skill | Omit<Skill,'_id'>) => void
+    skill?: Skill;
+    onSubmit: (skill: Skill | Omit<Skill,'_id'>) => void;
 }> = ({ skill,onSubmit }) => {
     const [formData,setFormData] = useState<Skill | Omit<Skill,'_id'>>(
-        skill || {
-            category: '',
-            name: '',
-            image: '',
-        }
-    )
-    const [previewImage,setPreviewImage] = useState<string | null>(skill?.image || null)
-    const [isUploading,setIsUploading] = useState(false)
-    const fileInputRef = useRef<HTMLInputElement>(null)
+        skill || { category: '',name: '',image: '' }
+    );
+    const [previewImage,setPreviewImage] = useState<string | null>(skill?.image || null);
+    const [isUploading,setIsUploading] = useState(false);
+    const fileInputRef = useRef<HTMLInputElement>(null);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name,value } = e.target
-        setFormData({ ...formData,[name]: value })
-    }
+        const { name,value } = e.target;
+        setFormData({ ...formData,[name]: value });
+    };
 
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0]
+        const file = e.target.files?.[0];
         if (file) {
-            const reader = new FileReader()
-            reader.onloadend = () => {
-                setPreviewImage(reader.result as string)
-            }
-            reader.readAsDataURL(file)
+            const reader = new FileReader();
+            reader.onloadend = () => setPreviewImage(reader.result as string);
+            reader.readAsDataURL(file);
         }
-    }
+    };
 
     const handleRemoveImage = () => {
-        setPreviewImage(null)
-        if (fileInputRef.current) {
-            fileInputRef.current.value = ''
-        }
-    }
+        setPreviewImage(null);
+        setFormData((prev) => ({ ...prev,image: '' }));
+        if (fileInputRef.current) fileInputRef.current.value = '';
+    };
 
     const uploadToImgBB = async (file: File): Promise<string> => {
-        const formData = new FormData()
-        formData.append('image',file)
+        const formData = new FormData();
+        formData.append('image',file);
 
-        const url = `https://api.imgbb.com/1/upload?key=${process.env.NEXT_PUBLIC_IMGBB_API_KEY}`
+        const url = `https://api.imgbb.com/1/upload?key=${process.env.NEXT_PUBLIC_IMGBB_API_KEY}`;
 
         try {
             const response = await fetch(url,{
                 method: 'POST',
                 body: formData,
-            })
+            });
 
-            if (!response.ok) {
-                throw new Error('Failed to upload image')
-            }
+            if (!response.ok) throw new Error('Failed to upload image');
 
-            const data = await response.json()
-            return data.data.url
+            const data = await response.json();
+            return data.data.url;
         } catch (error) {
-            console.error('Error uploading image:',error)
-            throw new Error('Failed to upload image')
+            console.error('Error uploading image:',error);
+            throw error;
         }
-    }
+    };
 
     const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault()
-        setIsUploading(true)
+        e.preventDefault();
+        setIsUploading(true);
 
         try {
-            let imageUrl = formData.image
+            let imageUrl = formData.image;
             if (previewImage && previewImage !== skill?.image) {
-                const file = fileInputRef.current?.files?.[0]
-                if (file) {
-                    imageUrl = await uploadToImgBB(file)
-                }
+                const file = fileInputRef.current?.files?.[0];
+                if (file) imageUrl = await uploadToImgBB(file);
             }
 
-            onSubmit({ ...formData,image: imageUrl })
+            onSubmit({ ...formData,image: imageUrl });
         } catch (error) {
-            console.error('Error submitting form:',error)
-            toast.error('Failed to submit form')
+            console.error('Error submitting form:',error);
+            toast.error('Failed to submit form');
         } finally {
-            setIsUploading(false)
+            setIsUploading(false);
         }
-    }
+    };
 
     return (
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -251,12 +376,20 @@ const SkillForm: React.FC<{
                     name="category"
                     value={formData.category}
                     onChange={handleChange}
+                    placeholder="Enter skill category"
                     required
                 />
             </div>
             <div>
                 <Label htmlFor="name">Name</Label>
-                <Input id="name" name="name" value={formData.name} onChange={handleChange} required />
+                <Input
+                    id="name"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleChange}
+                    placeholder="Enter skill name"
+                    required
+                />
             </div>
             <div>
                 <Label htmlFor="image">Image</Label>
@@ -291,7 +424,8 @@ const SkillForm: React.FC<{
                 {isUploading ? 'Uploading...' : skill ? 'Update Skill' : 'Add Skill'}
             </Button>
         </form>
-    )
-}
+    );
+};
+
 
 export default SkillManagementPage
