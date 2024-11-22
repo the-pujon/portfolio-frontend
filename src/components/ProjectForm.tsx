@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client'
 
-import React,{ useState,KeyboardEvent } from 'react';
+import React,{ useState,KeyboardEvent,useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -25,7 +25,11 @@ interface ProjectFormProps {
 }
 
 const ProjectForm: React.FC<ProjectFormProps> = ({ project,onSubmit }) => {
-    const [formData,setFormData] = useState<Project>(project || {} as Project);
+    const [formData,setFormData] = useState<Project>({
+        ...project,
+        featured: project?.featured ?? false,
+        priority: project?.priority ?? 0
+    } as Project);
     const [thumbnailPreview,setThumbnailPreview] = useState<string | null>(project?.thumbnailImage || null);
     const [imagesPreview,setImagesPreview] = useState<string[]>(project?.images || []);
     const [thumbnailFile,setThumbnailFile] = useState<File | null>(null);
@@ -38,6 +42,19 @@ const ProjectForm: React.FC<ProjectFormProps> = ({ project,onSubmit }) => {
     const [solutionInput,setSolutionInput] = useState('');
 
     const [isUploading,setIsUploading] = useState(false);
+
+    useEffect(() => {
+        if (formData.featured && !formData.priority) {
+            setFormData(prev => ({
+                ...prev,
+                priority: 1
+            }));
+        }
+    },[formData.featured]);
+
+    useEffect(() => {
+        console.log('formData updated:',formData);
+    },[formData]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name,value } = e.target;
@@ -68,7 +85,28 @@ const ProjectForm: React.FC<ProjectFormProps> = ({ project,onSubmit }) => {
     };
 
     const handleSelectChange = (name: string,value: string) => {
-        setFormData({ ...formData,[name]: value });
+        console.log('handleSelectChange:',{ name,value });
+
+        if (name === 'priority') {
+            const priorityValue = value === '0' ? 0 : parseInt(value,10);
+            console.log('Setting priority to:',priorityValue);
+            setFormData({
+                ...formData,
+                [name]: priorityValue
+            });
+        } else if (name === 'featured') {
+            const boolValue = value === 'true';
+            console.log('Setting featured to:',boolValue);
+            setFormData(prevData => {
+                console.log('Previous formData:',prevData);
+                return {
+                    ...prevData,
+                    featured: boolValue
+                };
+            });
+        } else {
+            setFormData({ ...formData,[name]: value });
+        }
     };
 
     const handleRichTextChange = (e: ContentEditableEvent) => {
@@ -145,13 +183,17 @@ const ProjectForm: React.FC<ProjectFormProps> = ({ project,onSubmit }) => {
                 ...formData,
                 thumbnailImage: thumbnailUrl,
                 images: allImageUrls,
+                featured: formData.featured ?? false,
+                priority: formData.priority ?? 0
             };
 
-            // Submit the form
+            // Remove the 'features' field if it exists
+            //delete finalFormData?.features;
+
+            console.log('Final form data before submit:',finalFormData);
             await onSubmit(finalFormData);
         } catch (error) {
             console.error('Error uploading images:',error);
-            // Handle error (e.g., show error message to user)
         } finally {
             setIsUploading(false);
         }
@@ -270,19 +312,6 @@ const ProjectForm: React.FC<ProjectFormProps> = ({ project,onSubmit }) => {
                             </Select>
                         </div>
                         <div className="space-y-2">
-                            <Label htmlFor="features">Features</Label>
-                            <Select name="features" onValueChange={(value) => handleSelectChange('features',value)}>
-                                <SelectTrigger>
-                                    <SelectValue placeholder="Select feature availability" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="true">True</SelectItem>
-                                    <SelectItem value="false">False</SelectItem>
-                                </SelectContent>
-                            </Select>
-                        </div>
-
-                        <div className="space-y-2">
                             <Label htmlFor="priority">Priority</Label>
                             <Select name="priority" onValueChange={(value) => handleSelectChange('priority',value)}>
                                 <SelectTrigger>
@@ -295,6 +324,23 @@ const ProjectForm: React.FC<ProjectFormProps> = ({ project,onSubmit }) => {
                                             <Star className="inline h-4 w-4 mr-1" /> {num}
                                         </SelectItem>
                                     ))}
+                                </SelectContent>
+                            </Select>
+                        </div>
+
+                        <div className="space-y-2">
+                            <Label htmlFor="featured">Featured</Label>
+                            <Select
+                                name="featured"
+                                onValueChange={(value) => handleSelectChange('featured',value)}
+                                value={formData.featured?.toString() || 'false'}
+                            >
+                                <SelectTrigger>
+                                    <SelectValue placeholder="Select featured status" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="true">Yes</SelectItem>
+                                    <SelectItem value="false">No</SelectItem>
                                 </SelectContent>
                             </Select>
                         </div>

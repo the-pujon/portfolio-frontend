@@ -72,6 +72,14 @@ const projectApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["Project"],
     }),
+
+    //get featured projects by priority
+    getFeaturedProjectsByPriority: builder.query({
+      query: () => ({
+        url: "/project/featured",
+        method: "GET",
+      }),
+    }),
   }),
 });
 
@@ -83,4 +91,5 @@ export const {
   useDeleteProjectMutation,
   useGetProfileByUserIdQuery,
   useGiveFeedbackMutation,
+  useGetFeaturedProjectsByPriorityQuery,
 } = projectApi;

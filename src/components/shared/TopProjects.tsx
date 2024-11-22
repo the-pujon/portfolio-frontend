@@ -5,12 +5,12 @@ import { motion } from "framer-motion";
 import { Sparkles,Rocket } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import ProjectCard from "../ui/ProjectCard";
-import { useGetAllProjectsQuery } from "@/redux/features/project/projectApi";
+import { useGetFeaturedProjectsByPriorityQuery } from "@/redux/features/project/projectApi";
 import { Project } from "@/types/project";
 
 const TopProjects = () => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { data: projectsData,isLoading,isError } = useGetAllProjectsQuery({});
+    const { data: projectsData,isLoading,isError } = useGetFeaturedProjectsByPriorityQuery({});
 
     const projects = projectsData?.data || [];
 

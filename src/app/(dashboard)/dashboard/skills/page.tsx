@@ -334,12 +334,21 @@ const SkillForm: React.FC<{
         try {
             const response = await fetch(url,{
                 method: 'POST',
-                body: formData,
+                body: formData, // Don't stringify FormData
             });
 
-            if (!response.ok) throw new Error('Failed to upload image');
+            if (!response.ok) {
+                const errorData = await response.text();
+                console.error('ImgBB API Error:',errorData);
+                throw new Error(`Failed to upload image: ${response.status} ${response.statusText}`);
+            }
 
             const data = await response.json();
+
+            if (!data.data?.url) {
+                throw new Error('No image URL received from ImgBB');
+            }
+
             return data.data.url;
         } catch (error) {
             console.error('Error uploading image:',error);

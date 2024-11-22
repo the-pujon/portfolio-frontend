@@ -7,7 +7,7 @@ import { Card,CardContent } from "@/components/ui/card"
 import { Carousel,CarouselContent,CarouselItem,CarouselNext,CarouselPrevious,} from "@/components/ui/carousel"
 import { Progress } from "@/components/ui/progress"
 import { Tabs,TabsContent,TabsList,TabsTrigger } from "@/components/ui/tabs"
-import { Github,Globe,Play,Star,Briefcase,Code,Layers } from "lucide-react"
+import { Github,Globe,Play,Star,Briefcase,Code,Layers,ChevronUp,ChevronDown } from "lucide-react"
 import Image from "next/image"
 import { useState } from "react"
 import { motion } from "framer-motion"
@@ -30,9 +30,6 @@ export default function ProjectDetails() {
     const { id } = useParams();
     const { data: projectData,isLoading } = useGetProjectByIdQuery(id as string);
     const project = projectData?.data;
-    console.log(project)
-
-    console.log(isLoading)
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [giveFeedback,{ isLoading: feedbackLoading }] = useGiveFeedbackMutation();
@@ -46,8 +43,8 @@ export default function ProjectDetails() {
             projectId: id as string,
         }
 
-        const res = await giveFeedback(feedbackData);
-        console.log(res)
+        await giveFeedback(feedbackData);
+
         // Here you would typically send this data to your backend
         //console.log({ rating: userRating,email: userEmail,feedback: userFeedback });
 
@@ -413,16 +410,16 @@ export default function ProjectDetails() {
                                             animate={{ height: isDescriptionExpanded ? "auto" : 200 }}
                                             transition={{ duration: 0.5 }}
                                         >
-                                            <div className="richText max-w-none" dangerouslySetInnerHTML={{ __html: project?.fullDescription || '' }} />
+                                            <div className="richText max-w-none" dangerouslySetInnerHTML={{ __html: isDescriptionExpanded ? project?.fullDescription : project?.fullDescription?.slice(0,1000) + '...' || '' }} />
                                         </motion.div>
                                         {
-                                            project?.fullDescription && project?.fullDescription.length > 700 && (
+                                            project?.fullDescription && project?.fullDescription.length > 1000 && (
                                                 <Button
                                                     onClick={() => setIsDescriptionExpanded(!isDescriptionExpanded)}
                                                     variant="ghost"
-                                                    className="mt-4"
+                                                    className="mt-2 flex items-center justify-center bg-primary/10"
                                                 >
-                                                    {isDescriptionExpanded ? "Read Less" : "Read More"}
+                                                    {isDescriptionExpanded ? <span className="flex items-center">Read Less <ChevronUp className="w-4 h-4" /></span> : <span className="flex items-center">Read More <ChevronDown className="w-4 h-4" /></span>}
                                                 </Button>
                                             )
                                         }

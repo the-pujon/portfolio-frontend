@@ -10,6 +10,7 @@ import { Project } from "@/types/project"; // Assuming you've created this type 
 import Link from "next/link";
 
 const ProjectCard = ({ project,index }: { project: Project,index: number }) => {
+    console.log(project)
     return (
         <motion.div
             key={project._id}
@@ -26,7 +27,7 @@ const ProjectCard = ({ project,index }: { project: Project,index: number }) => {
 
                 {/* Status badge */}
                 <div className="absolute top-4 left-4 z-10">
-                    <Badge className="bg-background/50 backdrop-blur-md border-primary/20 text-primary px-4 py-1.5 flex items-center gap-2 shadow-lg">
+                    <Badge className="bg-primary/40 backdrop-blur-md border-primary/20 text-white px-4 py-1.5 flex items-center gap-2 shadow-lg">
                         {project.projectStatus === "Production" && (
                             <Zap className="h-3 w-3" />
                         )}
@@ -36,6 +37,21 @@ const ProjectCard = ({ project,index }: { project: Project,index: number }) => {
                         {project.projectStatus}
                     </Badge>
                 </div>
+
+                {/* Status badge */}
+                {
+                    project?.featured === true && <div className="absolute top-4 right-4 z-10">
+                        <Badge className="bg-primary/40 backdrop-blur-md border-primary/20 text-white px-4 py-1.5 flex items-center gap-2 shadow-lg">
+                            {project.projectStatus === "Production" && (
+                                <Zap className="h-3 w-3" />
+                            )}
+                            {project.projectStatus === "Beta" && (
+                                <Trophy className="h-3 w-3" />
+                            )}
+                            {project.projectStatus}
+                        </Badge>
+                    </div>
+                }
 
                 <CardContent className="p-0 flex flex-col h-full">
                     {/* Image container */}
@@ -125,8 +141,8 @@ const ProjectCard = ({ project,index }: { project: Project,index: number }) => {
                             </div>
 
                             {/* Technology badges */}
-                            <div className="flex flex-wrap gap-2 pt-2 border-t border-primary/10">
-                                {project.technologies?.map((tech,idx) => (
+                            <div className="flex flex-wrap gap-1 pt-2 border-t border-primary/10">
+                                {/*{project.technologies?.map((tech,idx) => (
                                     <Badge
                                         key={idx}
                                         variant="secondary"
@@ -134,7 +150,13 @@ const ProjectCard = ({ project,index }: { project: Project,index: number }) => {
                                     >
                                         {tech}
                                     </Badge>
+                                ))}*/}
+                                {project.technologies?.slice(0,4).map((tech,index) => (
+                                    <Badge className="bg-primary/5 hover:bg-primary/10 transition-colors hover:scale-105 duration-300" key={index} variant="outline">{tech}</Badge>
                                 ))}
+                                {project.technologies && project.technologies.length > 4 && (
+                                    <Badge className="bg-primary/5 hover:bg-primary/10 transition-colors hover:scale-105 duration-300" variant="outline">+{project.technologies.length - 4}</Badge>
+                                )}
                             </div>
 
                             {/* Show Details button */}
